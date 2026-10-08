@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="theme-color" content="#08172a">
+ <meta name="robots" content="noindex,nofollow">
+ <title>ASD Industry — Email-Verified Adult Beta</title>
+ <link rel="stylesheet" href="/beta-signup.css">
+ <script src="/beta-signup.js" defer></script>
+</head>
+<body>
+ <main class="wrap">
+  <section class="intro">
+   <a class="brand" href="/"><span class="mark">A✦</span><span>ASD INDUSTRY<small>BUILD YOUR FUTURE</small></span></a>
+   <div class="intro-content">
+    <p class="eyebrow">ASD INDUSTRY / SECURE SIGN UP</p>
+    <h1>Your ideas.<br>Your people.<br><em>Your future.</em></h1>
+    <p>A simple beginning. Create an account, verify your email, and explore what you can build.</p>
+    <div class="intro-cards"><span>✦ Your account first</span><span>✧ Skills and interests later</span><span>◇ Privacy by design</span></div>
+   </div>
+   <p class="bottom-mark">A PLACE WHERE YOUNG PEOPLE WILL BUILD — ADULT-ONLY TESTING TODAY</p>
+  </section>
+  <section class="forms">
+   <div class="form-inner">
+    <div class="topline"><span>PRIVATE ACCOUNT BETA</span><span class="badge">18+ TESTERS ONLY</span></div>
+    <div id="locked" class="alert" role="status" aria-live="polite">Checking if real email verification is available…</div>
+    <section id="signupPanel" aria-labelledby="signupTitle">
+      <h2 id="signupTitle">Create your <em>account.</em></h2>
+      <p class="sub">A nickname, email, and password. You'll choose your project skills when you start building.</p>
+      <form id="accountForm">
+       <label>Builder nickname <input type="text" id="betaHandle" required pattern="[A-Za-z][A-Za-z0-9_]{2,23}" maxlength="24" autocomplete="nickname" placeholder="e.g. FutureBuilder"></label>
+       <label>Email address <input type="email" id="betaEmail" required maxlength="254" autocomplete="email" placeholder="you@example.com"></label>
+       <label>Password <input type="password" id="betaPassword" required minlength="12" autocomplete="new-password" placeholder="12 characters or more"></label>
+       <label>Age group <select id="betaAge" required><option value="">Select age group</option><option value="18+">18 or older — invited beta tester</option><option value="under18" disabled>Under 18 — accounts not enabled yet</option></select></label>
+       <label>Private invitation code <input type="password" id="betaInvite" required autocomplete="off" placeholder="Provided to adult testers"></label>
+       <div class="notice">ⓘ <span>Email verification is required before an account becomes active. This limited testing page cannot verify someone's age. Users under 18 cannot register until appropriate guardian and safety protections are implemented.</span></div>
+       <button type="submit" class="primary" id="signupBtn" disabled>Send verification email <span>→</span></button>
+       <p class="status" role="alert" id="signupFeedback"></p>
+      </form>
+      <button type="button" id="showLogin" class="linkish">Already verified? Log in →</button>
+    </section>
+    <section id="verifyPanel" class="hidden" aria-labelledby="verifyTitle">
+      <p class="eyebrow">STEP 02 · CONFIRM EMAIL</p>
+      <h2 id="verifyTitle">Check your <em>inbox.</em></h2>
+      <p class="sub">Enter the six-digit code sent to <strong id="verifyAddress"></strong>. The code expires in 10 minutes.</p>
+      <form id="verifyForm">
+       <label>Six-digit verification code <input id="betaCode" required pattern="[0-9]{6}" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="000000"></label>
+       <button type="submit" class="primary" id="verifyBtn">Verify my email <span>→</span></button>
+       <p class="status" role="alert" id="verifyFeedback"></p>
+      </form>
+      <div class="actions"><button type="button" id="resendBtn" class="linkish">Resend verification code</button><button type="button" class="linkish" id="backSignup">Change details</button></div>
+    </section>
+    <section id="loginPanel" class="hidden" aria-labelledby="loginTitle">
+     <h2 id="loginTitle">Welcome <em>back.</em></h2>
+     <p class="sub">Sign in after verifying your email address.</p>
+     <form id="loginForm">
+      <label>Email address <input type="email" id="loginEmail" autocomplete="email" required></label>
+      <label>Password <input type="password" id="loginPassword" autocomplete="current-password" required></label>
+      <button class="primary" type="submit" id="loginBtn">Log in <span>→</span></button>
+      <p class="status" role="alert" id="loginFeedback"></p>
+     </form>
+     <button type="button" class="linkish" id="backToSignup">← Create account</button>
+    </section>
+    <section id="successPanel" class="hidden" aria-labelledby="successTitle">
+      <span class="success-icon">✓</span>
+      <h2 id="successTitle">Email <em>verified.</em></h2>
+      <p class="sub" id="successMessage">Your adult beta account is active. Project building remains a separate demo experience while the platform is being prepared.</p>
+      <a class="primary primary-link" href="/">Explore ASD Industry demo <span>↗</span></a>
+     </section>
+    <p class="foot">Email verification proves ownership of an inbox — not age or guardian consent. No payments, real group chat, or public youth accounts are active.</p>
+   </div>
+  </section>
+ </main>
+</body>
+</html>
