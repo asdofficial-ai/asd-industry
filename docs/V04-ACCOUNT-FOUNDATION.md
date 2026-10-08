@@ -57,3 +57,21 @@ By default `ACCOUNTS_BETA_ENABLED` is unset and all endpoints except status retu
 Before any youth-facing launch: qualified Nigerian privacy/child-safety legal review; age assurance; verified guardian consent where required; consent revocation; default-private profiles; verified guardianship process; human moderation and abuse escalation; child-appropriate content and contact safeguards; data retention/deletion policy; security testing; authentication hardening (email verification, account recovery, session revocation); monitoring and incident-response procedures; independent risk review of the 30/70 ownership concept.
 
 No API flag should bypass these safeguards for minors.
+
+## Email verification (staged)
+
+Signup requires a valid email and password for invited **18+ adult testers**, but project role, skills and interests are not requested during registration. These belong in project setup.
+
+The signup endpoint creates an unverified account and sends a six-digit code by the configured Resend transactional-email provider. Code entry is available at `POST /api/beta/verify-email` and resend at `POST /api/beta/resend-verification`. Codes expire after 10 minutes, have five verification attempts, are rate-limited at the API, and are stored as keyed HMAC digests (never plaintext). A new valid code replaces the previous one, with a 60-second resend interval. The login route and session creation reject unverified accounts.
+
+The new separate adult-beta sign-up interface is at `/beta-signup.html` **on the development branch only**. It displays a disabled/unavailable state without the server-side email and database configuration. The public landing page remains a separate local demonstration.
+
+Required backend variables, in addition to the existing invite-only flags and dedicated DATABASE_URL:
+
+- `EMAIL_OTP_PEPPER`: random secret at least 32 characters
+- `RESEND_API_KEY`: transactional email provider API key
+- `VERIFICATION_EMAIL_FROM`: verified sender address on the email provider
+
+Use `npm run db:migrate` to apply both SQL migrations. No emails can be sent or received until the owner configures a verified domain and sending provider.
+
+Email verification proves control of an address. **It does not prove age or guardian consent.** Real minor accounts remain disabled.
