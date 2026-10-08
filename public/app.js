@@ -115,11 +115,8 @@
     if (!signupForm.reportValidity()) return;
     const nick = byId("signupNickname").value.trim();
     const age = byId("signupAge").value;
-    const role = byId("signupRole").value;
-    const availability = byId("signupAvailability").value;
-    const interests = [...byId("signupInterests").querySelectorAll("input:checked")].map(i=>i.value);
-    if (nick.length < 2 || nick.length > 24 || !age || !role || !availability || !interests.length) {
-      byId("signupStatus").textContent = "Choose a nickname, age group, role, time and at least one interest.";
+    if (nick.length < 2 || nick.length > 24 || !["12-14","15-17","18+"].includes(age)) {
+      byId("signupStatus").textContent = "Choose a nickname and an age group to enter.";
       return;
     }
     if (!byId("signupAcknowledge").checked) {
@@ -128,7 +125,7 @@
     }
     state = {
       entryCompleted:true,
-      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,role,availability,interests},
+      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,role:"",availability:"",interests:[]},
       idea:null,
       project:null
     };
@@ -136,12 +133,12 @@
     // Populate the builder profile page from the entry form.
     byId("nickname").value = nick;
     byId("age").value = age;
-    byId("role").value = role;
-    byId("availability").value = availability;
-    document.querySelectorAll('input[name="interests"]').forEach(input=>{input.checked=interests.includes(input.value);});
+    byId("role").value = "";
+    byId("availability").value = "";
+    document.querySelectorAll('input[name="interests"]').forEach(input=>{input.checked=false;});
     ideaForm.reset();
     byId("ideaStatus").textContent="";
-    byId("profileStatus").textContent="Your demo profile is ready · ASD-DEMO-0001";
+    byId("profileStatus").textContent="Basic demo profile saved. Add interests when you're ready to build a project.";
     byId("signupStatus").textContent="";
     renderMatches();
     renderRisks();
@@ -155,6 +152,7 @@
     byId("profileStatus").textContent="";
     byId("ideaStatus").textContent="";
     byId("signupStatus").textContent="";
+    byId("ideaBuilderStatus").textContent="";
     renderMatches();renderRisks();
     showGate();
   }
@@ -167,8 +165,15 @@
     if (!profileForm.reportValidity()) return;
     const nickname = byId("nickname").value.trim();
     const interests = selectedInterests();
-    if (nickname.length < 2 || interests.length === 0) {
-      byId("profileStatus").textContent = "Please add a nickname and choose at least one interest.";
+    const role=byId("role").value;
+    const availability=byId("availability").value;
+    const hasAnyProjectPreferences = Boolean(role || availability || interests.length);
+    if (nickname.length < 2 || nickname.length > 24 || !["12-14","15-17","18+"].includes(byId("age").value)) {
+      byId("profileStatus").textContent = "Choose a nickname and age group.";
+      return;
+    }
+    if (hasAnyProjectPreferences && (!role || !availability || !interests.length)) {
+      byId("profileStatus").textContent = "To set your project preferences, choose a role, availability and at least one interest — or leave all three blank until later.";
       return;
     }
     state.profile = {
@@ -176,10 +181,11 @@
       nickname:nickname,
       ageGroup:byId("age").value,
       interests,
-      role:byId("role").value,
-      availability:byId("availability").value
+      role,
+      availability
     };
-    // A changed profile invalidates old matches; fictional workspace remains local.
+    syncIdeaBuilderFromProfile();
+    // Profile changes remain local and can be used for subsequent project matches.
     save();
     byId("profileStatus").textContent = "Saved only in this browser tab — "+state.profile.id+".";
     go("ideas");
@@ -192,18 +198,35 @@
     for (const checkbox of document.querySelectorAll('input[name="interests"]')) {
       checkbox.checked = (state.profile.interests || []).includes(checkbox.value);
     }
-    byId("profileStatus").textContent = "Demo profile stored in this browser tab · "+state.profile.id;
+    byId("profileStatus").textContent = "Demo nickname saved · "+state.profile.id+". Builder skills are chosen when you start a project.";
   }
 
   const ideaForm = byId("ideaForm");
+  const projectInterestInputs = [...document.querySelectorAll('input[name="ideaInterests"]')];
+  function syncIdeaBuilderFromProfile() {
+    const profile = state.profile || {};
+    byId("ideaRole").value = profile.role || "";
+    byId("ideaAvailability").value = profile.availability || "";
+    projectInterestInputs.forEach(input => {
+      input.checked = Array.isArray(profile.interests) && profile.interests.includes(input.value);
+    });
+  }
+  syncIdeaBuilderFromProfile();
   ideaForm.addEventListener("submit", event => {
     event.preventDefault();
     if (!ideaForm.reportValidity()) return;
     if (!state.profile) {
-      byId("ideaStatus").textContent = "Save your demo profile first to try matching.";
-      go("profile");
+      byId("ideaStatus").textContent = "Sign up with a nickname first.";
+      showGate();
       return;
     }
+    const interests = projectInterestInputs.filter(input=>input.checked).map(input=>input.value);
+    if(!interests.length) {
+      byId("ideaBuilderStatus").textContent = "Please select at least one interest for your project match.";
+      byId("ideaInterestChoices").scrollIntoView({block:"center",behavior:"smooth"});
+      return;
+    }
+    byId("ideaBuilderStatus").textContent = "";
     const title = byId("ideaTitleInput").value.trim();
     const description = byId("ideaDescription").value.trim();
     if (title.length < 3 || description.length < 25) {
@@ -215,6 +238,13 @@
       topic:byId("ideaTopic").value,
       neededRole:byId("neededRole").value
     };
+    // Builder preferences are asked here, when starting a project, not at signup.
+    state.profile.role=byId("ideaRole").value;
+    state.profile.availability=byId("ideaAvailability").value;
+    state.profile.interests=interests;
+    byId("role").value=state.profile.role;
+    byId("availability").value=state.profile.availability;
+    document.querySelectorAll('input[name="interests"]').forEach(input=>{input.checked=interests.includes(input.value);});
     state.project = null;
     save();
     byId("ideaStatus").textContent = "Idea saved locally. Matches below are fictional examples, not real people.";
@@ -244,7 +274,7 @@
     const target = byId("matchResults");
     target.replaceChildren();
     if (!state.profile || !state.idea) {
-      target.append(node("p","muted","Create a demo profile and submit an idea to preview matching."));
+      target.append(node("p","muted","Describe your project and add your role, interests and availability here to preview fictional matches."));
       return;
     }
     const matches = scoredBuilders().filter(b=>b.score>=35).slice(0,3);
