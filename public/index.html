@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0b1414">
+  <meta name="theme-color" content="#07111e">
   <meta name="description" content="ASD Industry — a place where young builders turn ideas into collaborative projects. Demo only.">
   <title>ASD Industry — Build the Future Together</title>
   <link rel="stylesheet" href="/styles.css">
@@ -14,18 +14,18 @@
   <header class="header">
     <div class="header-inner">
       <a href="#home" class="brand" data-nav="home" aria-label="ASD Industry home"><span class="brand-mark">A<span>✦</span></span><span class="brand-type">ASD <b>INDUSTRY</b><small>BUILD YOUR FUTURE</small></span></a>
-      <nav aria-label="Main navigation" class="top-nav">
+      <nav aria-label="Main navigation" class="top-nav" id="primaryNavigation">
         <button type="button" class="nav-button active" data-nav="home">Home</button>
         <button type="button" class="nav-button" data-nav="profile">Profile</button>
         <button type="button" class="nav-button" data-nav="ideas">Find your team</button>
-        <button type="button" class="nav-button" data-nav="workspace">Workspace</button>
+        <button type="button" class="nav-button" data-nav="workspace">Workspace</button><button type="button" class="nav-button nav-review" data-nav="review">Risk review</button>
       </nav>
-      <button type="button" class="btn btn-small btn-accent" data-nav="profile">Start building <span aria-hidden="true">↗</span></button>
+      <div class="header-actions"><span class="nav-live" title="Browser-local demo, no live community"><span></span> DEMO</span><button type="button" class="btn btn-small btn-accent header-cta" data-nav="profile">Start building <span aria-hidden="true">↗</span></button><button type="button" class="menu-toggle" id="mobileMenuToggle" aria-label="Open navigation" aria-controls="primaryNavigation" aria-expanded="false"><span></span><span></span><span></span></button></div>
     </div>
   </header>
   <main id="main">
     <section class="view" id="view-home" data-view="home" aria-labelledby="homeTitle">
-      <div class="hero">
+      <div class="hero"><div class="hero-light"></div>
         <div class="hero-copy">
           <div class="eyebrow"><span class="eyebrow-line"></span> THE NEXT GENERATION OF BUILDERS</div>
           <h1 id="homeTitle">Your idea.<br>Your people.<br><em>Your future.</em></h1>
@@ -34,7 +34,7 @@
             <button class="btn btn-accent btn-large" type="button" data-nav="profile">Start your journey <span aria-hidden="true">↗</span></button>
             <button class="btn btn-ghost btn-large" type="button" data-nav="ideas">Explore matching <span aria-hidden="true">→</span></button>
           </div>
-          <div class="hero-caption"><span class="caption-dot"></span> Built for young minds. Designed for big ambitions.</div>
+          <div class="hero-caption"><span class="caption-dot"></span> Built for young minds <span class="caption-divide"></span> Project focused <span class="caption-divide"></span> Learn by doing</div>
         </div>
         <div class="hero-art" aria-label="Abstract illustration of ideas becoming collaborative projects">
           <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
@@ -46,13 +46,14 @@
           <div class="art-bottom">CREATE SOMETHING THAT MATTERS // ASD</div>
         </div>
       </div>
+      <div class="platform-strip" aria-label="How this demo works"><div class="strip-item"><span class="strip-symbol">✧</span><span><strong>01</strong><small>BRING AN IDEA</small></span></div><div class="strip-item"><span class="strip-symbol">◇</span><span><strong>02</strong><small>EXPLORE MATCHES</small></span></div><div class="strip-item"><span class="strip-symbol">▧</span><span><strong>03</strong><small>BUILD A PROJECT</small></span></div><div class="strip-item"><span class="strip-symbol">✦</span><span><strong>04</strong><small>REVIEW &amp; GROW</small></span></div></div>
       <section class="section-block how-section">
-        <div class="section-top"><div><p class="kicker">THE PROCESS / 001</p><h2>Big things start <em>small.</em></h2></div><p>Not another classroom. A place to turn curiosity and talent into real projects.</p></div>
+        <div class="section-top"><div><p class="kicker">↗ THE PROCESS / 001</p><h2>Big things start <em>small.</em></h2></div><p>Not another classroom. A place to turn curiosity and talent into real projects.</p></div>
         <div class="steps-grid">
-          <article class="step-card"><div class="step-num">01 <span>↗</span></div><h3>Show up</h3><p>Create a demo builder profile. Tell us your interests and what you can bring to a team.</p><span class="step-label">JOIN THE COMMUNITY</span></article>
-          <article class="step-card"><div class="step-num">02 <span>↗</span></div><h3>Share your idea</h3><p>Bring a project idea, or start by exploring problems you care about solving.</p><span class="step-label">START WITH A SPARK</span></article>
-          <article class="step-card"><div class="step-num">03 <span>↗</span></div><h3>Find your people</h3><p>Explore matches based on interests, available time and complementary skills.</p><span class="step-label">BUILD YOUR CREW</span></article>
-          <article class="step-card"><div class="step-num">04 <span>↗</span></div><h3>Build together</h3><p>Turn plans into tasks and decisions. Get transparent guidance on project risks.</p><span class="step-label">MAKE IT REAL</span></article>
+          <article class="step-card"><div class="step-num"><span class="step-bubble">01</span><span>01</span></div><h3>Show up</h3><p>Create a demo builder profile. Tell us your interests and what you can bring to a team.</p><span class="step-label">JOIN THE COMMUNITY</span></article>
+          <article class="step-card"><div class="step-num"><span class="step-bubble">02</span><span>02</span></div><h3>Share your idea</h3><p>Bring a project idea, or start by exploring problems you care about solving.</p><span class="step-label">START WITH A SPARK</span></article>
+          <article class="step-card"><div class="step-num"><span class="step-bubble">03</span><span>03</span></div><h3>Find your people</h3><p>Explore matches based on interests, available time and complementary skills.</p><span class="step-label">BUILD YOUR CREW</span></article>
+          <article class="step-card"><div class="step-num"><span class="step-bubble">04</span><span>04</span></div><h3>Build together</h3><p>Turn plans into tasks and decisions. Get transparent guidance on project risks.</p><span class="step-label">MAKE IT REAL</span></article>
         </div>
       </section>
       <section class="mission-strip"><div><p class="kicker">OUR PHILOSOPHY</p><h2>“Building our younger self <em>for the future.</em>”</h2></div><button type="button" class="btn btn-outline-light" data-nav="profile">Become a builder ↗</button></section>
@@ -126,7 +127,7 @@
     </section>
     <section class="view hidden" id="view-workspace" data-view="workspace" aria-labelledby="workspaceTitle">
       <div class="page-heading"><p class="kicker">03 / THE BUILD SPACE</p><h1 id="workspaceTitle">Your project <em>workspace.</em></h1><p>A focused place to turn an idea into tasks and progress. Teammates shown in this demo are fictional.</p></div>
-      <div id="workspaceEmpty" class="panel empty-state"><div class="empty-icon">▦</div><h2>No project yet</h2><p>Create your demo profile and submit a project idea to start a simulated team.</p><button class="btn btn-accent" type="button" data-nav="ideas">Go to ideas →</button></div>
+      <div class="workspace-toolbar"><span class="workspace-toolbar-title">PROJECT OVERVIEW <small>·  DEMO ONLY</small></span><button type="button" class="btn btn-small btn-accent" data-nav="ideas">+ New project idea</button></div><div id="workspaceEmpty" class="panel empty-state"><div class="empty-icon"><span>＋</span></div><h2>No project yet</h2><p>Create your demo profile and submit a project idea to start a simulated team.</p><button class="btn btn-accent" type="button" data-nav="ideas">Go to ideas →</button><button class="btn btn-ghost" type="button" data-nav="profile">Create demo profile</button></div>
       <div id="workspaceContent" class="hidden">
         <div class="workspace-summary"><div><span class="kicker">CURRENT PROJECT · DEMO</span><h2 id="workspaceProjectTitle"></h2><p id="workspaceProjectDescription"></p></div><div class="project-badge">● IN PROGRESS</div></div>
         <div class="workspace-grid">
