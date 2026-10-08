@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1414">
+  <meta name="description" content="ASD Industry — a place where young builders turn ideas into collaborative projects. Demo only.">
+  <title>ASD Industry — Build the Future Together</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="announcement" role="status"><span class="pulse"></span> PUBLIC PREVIEW · DEMO ONLY <span class="announcement-end">No real accounts, teammates or payments</span></div>
+  <header class="header">
+    <div class="header-inner">
+      <a href="#home" class="brand" data-nav="home" aria-label="ASD Industry home"><span class="brand-mark">A<span>✦</span></span><span class="brand-type">ASD <b>INDUSTRY</b><small>BUILD YOUR FUTURE</small></span></a>
+      <nav aria-label="Main navigation" class="top-nav">
+        <button type="button" class="nav-button active" data-nav="home">Home</button>
+        <button type="button" class="nav-button" data-nav="profile">Profile</button>
+        <button type="button" class="nav-button" data-nav="ideas">Find your team</button>
+        <button type="button" class="nav-button" data-nav="workspace">Workspace</button>
+      </nav>
+      <button type="button" class="btn btn-small btn-accent" data-nav="profile">Start building <span aria-hidden="true">↗</span></button>
+    </div>
+  </header>
+  <main id="main">
+    <section class="view" id="view-home" data-view="home" aria-labelledby="homeTitle">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> THE NEXT GENERATION OF BUILDERS</div>
+          <h1 id="homeTitle">Your idea.<br>Your people.<br><em>Your future.</em></h1>
+          <p class="lead">You don't have to wait until you're older to start something meaningful. Meet future collaborators, build projects, and learn by <strong>actually building.</strong></p>
+          <div class="hero-actions">
+            <button class="btn btn-accent btn-large" type="button" data-nav="profile">Start your journey <span aria-hidden="true">↗</span></button>
+            <button class="btn btn-ghost btn-large" type="button" data-nav="ideas">Explore matching <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="hero-caption"><span class="caption-dot"></span> Built for young minds. Designed for big ambitions.</div>
+        </div>
+        <div class="hero-art" aria-label="Abstract illustration of ideas becoming collaborative projects">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="art-grid"></div>
+          <div class="art-core"><span class="art-asterisk">✳</span><span>BUILD<br><b>TOGETHER.</b></span></div>
+          <div class="art-pill art-pill-top"><span class="pill-dot yellow"></span> IDEA FOUND <span>01</span></div>
+          <div class="art-pill art-pill-right"><span class="pill-dot"></span> TEAM MATCHED <span>03</span></div>
+          <div class="art-pill art-pill-bottom"><span class="pill-dot orange"></span> PROJECT IN MOTION <span>↗</span></div>
+          <div class="art-bottom">CREATE SOMETHING THAT MATTERS // ASD</div>
+        </div>
+      </div>
+      <section class="section-block how-section">
+        <div class="section-top"><div><p class="kicker">THE PROCESS / 001</p><h2>Big things start <em>small.</em></h2></div><p>Not another classroom. A place to turn curiosity and talent into real projects.</p></div>
+        <div class="steps-grid">
+          <article class="step-card"><div class="step-num">01 <span>↗</span></div><h3>Show up</h3><p>Create a demo builder profile. Tell us your interests and what you can bring to a team.</p><span class="step-label">JOIN THE COMMUNITY</span></article>
+          <article class="step-card"><div class="step-num">02 <span>↗</span></div><h3>Share your idea</h3><p>Bring a project idea, or start by exploring problems you care about solving.</p><span class="step-label">START WITH A SPARK</span></article>
+          <article class="step-card"><div class="step-num">03 <span>↗</span></div><h3>Find your people</h3><p>Explore matches based on interests, available time and complementary skills.</p><span class="step-label">BUILD YOUR CREW</span></article>
+          <article class="step-card"><div class="step-num">04 <span>↗</span></div><h3>Build together</h3><p>Turn plans into tasks and decisions. Get transparent guidance on project risks.</p><span class="step-label">MAKE IT REAL</span></article>
+        </div>
+      </section>
+      <section class="mission-strip"><div><p class="kicker">OUR PHILOSOPHY</p><h2>“Building our younger self <em>for the future.</em>”</h2></div><button type="button" class="btn btn-outline-light" data-nav="profile">Become a builder ↗</button></section>
+      <section class="section-block cards-section">
+        <div class="section-top"><div><p class="kicker">THE TOOLKIT / 002</p><h2>Everything starts <em>with a team.</em></h2></div></div>
+        <div class="feature-grid">
+          <article class="feature-card"><div class="feature-icon">⌘</div><h3>Match with purpose</h3><p>Find the skills your idea is missing. Sample profiles only in this preview.</p></article>
+          <article class="feature-card"><div class="feature-icon">▧</div><h3>Your project space</h3><p>Track tasks, record decisions and see your idea take shape.</p></article>
+          <article class="feature-card"><div class="feature-icon">◇</div><h3>Check the risks</h3><p>See potential blind spots. Your team makes the final choice on ordinary project risks.</p></article>
+        </div>
+      </section>
+    </section>
+    <section class="view hidden" id="view-profile" data-view="profile" aria-labelledby="profileTitle">
+      <div class="page-heading"><p class="kicker">01 / YOUR FOUNDATION</p><h1 id="profileTitle">Start as a <em>builder.</em></h1><p>Create a local demo profile so we can show how matching works. Use a nickname—no real names or contact details.</p></div>
+      <div class="content-grid">
+        <form class="panel form-panel" id="profileForm">
+          <div class="panel-header"><h2>Your builder profile</h2><span class="tag">LOCAL DEMO</span></div>
+          <div class="form-row two-cols">
+            <label>Builder nickname <input name="nickname" id="nickname" type="text" minlength="2" maxlength="24" placeholder="e.g. FutureBuilder" autocomplete="off" required></label>
+            <label>Age group <select name="age" id="age" required><option value="">Choose a group</option><option value="12-14">12–14</option><option value="15-17">15–17</option><option value="18+">18+</option></select></label>
+          </div>
+          <label>Your interests <small>(choose at least one)</small></label>
+          <div class="choice-grid" id="interestsChoices">
+            <label><input type="checkbox" name="interests" value="AI"><span>AI</span></label>
+            <label><input type="checkbox" name="interests" value="Websites"><span>Websites</span></label>
+            <label><input type="checkbox" name="interests" value="Apps"><span>Apps</span></label>
+            <label><input type="checkbox" name="interests" value="Business"><span>Business</span></label>
+            <label><input type="checkbox" name="interests" value="Marketing"><span>Marketing</span></label>
+            <label><input type="checkbox" name="interests" value="Design"><span>Design</span></label>
+            <label><input type="checkbox" name="interests" value="Finance"><span>Finance</span></label>
+            <label><input type="checkbox" name="interests" value="Education"><span>Education</span></label>
+            <label><input type="checkbox" name="interests" value="Gaming"><span>Gaming</span></label>
+            <label><input type="checkbox" name="interests" value="Content"><span>Content</span></label>
+            <label><input type="checkbox" name="interests" value="Agriculture"><span>Agriculture</span></label>
+            <label><input type="checkbox" name="interests" value="Other"><span>Other</span></label>
+          </div>
+          <div class="form-row two-cols">
+            <label>Your strongest role <select id="role" name="role" required><option value="">Select a role</option><option>Project leader</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option><option>I want to learn</option></select></label>
+            <label>Time available <select id="availability" name="availability" required><option value="">Select availability</option><option value="weekends">Weekends</option><option value="evenings">Evenings</option><option value="flexible">Flexible</option></select></label>
+          </div>
+          <div class="info-box" id="guardianNotice"><b>Under 18?</b> Real participation will require appropriate guardian consent and platform safety checks. This demo does not verify consent or create an account.</div>
+          <button type="submit" class="btn btn-accent submit-btn">Save demo profile <span aria-hidden="true">→</span></button>
+          <p class="field-hint" id="profileStatus" role="status"></p>
+        </form>
+        <aside class="aside-stack">
+          <div class="panel light-panel"><div class="panel-mini-icon">✳</div><h3>Everyone has a starting point.</h3><p>You don't need to be an expert. Curiosity, commitment and the willingness to learn are valuable.</p><div class="mini-divider"></div><span class="big-type">YOUR SKILLS.<br>YOUR FUTURE.</span></div>
+          <div class="panel safety-panel"><p class="kicker">SAFETY FIRST</p><h3>Real young people deserve real protection.</h3><p>There are no real public profiles or personal messages in this prototype. Don't enter identifying information.</p></div>
+        </aside>
+      </div>
+    </section>
+    <section class="view hidden" id="view-ideas" data-view="ideas" aria-labelledby="ideaTitle">
+      <div class="page-heading"><p class="kicker">02 / FROM SPARK TO PROJECT</p><h1 id="ideaTitle">Find your <em>people.</em></h1><p>Describe something you want to build. We'll show an illustrative skills-based match with fictional sample builders.</p></div>
+      <div class="content-grid">
+        <form class="panel form-panel" id="ideaForm">
+          <div class="panel-header"><h2>Your project idea</h2><span class="tag">SANDBOX MATCHING</span></div>
+          <label>Project name <input id="ideaTitleInput" name="title" required maxlength="70" placeholder="e.g. FarmLink marketplace"></label>
+          <label>Describe the problem and your idea <textarea name="description" id="ideaDescription" required minlength="25" maxlength="800" rows="6" placeholder="What problem are you solving, and how might the project help?"></textarea></label>
+          <div class="form-row two-cols">
+            <label>Project focus <select id="ideaTopic" name="topic" required><option value="">Select a focus</option><option>Agriculture</option><option>AI</option><option>Apps</option><option>Websites</option><option>Business</option><option>Marketing</option><option>Design</option><option>Finance</option><option>Education</option><option>Gaming</option><option>Content</option><option>Other</option></select></label>
+            <label>Skill you need most <select id="neededRole" name="neededRole" required><option value="">Select a skill</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option></select></label>
+          </div>
+          <div class="info-box">Please don't share passwords, contact details, business secrets or personal information. Everything here stays inside your current browser tab.</div>
+          <button class="btn btn-accent submit-btn" type="submit">Find sample teammates <span aria-hidden="true">→</span></button>
+          <p class="field-hint" id="ideaStatus" role="status"></p>
+        </form>
+        <aside class="aside-stack">
+          <div class="panel" id="matchingPanel"><div class="panel-header"><h2>Match preview</h2><span class="tag">SIMULATION</span></div><p class="muted">Save a profile and submit an idea to see illustrative matches.</p><div id="matchResults" aria-live="polite"></div></div>
+          <div class="panel"><p class="kicker">WAITING SYSTEM · FUTURE FEATURE</p><h3>What if there's no match?</h3><p>Planned: allow 3–6 hours to find a suitable team, then suggest a related project. This preview does <b>not</b> run a background matching queue.</p></div>
+        </aside>
+      </div>
+    </section>
+    <section class="view hidden" id="view-workspace" data-view="workspace" aria-labelledby="workspaceTitle">
+      <div class="page-heading"><p class="kicker">03 / THE BUILD SPACE</p><h1 id="workspaceTitle">Your project <em>workspace.</em></h1><p>A focused place to turn an idea into tasks and progress. Teammates shown in this demo are fictional.</p></div>
+      <div id="workspaceEmpty" class="panel empty-state"><div class="empty-icon">▦</div><h2>No project yet</h2><p>Create your demo profile and submit a project idea to start a simulated team.</p><button class="btn btn-accent" type="button" data-nav="ideas">Go to ideas →</button></div>
+      <div id="workspaceContent" class="hidden">
+        <div class="workspace-summary"><div><span class="kicker">CURRENT PROJECT · DEMO</span><h2 id="workspaceProjectTitle"></h2><p id="workspaceProjectDescription"></p></div><div class="project-badge">● IN PROGRESS</div></div>
+        <div class="workspace-grid">
+          <section class="panel"><div class="panel-header"><h2>Team</h2><span class="tag">SIMULATED</span></div><div id="workspaceMembers"></div></section>
+          <section class="panel"><div class="panel-header"><h2>Task board</h2><span class="tag" id="taskCount">0 TASKS</span></div><form id="taskForm" class="inline-form"><input id="newTask" maxlength="110" aria-label="New task" placeholder="Add the next step..." required><button class="btn btn-accent btn-small" type="submit">Add</button></form><div id="tasksList" class="task-list"></div></section>
+          <section class="panel"><div class="panel-header"><h2>Project decisions & notes</h2><span class="tag">LOCAL ONLY</span></div><form id="noteForm"><label class="sr-only" for="newNote">New project note</label><textarea id="newNote" rows="3" maxlength="350" placeholder="Write a decision or progress update..." required></textarea><button type="submit" class="btn btn-dark">Save note →</button></form><div id="notesList" class="notes-list"></div></section>
+          <section class="panel ai-card"><div class="ai-icon">✳</div><p class="kicker">ASD AI · FUTURE FEATURE</p><h2>Project assistant</h2><p>Planned: recap team progress, help organize work and highlight risks. No AI model is connected in this demo.</p><button class="btn btn-outline-light" data-nav="review" type="button">Try project review →</button></section>
+        </div>
+      </div>
+    </section>
+    <section class="view hidden" id="view-review" data-view="review" aria-labelledby="reviewTitle">
+      <div class="page-heading"><p class="kicker">04 / BUILD SMARTER</p><h1 id="reviewTitle">Check the <em>blind spots.</em></h1><p>ASD Industry aims to help teams understand risks, not take over ordinary project decisions. Some activities may need mandatory safety review.</p></div>
+      <div class="content-grid">
+        <section class="panel form-panel">
+          <div class="panel-header"><h2>Project risk preview</h2><span class="tag">RULE-BASED DEMO</span></div>
+          <div id="reviewEmpty"><p class="muted">Submit a project idea first to see a basic review.</p><button type="button" data-nav="ideas" class="btn btn-accent">Submit an idea →</button></div>
+          <div id="reviewContent" class="hidden"><div id="riskList"></div><div class="info-box"><b>Decision stays with the team for ordinary project risks.</b> This is an informational keyword-based checklist, not professional advice or a safety approval. Unsafe or unlawful activity is not permitted.</div></div>
+        </section>
+        <aside class="aside-stack"><div class="panel light-panel"><span class="panel-mini-icon">◇</span><h3>Build with open eyes.</h3><p>A useful risk check asks better questions. It doesn't pretend every project is guaranteed to succeed.</p><span class="big-type">THINK.<br>TEST.<br>IMPROVE.</span></div><div class="panel"><p class="kicker">PROPOSED OWNERSHIP · NOT ACTIVE</p><h3>30% ASD Industry / 70% team</h3><p>Concept only. No equity or legal commitments are created here. Any future structure requires proper legal review, especially for minors.</p></div></aside>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><div><span class="footer-brand">ASD INDUSTRY<span>✳</span></span><p>Building our younger self for the future.</p></div><div class="footer-right"><p>v0.3 RECONSTRUCTION · DEMO ONLY</p><button id="resetDemo" type="button" class="reset-link">Reset my demo data ↗</button></div></div><div class="footer-bottom">© 2026 ASD Industry <span>Not a live youth community. Registration fee ₦1,000–₦2,000 is proposed only; no payments are accepted.</span></div></footer>
+</body>
+</html>
