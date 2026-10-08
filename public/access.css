@@ -1,0 +1,122 @@
+/* ASD Industry demo entrance + team room (Design 3) */
+[hidden]{display:none!important}
+.access-gate{min-height:100svh;padding:32px;background:radial-gradient(ellipse at 10% 70%,#1454a144,transparent 47%),radial-gradient(ellipse at 88% 15%,#1739636d,transparent 45%),#060f1b;color:#eef5ff;display:grid;place-items:center}
+.gate-layout{width:min(1220px,100%);min-height:min(780px,calc(100svh - 64px));display:grid;grid-template-columns:minmax(0,1.04fr) minmax(390px,.96fr);border:1px solid #274566;border-radius:23px;overflow:hidden;background:#0b1726;box-shadow:0 28px 100px #0009}
+.gate-story{min-height:660px;position:relative;isolation:isolate;padding:37px 40px;display:flex;flex-direction:column;justify-content:space-between;background:#071626;overflow:hidden}
+.gate-story::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,#061321d9 0%,#0a1a26c9 55%,#06131de5 100%),url("https://images.unsplash.com/photo-1540274470540-009a398c8bed?auto=format&fit=crop&w=1400&q=80") center 58%/cover no-repeat}
+.gate-story::after{content:"";position:absolute;z-index:-1;left:-200px;bottom:-240px;width:700px;height:700px;border:1px solid #3c84cf55;border-radius:50%;box-shadow:0 0 0 80px #5292d608,0 0 0 160px #5292d605,0 0 0 240px #5292d602}
+.gate-brand{display:flex;align-items:center;gap:12px;line-height:1.2;font-size:18px;letter-spacing:-.025em;font-weight:900}
+.gate-brand small{display:block;font-size:9px;color:#9eb6d4;letter-spacing:.24em;margin-top:4px}
+.gate-brand-icon{height:44px;width:44px;border:1px solid #4d80ba;background:#0b2138;box-shadow:0 0 21px #2470b044;display:grid;place-items:center;border-radius:12px;font-size:32px;position:relative}
+.gate-brand-icon span{color:#ffc98b;font-size:11px;position:absolute;right:4px;top:2px}
+.gate-story-main{margin:70px 0 80px;max-width:610px}
+.gate-eyebrow{font-size:10px;letter-spacing:.15em;font-weight:900;color:#86c3ff}
+.gate-eyebrow span{display:inline-block;border-radius:50%;background:#61bdff;width:7px;height:7px;margin-right:8px;box-shadow:0 0 16px #78beff}
+.gate-story h1{font-size:clamp(45px,4.9vw,70px);line-height:1.05;letter-spacing:-.075em;margin:26px 0 24px;text-shadow:0 5px 35px #020e1f66}
+.gate-story h1 em{font-style:normal;color:#58a9ff}
+.gate-story-main>p:last-of-type{max-width:440px;color:#bfcbde;font-size:15px;line-height:1.8}
+.gate-badges{display:flex;gap:11px;flex-wrap:wrap;margin-top:33px}
+.gate-badges span{border:1px solid #49729f99;border-radius:30px;background:#122b48cc;color:#c4dbf6;padding:8px 12px;font-size:10px;letter-spacing:.015em}
+.gate-story-bottom{display:flex;gap:10px;align-items:center;color:#a6c3de;font-size:10px;letter-spacing:.13em;font-weight:850}
+.gate-star{font-size:24px;color:#ffc990;line-height:1}
+.gate-form-side{display:flex;align-items:center;justify-content:center;padding:46px clamp(20px,4vw,55px);background:radial-gradient(ellipse at 10% 0%,#233c5b65,transparent 60%),#0e1b2b}
+.gate-form-wrap{width:100%;max-width:510px}
+.gate-topline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:28px}
+.gate-kicker{color:#78a9e2;font-size:9px;font-weight:900;letter-spacing:.17em}
+.gate-pill{color:#9dccff;background:#163151;border:1px solid #295582;border-radius:25px;font-size:9px;font-weight:900;letter-spacing:.12em;padding:7px 11px}
+.gate-form-wrap h2{font-size:clamp(35px,4.2vw,49px);letter-spacing:-.06em;line-height:1.1;margin:0 0 12px}
+.gate-subheading{color:#abbdd0;font-size:12px;line-height:1.75;margin:0 0 26px}
+.gate-form{display:grid;gap:17px}
+.gate-form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.gate-form label:not(.gate-confirm){font-size:11px;font-weight:800;color:#d1e2f5}
+.gate-form input:not([type=checkbox]),.gate-form select{margin-top:8px;border:1px solid #38536e;border-radius:9px;background:#192b3e;width:100%;height:45px;min-width:0;padding:10px 12px;color:#eef6ff;font-size:12px}
+.gate-form input::placeholder{color:#8399ae}.gate-form select option{background:#14283e}
+.gate-fieldset{border:0;padding:0;margin:0;min-width:0}
+.gate-fieldset legend{font-size:11px;font-weight:850;color:#e4edfa;margin-bottom:10px}
+.gate-fieldset legend span{color:#93a7bd;font-weight:500}
+.gate-interest-grid{display:flex;flex-wrap:wrap;gap:8px}
+.gate-interest-grid label{position:relative}
+.gate-interest-grid input{position:absolute;opacity:0;width:1px;height:1px}
+.gate-interest-grid label span{display:block;padding:9px 12px;border-radius:8px;background:#192d40;color:#b9cadd;border:1px solid #304b63;font-size:10px;cursor:pointer;line-height:1}
+.gate-interest-grid input:checked+span{color:#f3faff;background:#235382;border-color:#65b0ff}
+.gate-interest-grid input:focus-visible+span{outline:2px solid #8dbdff;outline-offset:3px}
+.gate-notice{display:flex;gap:10px;border:1px solid #32577e;background:#112b46;color:#b4cee9;border-radius:10px;padding:13px;font-size:11px;line-height:1.55}
+.gate-notice b{color:#e5f1ff}
+.gate-confirm{display:flex;align-items:start;gap:10px;font-size:11px;line-height:1.5;color:#abc1d6;cursor:pointer}
+.gate-confirm input{margin-top:2px;accent-color:#4999ff;flex-shrink:0;width:16px;height:16px}
+.gate-error{font-size:11px;color:#ffaf9b;line-height:1.4;margin:-6px 0;min-height:0}
+.gate-error:empty{display:none}
+.gate-submit{width:100%;border:1px solid #64b0ff;border-radius:10px;background:linear-gradient(100deg,#2b80ed,#4faeff);color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:space-between;min-height:50px;padding:12px 19px;box-shadow:0 9px 25px #1d7bdf44}
+.gate-submit:hover{background:linear-gradient(100deg,#3b97ff,#66baff)}
+.gate-footnote{color:#7994ac;font-size:10px;line-height:1.5;text-align:center;margin:22px 0 0}
+.header-exit{padding:8px 11px;min-height:36px;font-size:10px}
+.workspace-toolbar-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.team-chat-jump{border:1px solid #335b81;background:linear-gradient(100deg,#122f4d,#0a1b2d);border-radius:14px;margin:0 4.9% 18px;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.team-chat-jump span{font-size:11px;letter-spacing:.14em;font-weight:850;color:#8fc5ff}
+.team-chat-jump p{font-size:12px;color:#a9c1d6;margin:8px 0 0;max-width:610px;line-height:1.6}
+.chat-layout{padding:0 4.9% 90px;display:grid;grid-template-columns:minmax(225px,.45fr) minmax(0,1fr);gap:17px;align-items:start}
+.chat-sidebar{min-height:350px}
+.chat-safety{border:1px solid #345577;background:#132a43;border-radius:10px;padding:14px;color:#bcd5eb;font-size:12px;margin-top:19px}
+.chat-safety b{font-size:12px;color:#e3f2ff}
+.chat-safety p{font-size:11px;color:#9fb7ce;line-height:1.6;margin:6px 0 0}
+.chat-workspace-button{margin-top:19px;width:100%}
+.chat-room{padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:540px}
+.chat-room-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 23px;border-bottom:1px solid #29445f}
+.chat-room-header h2{font-size:20px;letter-spacing:-.04em;margin:4px 0 0;overflow-wrap:anywhere}
+.chat-local-badge{flex-shrink:0;border-radius:20px;background:#183950;border:1px solid #337590;padding:8px 10px;color:#87e6d1;font-weight:850;font-size:9px;letter-spacing:.08em}
+.chat-messages{flex:1;min-height:330px;max-height:58vh;overflow:auto;padding:24px 21px;display:flex;flex-direction:column;gap:13px;background:radial-gradient(circle at 75% 15%,#22456919,transparent 56%),#0a1726}
+.chat-empty-message{align-self:center;text-align:center;margin:auto;max-width:345px;color:#aec1d4;font-size:13px;line-height:1.7}
+.chat-empty-message b{font-size:17px;color:#f2f8ff;display:block;margin:0 0 7px}
+.chat-bubble{align-self:flex-end;max-width:min(85%,480px);background:linear-gradient(145deg,#1b5590,#1b3d64);border:1px solid #3673b4;border-radius:14px 14px 4px 14px;padding:12px 16px;box-shadow:0 5px 15px #0003;overflow-wrap:anywhere}
+.chat-bubble .chat-bubble-by{color:#a8d5ff;font-size:10px;font-weight:900;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chat-bubble p{white-space:pre-wrap;font-size:13px;color:#f3f8ff;line-height:1.55;margin:7px 0}
+.chat-bubble small{font-size:9px;color:#b4c7e0}
+.chat-bubble button{color:#b9d2ea;background:none;border:0;padding:3px;font-size:10px;cursor:pointer}
+.chat-bubble button:hover{text-decoration:underline}
+.chat-composer{background:#0f2032;padding:15px 19px 17px;border-top:1px solid #2a4258}
+.chat-composer textarea{display:block;background:#192e45;border:1px solid #345574;color:#f5faff;border-radius:10px;width:100%;padding:12px;font-size:13px;resize:vertical;min-height:66px}
+.chat-composer textarea::placeholder{color:#9db4c9}
+.chat-compose-footer{display:flex;align-items:center;justify-content:space-between;gap:17px;margin-top:11px}
+.chat-compose-footer>span{color:#91a9c0;font-size:10px;line-height:1.45;max-width:370px}
+@media(max-width:990px){
+ .gate-layout{grid-template-columns:.85fr 1.15fr}
+ .gate-story{padding:30px 27px}.gate-story h1{font-size:clamp(43px,5.5vw,60px)}
+ .gate-form-side{padding:35px 27px}
+ .header-exit{display:none}
+ .chat-layout{grid-template-columns:minmax(200px,.4fr) minmax(0,1fr)}
+}
+@media(max-width:720px){
+ .access-gate{padding:0;display:block;min-height:100svh}
+ .gate-layout{border:0;border-radius:0;width:100%;min-height:100svh;display:flex;flex-direction:column;box-shadow:none}
+ .gate-story{min-height:285px;padding:25px 6% 20px;display:block}
+ .gate-brand{font-size:15px}.gate-brand-icon{height:36px;width:36px;font-size:27px}.gate-brand small{font-size:7px}
+ .gate-story-main{margin:32px 0 0;max-width:580px}
+ .gate-story h1{font-size:clamp(39px,8.5vw,58px);line-height:1.04;margin:12px 0 10px}
+ .gate-eyebrow{font-size:9px}
+ .gate-story-main>p:last-of-type{font-size:12px;line-height:1.5;margin:6px 0}
+ .gate-badges{display:none}
+ .gate-story-bottom{display:none}
+ .gate-form-side{flex:1;padding:28px 6% 44px}
+ .gate-form-wrap{max-width:540px}
+ .gate-topline{margin-bottom:15px}.gate-form-wrap h2{font-size:34px}
+ .gate-subheading{font-size:12px;margin-bottom:17px}
+ .chat-layout{grid-template-columns:1fr;padding:0 4% 70px}
+ .chat-sidebar{min-height:0}
+ .chat-messages{min-height:290px}
+ .team-chat-jump{margin:0 4% 14px;flex-wrap:wrap}
+ .chat-compose-footer{flex-wrap:wrap}.chat-compose-footer .btn{width:100%}
+}
+@media(max-width:430px){
+ .gate-story{min-height:255px}.gate-story-main{margin-top:27px}
+ .gate-story h1{font-size:39px}
+ .gate-form-row{grid-template-columns:1fr;gap:13px}
+ .gate-form{gap:13px}
+ .gate-form-side{padding:24px 5% 40px}
+ .gate-interest-grid{gap:7px}.gate-interest-grid label span{padding:9px}
+ .gate-form-wrap h2{font-size:31px}
+ .team-chat-jump .btn{width:100%}
+ .workspace-toolbar{flex-wrap:wrap}
+ .chat-room-header{padding:15px}.chat-room-header h2{font-size:17px}.chat-local-badge{font-size:8px}
+ .chat-messages{padding:16px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
