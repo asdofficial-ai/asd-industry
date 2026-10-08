@@ -124,3 +124,35 @@
 /* Keep the exit control reachable on narrow screens. */
 @media (max-width:850px){.header-exit{display:inline-flex}}
 @media (max-width:385px){.header-exit{padding:7px 8px;font-size:9px}.header-actions{gap:7px}}
+
+/* Signup stays lightweight; project-specific choices happen after entry. */
+.gate-onboarding-hint{
+  display:flex;align-items:flex-start;gap:13px;
+  border:1px solid #2b527f;background:linear-gradient(110deg,#153253,#13253c);
+  border-radius:11px;padding:17px 16px;color:#b9cee4;font-size:12px;line-height:1.65;
+}
+.gate-onboarding-hint b{color:#eff6ff}
+.gate-hint-icon{
+  color:#95caff;font-size:22px;line-height:1.1;
+  display:grid;place-items:center;flex-shrink:0;width:31px;height:31px;
+  border:1px solid #3c6897;border-radius:9px;background:#164473;
+}
+.idea-builder-details{
+  background:linear-gradient(145deg,#122945c9,#0c1e32b5);
+  border:1px solid #345677;border-radius:14px;
+  padding:23px 21px 9px;margin:27px 0 20px;
+}
+.idea-builder-heading{margin-bottom:24px}
+.idea-builder-step{font-size:10px;letter-spacing:.15em;font-weight:900;color:#7cbafd}
+.idea-builder-heading h3{
+  font-size:21px;letter-spacing:-.04em;line-height:1.3;margin:10px 0 7px;color:#eff7ff
+}
+.idea-builder-heading p{font-size:12px;color:#a9bed4;line-height:1.65;margin:0}
+.idea-builder-heading p strong{color:#dbebff}
+.idea-builder-details .choice-grid{margin-top:9px;margin-bottom:18px}
+.idea-builder-details .field-hint{color:#ffbd9b}
+@media(max-width:660px){
+  .idea-builder-details{padding:20px 15px 6px;margin:22px 0}
+  .idea-builder-heading h3{font-size:19px}
+  .gate-onboarding-hint{padding:13px;font-size:11px}
+}
