@@ -120,3 +120,7 @@
  .chat-messages{padding:16px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Keep the exit control reachable on narrow screens. */
+@media (max-width:850px){.header-exit{display:inline-flex}}
+@media (max-width:385px){.header-exit{padding:7px 8px;font-size:9px}.header-actions{gap:7px}}
