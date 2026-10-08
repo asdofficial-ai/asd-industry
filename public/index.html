@@ -7,9 +7,88 @@
   <meta name="description" content="ASD Industry — a place where young builders turn ideas into collaborative projects. Demo only.">
   <title>ASD Industry — Build the Future Together</title>
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/access.css">
   <script src="/app.js" defer></script>
 </head>
 <body>
+
+  <!-- Entry gate: browser-local demo only; not a real account registration. -->
+  <section id="accessGate" class="access-gate" aria-labelledby="gateTitle">
+    <div class="gate-layout">
+      <div class="gate-story">
+        <div class="gate-brand"><span class="gate-brand-icon">A<span>✦</span></span><span>ASD INDUSTRY<small>BUILD YOUR FUTURE</small></span></div>
+        <div class="gate-story-main">
+          <p class="gate-eyebrow"><span></span> FOR THE NEXT GENERATION OF BUILDERS</p>
+          <h1 id="gateTitle">The future<br>doesn't wait.<br><em>Neither should you.</em></h1>
+          <p>Bring your ideas, find your kind of people, and turn the things you imagine into projects worth building.</p>
+          <div class="gate-badges"><span>✧ Find your people</span><span>▧ Build a project</span><span>◇ Grow your skills</span></div>
+        </div>
+        <div class="gate-story-bottom"><span class="gate-star">✳</span><span>BUILDING OUR YOUNGER SELF FOR THE FUTURE</span></div>
+      </div>
+      <div class="gate-form-side">
+        <div class="gate-form-wrap">
+          <div class="gate-topline"><span class="gate-kicker">ASD INDUSTRY / 001</span><span class="gate-pill">DEMO ACCESS</span></div>
+          <h2>Start your <em>journey.</em></h2>
+          <p class="gate-subheading">Set up your demo builder profile to enter ASD Industry. No email, password, payment, or real identity needed.</p>
+          <form id="signupForm" class="gate-form">
+            <div class="gate-form-row">
+              <label>Builder nickname
+                <input id="signupNickname" type="text" maxlength="24" minlength="2" placeholder="e.g. FutureBuilder" autocomplete="off" required>
+              </label>
+              <label>Age group
+                <select id="signupAge" required>
+                  <option value="">Choose group</option>
+                  <option value="12-14">12–14</option>
+                  <option value="15-17">15–17</option>
+                  <option value="18+">18 or older</option>
+                </select>
+              </label>
+            </div>
+            <div class="gate-form-row">
+              <label>What can you contribute?
+                <select id="signupRole" required>
+                  <option value="">Choose a role</option>
+                  <option>Project leader</option><option>Developer</option><option>Designer</option>
+                  <option>Marketing</option><option>Research</option><option>Content</option>
+                  <option>Sales</option><option>Business strategy</option><option>I want to learn</option>
+                </select>
+              </label>
+              <label>When can you build?
+                <select id="signupAvailability" required>
+                  <option value="">Choose a time</option>
+                  <option value="weekends">Weekends</option>
+                  <option value="evenings">Evenings</option>
+                  <option value="flexible">Flexible</option>
+                </select>
+              </label>
+            </div>
+            <fieldset class="gate-fieldset"><legend>Choose your interests <span>(at least one)</span></legend>
+              <div class="gate-interest-grid" id="signupInterests">
+                <label><input type="checkbox" value="AI"><span>AI</span></label>
+                <label><input type="checkbox" value="Websites"><span>Websites</span></label>
+                <label><input type="checkbox" value="Apps"><span>Apps</span></label>
+                <label><input type="checkbox" value="Business"><span>Business</span></label>
+                <label><input type="checkbox" value="Marketing"><span>Marketing</span></label>
+                <label><input type="checkbox" value="Design"><span>Design</span></label>
+                <label><input type="checkbox" value="Finance"><span>Finance</span></label>
+                <label><input type="checkbox" value="Education"><span>Education</span></label>
+                <label><input type="checkbox" value="Gaming"><span>Gaming</span></label>
+                <label><input type="checkbox" value="Content"><span>Content</span></label>
+                <label><input type="checkbox" value="Agriculture"><span>Agriculture</span></label>
+                <label><input type="checkbox" value="Other"><span>Other</span></label>
+              </div>
+            </fieldset>
+            <div class="gate-notice">ⓘ <span><b>Safe demo only.</b> This is not a real account. Nothing is posted online and any teammates are fictional. Visitors under 18 will need verified guardian consent and proper protection before real accounts or chat can launch. Please use a nickname, not your real name.</span></div>
+            <label class="gate-confirm"><input id="signupAcknowledge" type="checkbox" required><span>I understand this is a browser-only demo and won't enter personal or contact details.</span></label>
+            <p id="signupStatus" class="gate-error" role="alert" aria-live="polite"></p>
+            <button class="gate-submit" type="submit">Enter ASD Industry <span>↗</span></button>
+          </form>
+          <p class="gate-footnote">No registration fee collected · No passwords · No real team messaging</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div id="siteShell" class="site-shell" hidden>
   <div class="announcement" role="status"><span class="pulse"></span> PUBLIC PREVIEW · DEMO ONLY <span class="announcement-end">No real accounts, teammates or payments</span></div>
   <header class="header">
     <div class="header-inner">
@@ -18,9 +97,9 @@
         <button type="button" class="nav-button active" data-nav="home">Home</button>
         <button type="button" class="nav-button" data-nav="profile">Profile</button>
         <button type="button" class="nav-button" data-nav="ideas">Find your team</button>
-        <button type="button" class="nav-button" data-nav="workspace">Workspace</button><button type="button" class="nav-button nav-review" data-nav="review">Risk review</button>
+        <button type="button" class="nav-button" data-nav="workspace">Workspace</button><button type="button" class="nav-button" data-nav="chat">Group chat</button><button type="button" class="nav-button nav-review" data-nav="review">Risk review</button>
       </nav>
-      <div class="header-actions"><span class="nav-live" title="Browser-local demo, no live community"><span></span> DEMO</span><button type="button" class="btn btn-small btn-accent header-cta" data-nav="profile">Start building <span aria-hidden="true">↗</span></button><button type="button" class="menu-toggle" id="mobileMenuToggle" aria-label="Open navigation" aria-controls="primaryNavigation" aria-expanded="false"><span></span><span></span><span></span></button></div>
+      <div class="header-actions"><span class="nav-live" title="Browser-local demo, no live community"><span></span> DEMO</span><button type="button" class="btn btn-small btn-accent header-cta" data-nav="profile">Start building <span aria-hidden="true">↗</span></button><button type="button" class="btn btn-small btn-ghost header-exit" id="signOut" title="Leave the demo and return to the sign-up screen">Exit ↗</button><button type="button" class="menu-toggle" id="mobileMenuToggle" aria-label="Open navigation" aria-controls="primaryNavigation" aria-expanded="false"><span></span><span></span><span></span></button></div>
     </div>
   </header>
   <main id="main">
@@ -124,15 +203,49 @@
     </section>
     <section class="view hidden" id="view-workspace" data-view="workspace" aria-labelledby="workspaceTitle">
       <div class="page-heading"><p class="kicker">03 / THE BUILD SPACE</p><h1 id="workspaceTitle">Your project <em>workspace.</em></h1><p>A focused place to turn an idea into tasks and progress. Teammates shown in this demo are fictional.</p></div>
-      <div class="workspace-toolbar"><span class="workspace-toolbar-title">PROJECT OVERVIEW <small>·  DEMO ONLY</small></span><button type="button" class="btn btn-small btn-accent" data-nav="ideas">+ New project idea</button></div><div id="workspaceEmpty" class="panel empty-state"><div class="empty-icon"><span>＋</span></div><h2>No project yet</h2><p>Create your demo profile and submit a project idea to start a simulated team.</p><button class="btn btn-accent" type="button" data-nav="ideas">Go to ideas →</button><button class="btn btn-ghost" type="button" data-nav="profile">Create demo profile</button></div>
+      <div class="workspace-toolbar"><span class="workspace-toolbar-title">PROJECT OVERVIEW <small>·  DEMO ONLY</small></span><div class="workspace-toolbar-actions"><button type="button" class="btn btn-small btn-ghost" data-nav="chat">☰ Group chat →</button><button type="button" class="btn btn-small btn-accent" data-nav="ideas">+ New project idea</button></div></div><div id="workspaceEmpty" class="panel empty-state"><div class="empty-icon"><span>＋</span></div><h2>No project yet</h2><p>Create your demo profile and submit a project idea to start a simulated team.</p><button class="btn btn-accent" type="button" data-nav="ideas">Go to ideas →</button><button class="btn btn-ghost" type="button" data-nav="profile">Create demo profile</button></div>
       <div id="workspaceContent" class="hidden">
         <div class="workspace-summary"><div><span class="kicker">CURRENT PROJECT · DEMO</span><h2 id="workspaceProjectTitle"></h2><p id="workspaceProjectDescription"></p></div><div class="project-badge">● IN PROGRESS</div></div>
+        <div class="team-chat-jump"><div><span>✧ TEAM DISCUSSION</span><p>Your dedicated project chat is available in demo mode. Only messages you write in this browser appear.</p></div><button class="btn btn-accent" type="button" data-nav="chat">Open group chat →</button></div>
         <div class="workspace-grid">
           <section class="panel"><div class="panel-header"><h2>Team</h2><span class="tag">SIMULATED</span></div><div id="workspaceMembers"></div></section>
           <section class="panel"><div class="panel-header"><h2>Task board</h2><span class="tag" id="taskCount">0 TASKS</span></div><form id="taskForm" class="inline-form"><input id="newTask" maxlength="110" aria-label="New task" placeholder="Add the next step..." required><button class="btn btn-accent btn-small" type="submit">Add</button></form><div id="tasksList" class="task-list"></div></section>
           <section class="panel"><div class="panel-header"><h2>Project decisions & notes</h2><span class="tag">LOCAL ONLY</span></div><form id="noteForm"><label class="sr-only" for="newNote">New project note</label><textarea id="newNote" rows="3" maxlength="350" placeholder="Write a decision or progress update..." required></textarea><button type="submit" class="btn btn-dark">Save note →</button></form><div id="notesList" class="notes-list"></div></section>
           <section class="panel ai-card"><div class="ai-icon">✳</div><p class="kicker">ASD AI · FUTURE FEATURE</p><h2>Project assistant</h2><p>Planned: recap team progress, help organize work and highlight risks. No AI model is connected in this demo.</p><button class="btn btn-outline-light" data-nav="review" type="button">Try project review →</button></section>
         </div>
+      </div>
+    </section>
+
+    <section class="view hidden" id="view-chat" data-view="chat" aria-labelledby="chatTitle">
+      <div class="page-heading">
+        <p class="kicker">04 / TEAM COLLABORATION</p>
+        <h1 id="chatTitle">Your team <em>chat.</em></h1>
+        <p>A space for project discussions and decisions. This demo is private to your own tab — the sample teammates cannot read or reply to your messages.</p>
+      </div>
+      <div id="chatEmpty" class="panel empty-state">
+        <div class="empty-icon"><span>☰</span></div><h2>Your group chat starts with a project.</h2>
+        <p>Submit an idea, choose sample teammates, and create a simulated team. We'll open its dedicated chat room here.</p>
+        <button class="btn btn-accent" type="button" data-nav="ideas">Find sample teammates →</button>
+      </div>
+      <div id="chatContent" class="hidden chat-layout">
+        <aside class="panel chat-sidebar">
+          <div class="panel-header"><h2>Team members</h2><span class="tag">FICTIONAL</span></div>
+          <div id="chatMembers"></div>
+          <div class="chat-safety">🔒 <b>Local demo room</b><p>No message is transmitted to another person. Real chat requires identity safeguards, guardian processes, reporting, and moderation.</p></div>
+          <button type="button" class="btn btn-ghost chat-workspace-button" data-nav="workspace">← Back to workspace</button>
+        </aside>
+        <section class="panel chat-room" aria-label="Project team discussion">
+          <div class="chat-room-header">
+            <div><span class="kicker">PROJECT DISCUSSION</span><h2 id="chatProjectTitle">Team room</h2></div>
+            <span class="chat-local-badge">● LOCAL ONLY</span>
+          </div>
+          <div id="chatMessages" class="chat-messages" role="log" aria-label="Local demo messages" aria-live="polite"></div>
+          <form id="chatForm" class="chat-composer">
+            <label class="sr-only" for="chatMessage">Your message</label>
+            <textarea id="chatMessage" maxlength="500" rows="2" placeholder="Write a project message… (only you will see it)" required></textarea>
+            <div class="chat-compose-footer"><span>Never share addresses, phone numbers, passwords, or private details. Max 500 characters.</span><button class="btn btn-accent" type="submit">Send message ↗</button></div>
+          </form>
+        </section>
       </div>
     </section>
     <section class="view hidden" id="view-review" data-view="review" aria-labelledby="reviewTitle">
@@ -147,6 +260,7 @@
       </div>
     </section>
   </main>
-  <footer class="footer"><div class="footer-inner"><div><span class="footer-brand">ASD INDUSTRY<span>✳</span></span><p>Building our younger self for the future.</p></div><div class="footer-right"><p>v0.3 RECONSTRUCTION · DEMO ONLY</p><button id="resetDemo" type="button" class="reset-link">Reset my demo data ↗</button></div></div><div class="footer-bottom">© 2026 ASD Industry <span>Not a live youth community. Registration fee ₦1,000–₦2,000 is proposed only; no payments are accepted.</span></div></footer>
+  <footer class="footer"><div class="footer-inner"><div><span class="footer-brand">ASD INDUSTRY<span>✳</span></span><p>Building our younger self for the future.</p></div><div class="footer-right"><p>v0.3.1 · DESIGN 3 · DEMO ONLY</p><button id="resetDemo" type="button" class="reset-link">Reset my demo data ↗</button></div></div><div class="footer-bottom">© 2026 ASD Industry <span>Not a live youth community. Registration fee ₦1,000–₦2,000 is proposed only; no payments are accepted.</span></div></footer>
+</div><!-- #siteShell -->
 </body>
 </html>
