@@ -9,27 +9,29 @@ The public website stays the v0.3.1 **browser-local demo**. This branch adds:
 
 - PostgreSQL migration for an **isolated ASD Industry** accounts table, profiles and hashed session records.
 - A fail-closed API under `/api/beta`; **all write and identity endpoints return 503 unless explicitly enabled**.
-- A limited, invite-only **18+ tester** registration and login path.
+- A limited, invite-only **18+ tester** registration and login path with mandatory email confirmation before activation.
 - Adult beta profile updates, session cookies and logout.
 - Passwords stored only as memory-hard salted scrypt hashes.
 - Opaque session tokens sent in HttpOnly, SameSite=Strict cookies; only their SHA-256 hashes are stored in the database.
 - Origin checks, JSON content-type enforcement, request-size limits and an in-memory rate limiter.
 - Tests demonstrating under-18 rejection and disabled beta behavior.
 
-**No frontend path is wired to this account API** on the public site.
+**The production landing page is not wired to this account API** on the public site.
 
 ## Endpoint and data scope
 
 | Route | Action | Availability |
 |---|---|---|
 | GET /api/beta/status | Reports closed/open state | Always |
-| POST /api/beta/signup | Invite-only adult tester signup | Only when configured |
+| POST /api/beta/signup | Invite-only adult tester signup; sends 6-digit code | Only when configured |
+| POST /api/beta/verify-email | Confirms 6-digit code and activates adult account | Only when configured |
+| POST /api/beta/resend-verification | Rate-limited replacement code | Only when configured |
 | POST /api/beta/login | Adult tester login | Only when configured |
 | GET /api/beta/me | Current tester profile | Only when configured |
 | PATCH /api/beta/profile | Update role, interests, availability | Only when configured |
 | POST /api/beta/logout | Revoke session | Only when configured |
 
-In this milestone, signup requires `handle`, `email`, `password` (12+ characters), `ageGroup="18+"`, `inviteCode`, `role`, `availability`, and an `interests` array. It does **not** imply age verification, verified email, or a full identity system. The beta is intended only for authorized adult testers and should not be advertised as publicly available.
+In this milestone, signup requires `handle`, `email`, `password` (12+ characters), `ageGroup="18+"`, and `inviteCode`. **Role, availability, and interests are intentionally collected later** when the user starts building a project. It does **not** imply age verification, verified email, or a full identity system. The beta is intended only for authorized adult testers and should not be advertised as publicly available.
 
 ## Local checks
 
@@ -47,7 +49,7 @@ By default `ACCOUNTS_BETA_ENABLED` is unset and all endpoints except status retu
 
 1. **No live accounts for ages 12–17.** User-supplied age bands are insufficient age verification.
 2. **No real group chat.** Real young-user messaging requires safeguarding, reporting, blocking, moderation, abuse-response operations, and guardian workflows.
-3. No production invitation distribution, email verification, password recovery, or account deletion/export yet.
+3. No production invitation distribution, password recovery, or account deletion/export yet. The email-verification implementation is staged; no email provider credentials or real database are connected.
 4. No real payments, equity contracts or cash handling.
 5. No automatic database migration/deployment to public Render.
 6. In-memory rate limiting is insufficient for multi-instance or high-volume services; a shared rate-limit store and additional defenses are needed before wider testing.
