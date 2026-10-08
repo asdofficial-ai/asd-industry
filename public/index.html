@@ -29,7 +29,7 @@
         <div class="gate-form-wrap">
           <div class="gate-topline"><span class="gate-kicker">ASD INDUSTRY / 001</span><span class="gate-pill">SIGN UP · DEMO</span></div>
           <h2>Sign up to <em>build.</em></h2>
-          <p class="gate-subheading">Set up your demo builder profile to enter ASD Industry. No email, password, payment, or real identity needed.</p>
+          <p class="gate-subheading">Choose a nickname and age group to explore ASD Industry. You can tell us about your skills later, when you start a project. No email, password or payment is needed in this demo.</p>
           <form id="signupForm" class="gate-form">
             <div class="gate-form-row">
               <label>Builder nickname
@@ -44,44 +44,11 @@
                 </select>
               </label>
             </div>
-            <div class="gate-form-row">
-              <label>What can you contribute?
-                <select id="signupRole" required>
-                  <option value="">Choose a role</option>
-                  <option>Project leader</option><option>Developer</option><option>Designer</option>
-                  <option>Marketing</option><option>Research</option><option>Content</option>
-                  <option>Sales</option><option>Business strategy</option><option>I want to learn</option>
-                </select>
-              </label>
-              <label>When can you build?
-                <select id="signupAvailability" required>
-                  <option value="">Choose a time</option>
-                  <option value="weekends">Weekends</option>
-                  <option value="evenings">Evenings</option>
-                  <option value="flexible">Flexible</option>
-                </select>
-              </label>
-            </div>
-            <fieldset class="gate-fieldset"><legend>Choose your interests <span>(at least one)</span></legend>
-              <div class="gate-interest-grid" id="signupInterests">
-                <label><input type="checkbox" value="AI"><span>AI</span></label>
-                <label><input type="checkbox" value="Websites"><span>Websites</span></label>
-                <label><input type="checkbox" value="Apps"><span>Apps</span></label>
-                <label><input type="checkbox" value="Business"><span>Business</span></label>
-                <label><input type="checkbox" value="Marketing"><span>Marketing</span></label>
-                <label><input type="checkbox" value="Design"><span>Design</span></label>
-                <label><input type="checkbox" value="Finance"><span>Finance</span></label>
-                <label><input type="checkbox" value="Education"><span>Education</span></label>
-                <label><input type="checkbox" value="Gaming"><span>Gaming</span></label>
-                <label><input type="checkbox" value="Content"><span>Content</span></label>
-                <label><input type="checkbox" value="Agriculture"><span>Agriculture</span></label>
-                <label><input type="checkbox" value="Other"><span>Other</span></label>
-              </div>
-            </fieldset>
+            <div class="gate-onboarding-hint"><span class="gate-hint-icon">✦</span><span><b>Just the basics for now.</b> You'll choose your skills, interests and available time only when you want to build a project or find teammates.</span></div>
             <div class="gate-notice">ⓘ <span><b>Safe demo only.</b> This is not a real account. Nothing is posted online and any teammates are fictional. Visitors under 18 will need verified guardian consent and proper protection before real accounts or chat can launch. Please use a nickname, not your real name.</span></div>
             <label class="gate-confirm"><input id="signupAcknowledge" type="checkbox" required><span>I understand this is a browser-only demo and won't enter personal or contact details.</span></label>
             <p id="signupStatus" class="gate-error" role="alert" aria-live="polite"></p>
-            <button class="gate-submit" type="submit">Create demo profile &amp; enter <span>↗</span></button>
+            <button class="gate-submit" type="submit">Enter ASD Industry <span>↗</span></button>
           </form>
           <p class="gate-footnote">No registration fee collected · No passwords · No real team messaging</p>
         </div>
@@ -99,7 +66,7 @@
         <button type="button" class="nav-button" data-nav="ideas">Find your team</button>
         <button type="button" class="nav-button" data-nav="workspace">Workspace</button><button type="button" class="nav-button" data-nav="chat">Group chat</button><button type="button" class="nav-button nav-review" data-nav="review">Risk review</button>
       </nav>
-      <div class="header-actions"><span class="nav-live" title="Browser-local demo, no live community"><span></span> DEMO</span><button type="button" class="btn btn-small btn-accent header-cta" data-nav="profile">Start building <span aria-hidden="true">↗</span></button><button type="button" class="btn btn-small btn-ghost header-exit" id="signOut" title="Leave the demo and return to the sign-up screen">Exit ↗</button><button type="button" class="menu-toggle" id="mobileMenuToggle" aria-label="Open navigation" aria-controls="primaryNavigation" aria-expanded="false"><span></span><span></span><span></span></button></div>
+      <div class="header-actions"><span class="nav-live" title="Browser-local demo, no live community"><span></span> DEMO</span><button type="button" class="btn btn-small btn-accent header-cta" data-nav="ideas">Start building <span aria-hidden="true">↗</span></button><button type="button" class="btn btn-small btn-ghost header-exit" id="signOut" title="Leave the demo and return to the sign-up screen">Exit ↗</button><button type="button" class="menu-toggle" id="mobileMenuToggle" aria-label="Open navigation" aria-controls="primaryNavigation" aria-expanded="false"><span></span><span></span><span></span></button></div>
     </div>
   </header>
   <main id="main">
@@ -110,7 +77,7 @@
           <h1 id="homeTitle">Your idea.<br>Your people.<br><em>Your future.</em></h1>
           <p class="lead">Meet future collaborators, build real projects, and learn by <strong>actually building.</strong> Your future starts with what you create today.</p>
           <div class="hero-actions">
-            <button class="btn btn-accent btn-large" type="button" data-nav="profile">Start your journey <span aria-hidden="true">↗</span></button>
+            <button class="btn btn-accent btn-large" type="button" data-nav="ideas">Start your journey <span aria-hidden="true">↗</span></button>
             <button class="btn btn-ghost btn-large" type="button" data-nav="ideas">Explore matching <span aria-hidden="true">→</span></button>
           </div>
           <div class="hero-caption"><span class="caption-dot"></span> Built for young minds <span class="caption-divide"></span> Project focused <span class="caption-divide"></span> Learn by doing</div>
@@ -126,13 +93,13 @@
       <section class="section-block how-section">
         <div class="section-top"><div><p class="kicker">↗ THE PROCESS / 001</p><h2>Big things start <em>small.</em></h2></div><p>Not another classroom. A place to turn curiosity and talent into real projects.</p></div>
         <div class="steps-grid">
-          <article class="step-card"><div class="step-num"><span class="step-bubble">01</span><span>01</span></div><h3>Show up</h3><p>Create a demo builder profile. Tell us your interests and what you can bring to a team.</p><span class="step-label">JOIN THE COMMUNITY</span></article>
+          <article class="step-card"><div class="step-num"><span class="step-bubble">01</span><span>01</span></div><h3>Show up</h3><p>Pick a nickname, explore the platform and share an idea when you are ready.</p><span class="step-label">JOIN THE COMMUNITY</span></article>
           <article class="step-card"><div class="step-num"><span class="step-bubble">02</span><span>02</span></div><h3>Share your idea</h3><p>Bring a project idea, or start by exploring problems you care about solving.</p><span class="step-label">START WITH A SPARK</span></article>
           <article class="step-card"><div class="step-num"><span class="step-bubble">03</span><span>03</span></div><h3>Find your people</h3><p>Explore matches based on interests, available time and complementary skills.</p><span class="step-label">BUILD YOUR CREW</span></article>
           <article class="step-card"><div class="step-num"><span class="step-bubble">04</span><span>04</span></div><h3>Build together</h3><p>Turn plans into tasks and decisions. Get transparent guidance on project risks.</p><span class="step-label">MAKE IT REAL</span></article>
         </div>
       </section>
-      <section class="mission-strip"><div><p class="kicker">OUR PHILOSOPHY</p><h2>“Building our younger self <em>for the future.</em>”</h2></div><button type="button" class="btn btn-outline-light" data-nav="profile">Become a builder ↗</button></section>
+      <section class="mission-strip"><div><p class="kicker">OUR PHILOSOPHY</p><h2>“Building our younger self <em>for the future.</em>”</h2></div><button type="button" class="btn btn-outline-light" data-nav="ideas">Start a project ↗</button></section>
       <section class="section-block cards-section">
         <div class="section-top"><div><p class="kicker">THE TOOLKIT / 002</p><h2>Everything starts <em>with a team.</em></h2></div></div>
         <div class="feature-grid">
@@ -167,8 +134,8 @@
             <label><input type="checkbox" name="interests" value="Other"><span>Other</span></label>
           </div>
           <div class="form-row two-cols">
-            <label>Your strongest role <select id="role" name="role" required><option value="">Select a role</option><option>Project leader</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option><option>I want to learn</option></select></label>
-            <label>Time available <select id="availability" name="availability" required><option value="">Select availability</option><option value="weekends">Weekends</option><option value="evenings">Evenings</option><option value="flexible">Flexible</option></select></label>
+            <label>Your strongest role <select id="role" name="role"><option value="">Select a role</option><option>Project leader</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option><option>I want to learn</option></select></label>
+            <label>Time available <select id="availability" name="availability"><option value="">Select availability</option><option value="weekends">Weekends</option><option value="evenings">Evenings</option><option value="flexible">Flexible</option></select></label>
           </div>
           <div class="info-box" id="guardianNotice"><b>Under 18?</b> Real participation will require appropriate guardian consent and platform safety checks. This demo does not verify consent or create an account.</div>
           <button type="submit" class="btn btn-accent submit-btn">Save demo profile <span aria-hidden="true">→</span></button>
@@ -191,12 +158,51 @@
             <label>Project focus <select id="ideaTopic" name="topic" required><option value="">Select a focus</option><option>Agriculture</option><option>AI</option><option>Apps</option><option>Websites</option><option>Business</option><option>Marketing</option><option>Design</option><option>Finance</option><option>Education</option><option>Gaming</option><option>Content</option><option>Other</option></select></label>
             <label>Skill you need most <select id="neededRole" name="neededRole" required><option value="">Select a skill</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option></select></label>
           </div>
+          <section class="idea-builder-details" aria-labelledby="ideaBuilderTitle">
+            <div class="idea-builder-heading">
+              <span class="idea-builder-step">02 / TEAM SETUP</span>
+              <h3 id="ideaBuilderTitle">Now, who will you build with?</h3>
+              <p>Choose your interests, your role and when you're available <strong>for this project</strong>. These details help with sample team matching.</p>
+            </div>
+            <label>Your role in the project
+              <select id="ideaRole" required>
+                <option value="">What can you contribute?</option>
+                <option>Project leader</option><option>Developer</option><option>Designer</option>
+                <option>Marketing</option><option>Research</option><option>Content</option>
+                <option>Sales</option><option>Business strategy</option><option>I want to learn</option>
+              </select>
+            </label>
+            <label>Choose your interests <small>(at least one)</small></label>
+            <div class="choice-grid" id="ideaInterestChoices">
+              <label><input type="checkbox" name="ideaInterests" value="AI"><span>AI</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Websites"><span>Websites</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Apps"><span>Apps</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Business"><span>Business</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Marketing"><span>Marketing</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Design"><span>Design</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Finance"><span>Finance</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Education"><span>Education</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Gaming"><span>Gaming</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Content"><span>Content</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Agriculture"><span>Agriculture</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Other"><span>Other</span></label>
+            </div>
+            <label>When can you work on this project?
+              <select id="ideaAvailability" required>
+                <option value="">Choose availability</option>
+                <option value="weekends">Weekends</option>
+                <option value="evenings">Evenings</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </label>
+            <p class="field-hint" id="ideaBuilderStatus" role="status" aria-live="polite"></p>
+          </section>
           <div class="info-box">Please don't share passwords, contact details, business secrets or personal information. Everything here stays inside your current browser tab.</div>
           <button class="btn btn-accent submit-btn" type="submit">Find sample teammates <span aria-hidden="true">→</span></button>
           <p class="field-hint" id="ideaStatus" role="status"></p>
         </form>
         <aside class="aside-stack">
-          <div class="panel" id="matchingPanel"><div class="panel-header"><h2>Match preview</h2><span class="tag">SIMULATION</span></div><p class="muted">Save a profile and submit an idea to see illustrative matches.</p><div id="matchResults" aria-live="polite"></div></div>
+          <div class="panel" id="matchingPanel"><div class="panel-header"><h2>Match preview</h2><span class="tag">SIMULATION</span></div><p class="muted">Submit an idea, then choose your project skills and interests to see illustrative matches.</p><div id="matchResults" aria-live="polite"></div></div>
           <div class="panel"><p class="kicker">WAITING SYSTEM · FUTURE FEATURE</p><h3>What if there's no match?</h3><p>Planned: allow 3–6 hours to find a suitable team, then suggest a related project. This preview does <b>not</b> run a background matching queue.</p></div>
         </aside>
       </div>
