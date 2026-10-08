@@ -8,8 +8,11 @@ async function main(){
   const client=new Client({connectionString:process.env.DATABASE_URL});
   await client.connect();
   try{
-    const sql=fs.readFileSync(path.join(__dirname,"..","db","migrations","001_account_foundation.sql"),"utf8");
-    await client.query(sql);
+    for(const filename of ["001_account_foundation.sql","002_email_verification.sql"]){
+      const sql=fs.readFileSync(path.join(__dirname,"..","db","migrations",filename),"utf8");
+      await client.query(sql);
+      console.log("Applied "+filename);
+    }
     console.log("ASD Industry v0.4 account schema migration completed.");
   }finally{await client.end();}
 }
