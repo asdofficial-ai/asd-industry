@@ -13,7 +13,7 @@
     {id:"SAMPLE-07", nick:"LaunchLab", role:"Business strategy", interests:["Business","Finance","Apps"], availability:"weekends"},
     {id:"SAMPLE-08", nick:"BrightBridge", role:"Sales", interests:["Education","Marketing","Business"], availability:"evenings"}
   ];
-  const views = ["home", "profile", "ideas", "workspace", "review"];
+  const views = ["home", "profile", "ideas", "workspace", "chat", "review"];
   const byId = id => document.getElementById(id);
   const node = (tag, className, text) => {
     const item = document.createElement(tag);
@@ -29,14 +29,30 @@
         if (result && typeof result === "object") return result;
       }
     } catch (_) { /* storage disabled: in-memory only */ }
-    return {profile:null,idea:null,project:null};
+    return {entryCompleted:false,profile:null,idea:null,project:null};
   }
   let state = loadState();
   const save = () => {
     try { sessionStorage.setItem(STORE_KEY, JSON.stringify(state)); }
     catch (_) { /* do not transmit browser data anywhere */ }
   };
+  const gate = byId("accessGate");
+  const siteShell = byId("siteShell");
+  function showGate() {
+    gate.hidden = false;
+    siteShell.hidden = true;
+    document.title = "Join ASD Industry · Builder Demo";
+    if (location.hash !== "#signup") history.replaceState(null, "", "#signup");
+    window.scrollTo({top:0,behavior:"auto"});
+  }
+  function showSite() {
+    gate.hidden = true;
+    siteShell.hidden = false;
+    document.title = "ASD Industry — Build the Future Together";
+  }
   function go(to) {
+    if (!state.entryCompleted || !state.profile) { showGate(); return; }
+    showSite();
     if (!views.includes(to)) to = "home";
     for (const v of views) byId("view-"+v).classList.toggle("hidden", v !== to);
     for (const button of document.querySelectorAll(".nav-button")) {
@@ -45,6 +61,7 @@
     if (location.hash !== "#"+to) history.replaceState(null,"","#"+to);
     window.scrollTo({top:0,behavior:"auto"});
     if (to==="workspace") renderWorkspace();
+    if (to==="chat") renderChat();
     if (to==="review") renderRisks();
     if (to==="ideas") renderMatches();
   }
@@ -90,6 +107,61 @@
     return [...document.querySelectorAll('input[name="interests"]:checked')].map(e => e.value);
   }
   const profileForm = byId("profileForm");
+
+  // Demo-only access gate. This is not identity verification or real registration.
+  const signupForm = byId("signupForm");
+  signupForm.addEventListener("submit", event => {
+    event.preventDefault();
+    if (!signupForm.reportValidity()) return;
+    const nick = byId("signupNickname").value.trim();
+    const age = byId("signupAge").value;
+    const role = byId("signupRole").value;
+    const availability = byId("signupAvailability").value;
+    const interests = [...byId("signupInterests").querySelectorAll("input:checked")].map(i=>i.value);
+    if (nick.length < 2 || nick.length > 24 || !age || !role || !availability || !interests.length) {
+      byId("signupStatus").textContent = "Choose a nickname, age group, role, time and at least one interest.";
+      return;
+    }
+    if (!byId("signupAcknowledge").checked) {
+      byId("signupStatus").textContent = "Please acknowledge that this is a browser-only demo.";
+      return;
+    }
+    state = {
+      entryCompleted:true,
+      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,role,availability,interests},
+      idea:null,
+      project:null
+    };
+    save();
+    // Populate the builder profile page from the entry form.
+    byId("nickname").value = nick;
+    byId("age").value = age;
+    byId("role").value = role;
+    byId("availability").value = availability;
+    document.querySelectorAll('input[name="interests"]').forEach(input=>{input.checked=interests.includes(input.value);});
+    ideaForm.reset();
+    byId("ideaStatus").textContent="";
+    byId("profileStatus").textContent="Your demo profile is ready · ASD-DEMO-0001";
+    byId("signupStatus").textContent="";
+    renderMatches();
+    renderRisks();
+    go("home");
+  });
+  function leaveDemo() {
+    state={entryCompleted:false,profile:null,idea:null,project:null};
+    try { sessionStorage.removeItem(STORE_KEY); } catch (_) {}
+    signupForm.reset();profileForm.reset();ideaForm.reset();
+    byId("chatForm").reset();
+    byId("profileStatus").textContent="";
+    byId("ideaStatus").textContent="";
+    byId("signupStatus").textContent="";
+    renderMatches();renderRisks();
+    showGate();
+  }
+  byId("signOut").addEventListener("click", () => {
+    if (confirm("Exit and clear all demo profile, project, chat and task data from this tab?")) leaveDemo();
+  });
+
   profileForm.addEventListener("submit", event => {
     event.preventDefault();
     if (!profileForm.reportValidity()) return;
@@ -205,7 +277,8 @@
             {text:"Agree on the problem we're solving",done:false},
             {text:"Describe a small first prototype",done:false}
           ],
-          notes:[]
+          notes:[],
+          messages:[]
         };
         save();
       }
@@ -289,6 +362,60 @@
     input.value="";save();renderNotes();
   });
 
+
+  function renderChat() {
+    const p=state.project;
+    byId("chatEmpty").classList.toggle("hidden",!!p);
+    byId("chatContent").classList.toggle("hidden",!p);
+    if (!p) return;
+    byId("chatProjectTitle").textContent=p.title+" · Team room";
+    const members=byId("chatMembers");
+    members.replaceChildren();
+    for (const member of (p.members || [])) {
+      const line=node("div","member");
+      line.append(node("div","avatar",(member.nick || "?").charAt(0).toUpperCase()));
+      const info=node("div");
+      info.append(node("b","",member.nick));
+      info.append(node("small","",member.role+" · "+(member.demo?"fictional sample":"you")));
+      line.append(info);members.append(line);
+    }
+    const list=byId("chatMessages");
+    list.replaceChildren();
+    const messages=Array.isArray(p.messages) ? p.messages : [];
+    if (!messages.length) {
+      const empty=node("div","chat-empty-message");
+      empty.append(node("b","","Your team room is ready."));
+      empty.append(node("span","","Try sending a project update or asking a question. Messages stay in your own browser tab. No one else can read or reply."));
+      list.append(empty);
+    }
+    messages.forEach((msg,index)=>{
+      const bubble=node("article","chat-bubble");
+      const by=node("div","chat-bubble-by");
+      by.append(node("span","",state.profile.nickname+" · you"));
+      const remove=node("button","","Delete");
+      remove.type="button";remove.setAttribute("aria-label","Delete message "+(index+1));
+      remove.addEventListener("click",()=>{
+        p.messages.splice(index,1);save();renderChat();
+      });
+      by.append(remove);
+      bubble.append(by,node("p","",msg.text),node("small","",msg.sent));
+      list.append(bubble);
+    });
+    list.scrollTop=list.scrollHeight;
+  }
+  byId("chatForm").addEventListener("submit", event=>{
+    event.preventDefault();
+    if (!state.project || !state.profile) { go("ideas"); return; }
+    const input=byId("chatMessage");
+    const text=input.value.trim();
+    if (!text || text.length>500) return;
+    if (!Array.isArray(state.project.messages)) state.project.messages=[];
+    // Bound browser-tab data. No network request and no fictional replies.
+    if (state.project.messages.length>=100) state.project.messages.shift();
+    state.project.messages.push({text,sent:new Date().toLocaleString()});
+    input.value="";save();renderChat();input.focus();
+  });
+
   function riskAssessment(idea) {
     const combined=(idea.title+" "+idea.description+" "+idea.topic).toLowerCase();
     const result = [
@@ -322,11 +449,8 @@
     });
   }
   byId("resetDemo").addEventListener("click",()=>{
-    if (!confirm("Delete this tab's ASD Industry demo profile, idea, tasks and notes?")) return;
-    state={profile:null,idea:null,project:null};
-    try {sessionStorage.removeItem(STORE_KEY);} catch (_) {}
-    profileForm.reset();ideaForm.reset();byId("profileStatus").textContent="";byId("ideaStatus").textContent="";
-    renderMatches();renderRisks();go("home");
+    if (!confirm("Clear your demo profile, project, tasks, group chat and notes, and return to the sign-up screen?")) return;
+    leaveDemo();
   });
   renderMatches();
   renderRisks();
