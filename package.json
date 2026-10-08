@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check public/app.js && node --check lib/account-core.js && node --check lib/account-api.js && node --check scripts/migrate.js",
+    "check": "node --check server.js && node --check public/app.js && node --check lib/account-core.js && node --check lib/account-api.js && node --check scripts/migrate.js && node --check lib/email-verification.js && node --check lib/email-service.js && node --check public/beta-signup.js",
     "test": "node --test",
     "db:migrate": "node scripts/migrate.js"
   },
