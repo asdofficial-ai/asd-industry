@@ -55,6 +55,36 @@
     })
   );
   window.addEventListener("hashchange", () => go(location.hash.slice(1)));
+  // Responsive navigation: visible and operable on touch screens and keyboards.
+  const header = document.querySelector(".header");
+  const menuToggle = byId("mobileMenuToggle");
+  const closeMenu = () => {
+    header.classList.remove("menu-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Open navigation");
+  };
+  menuToggle.addEventListener("click", () => {
+    const opening = !header.classList.contains("menu-open");
+    header.classList.toggle("menu-open", opening);
+    menuToggle.setAttribute("aria-expanded", String(opening));
+    menuToggle.setAttribute("aria-label", opening ? "Close navigation" : "Open navigation");
+  });
+  document.querySelectorAll(".top-nav .nav-button").forEach(button => {
+    button.addEventListener("click", closeMenu);
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && header.classList.contains("menu-open")) {
+      closeMenu();
+      menuToggle.focus();
+    }
+  });
+  document.addEventListener("click", event => {
+    if (header.classList.contains("menu-open") && !header.contains(event.target)) closeMenu();
+  });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 850) closeMenu();
+  });
+
 
   function selectedInterests() {
     return [...document.querySelectorAll('input[name="interests"]:checked')].map(e => e.value);
