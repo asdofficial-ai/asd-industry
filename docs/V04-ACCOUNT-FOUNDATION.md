@@ -31,7 +31,7 @@ The public website stays the v0.3.1 **browser-local demo**. This branch adds:
 | PATCH /api/beta/profile | Update role, interests, availability | Only when configured |
 | POST /api/beta/logout | Revoke session | Only when configured |
 
-In this milestone, signup requires `handle`, `email`, `password` (12+ characters), `ageGroup="18+"`, and `inviteCode`. **Role, availability, and interests are intentionally collected later** when the user starts building a project. It does **not** imply age verification, verified email, or a full identity system. The beta is intended only for authorized adult testers and should not be advertised as publicly available.
+In this milestone, signup requires `handle`, `email`, `password` (12+ characters), `ageGroup="18+"`, and `inviteCode`. **Role, availability, and interests are intentionally collected later** when the user starts building a project. Email confirmation verifies control of the inbox, **not** age, legal identity, guardian consent, or a complete identity system. The beta is intended only for authorized adult testers and should not be advertised as publicly available.
 
 ## Local checks
 
@@ -77,3 +77,12 @@ Required backend variables, in addition to the existing invite-only flags and de
 Use `npm run db:migrate` to apply both SQL migrations. No emails can be sent or received until the owner configures a verified domain and sending provider.
 
 Email verification proves control of an address. **It does not prove age or guardian consent.** Real minor accounts remain disabled.
+
+## Email-provider hardening and test status (2026-10-09)
+
+- Provider configuration now validates the sender address and configured public origin before allowing beta registration; production requires HTTPS.
+- Invalid email recipients and verification codes are rejected before a provider request.
+- Network/HTTP delivery failures return a generic error without exposing verification codes or provider responses to logs.
+- Email delivery is mocked in automated tests; **no real verification email has been sent**.
+- GitHub Actions succeeded with **18 tests passed, 0 failed**. This is code-level verification, not a complete production security assessment or an end-to-end database test.
+- Pending signup recovery, email-provider delivery monitoring, outbox/retry reliability, shared rate limiting, age verification, privacy compliance and the separate database remain unfinished.
