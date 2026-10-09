@@ -86,7 +86,9 @@ test("Founder has a distinct sign-in route and no public self-provisioning",()=>
  assert.match(html,/id="founderLoginPassword"/);
  assert.match(app,/\.staff\?\.role!=="founder"/);
  assert.match(app,/location\.assign\("\/founder\.html"\)/);
- assert.match(app,/if\(!current\.enabled\)/);
+ assert.match(app,/if\(privateStaffEnabled\)/);
+ assert.match(app,/google-config/);
+ assert.match(app,/google-verify/);
  assert.match(founder,/href="\/founder-login\.html"/);
  assert.doesNotMatch(html,/type="text" name="founderRole"/);
 });
