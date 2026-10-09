@@ -7,6 +7,7 @@ This is a **reconstruction from the October 8, 2026 handoff**, not the recovered
 ## Demo features
 
 - **Design 3** responsive dark-blue landing page, desktop and mobile navigation.
+- **Phone homepage refinement (Oct 9)**: mobile hero now stacks intro, actions and skyline without floating-card overlaps; the four process steps form a compact 2×2 grid, toolkit has three concise rows, and footer uses less space. Desktop styles and existing navigation remain separate. The responsive smoke test checks 320/360/390/430/600/660/768/1280px sizes for clipping and overlap.
 - **Sign-up-first gateway**: asks for nickname, age group, email and country. Email and country are stored only in the current browser tab; no real account is created or email sent. Returning visitors in the same tab retain their demo session.
 - **Exit / reset** buttons clear the browser-tab session and return to the signup screen.
 - **Step 2 Builder Profiles**: premium private builder card with nickname, editable @handle, country, age group, short bio, five preset avatar styles or an optional locally resized photo (PNG/JPG/WebP, max 3 MB, reduced to 160 × 160), optional skill tags, and project/idea stats. **Email always shows UNVERIFIED**; no email service is connected.
