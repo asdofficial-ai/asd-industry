@@ -156,3 +156,27 @@
   .idea-builder-heading h3{font-size:19px}
   .gate-onboarding-hint{padding:13px;font-size:11px}
 }
+
+/* Email and country are profile details; verification is explicitly future-only. */
+.email-verification-panel{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  border:1px solid #355473;background:linear-gradient(120deg,#142f4a,#10253a);
+  border-radius:11px;padding:15px 17px;margin:-3px 0 24px
+}
+.email-verification-icon{
+  display:grid;place-items:center;flex:0 0 37px;width:37px;height:37px;
+  border:1px solid #3f6f9f;border-radius:10px;background:#1b4569;
+  color:#aad8ff;font-size:21px
+}
+.email-verification-text{flex:1 1 165px;min-width:0}
+.email-verification-text strong{font-size:12px;color:#e8f3ff}
+.email-verification-text p{font-size:11px;color:#b0c5d9;margin:4px 0 0;line-height:1.6}
+.email-verification-badge{
+  color:#ffd2a6;background:#50381f;border:1px solid #8e6035;
+  padding:6px 9px;border-radius:100px;font-weight:900;font-size:9px;
+  letter-spacing:.07em;white-space:nowrap
+}
+@media(max-width:430px){
+  .email-verification-panel{padding:13px;gap:11px}
+  .email-verification-badge{margin-left:48px}
+}
