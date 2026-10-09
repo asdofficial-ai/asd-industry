@@ -60,6 +60,11 @@ if(!process.env.STAFF_TEST_DATABASE_URL) {
    assert.equal((await r.json()).staff.badge,null);
    assert.equal((await get("/founder/overview",s)).status,403);
    assert.equal((await get("/founder/overview",m)).status,403);
+   assert.equal((await get("/manager/overview",s)).status,403);
+   assert.equal((await get("/manager/overview",m)).status,200);
+   const overview=await get("/manager/overview",f);
+   assert.equal(overview.status,200);
+   assert.equal((await overview.json()).permissions.mayAssignFounder,false);
    r=await get("/founder/overview",f);assert.equal(r.status,200);
    assert.equal((await r.json()).security.passwordsReadable,false);
    assert.equal((await get("/support/overview",f)).status,200);
