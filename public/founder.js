@@ -231,6 +231,76 @@
    queue.append(row);
   });
  }
+ function showNotice(text){
+  $("founderStatus").hidden=false;$("statusText").textContent=text;
+ }
+ async function mutate(path,method,data){
+  const response=await fetch(path,{method,credentials:"same-origin",cache:"no-store",
+   headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok)throw Error(result.error||"Operation unavailable");
+  return result;
+ }
+ function closeReview(){
+  reviewSelection=null;$("founderReviewPanel").hidden=true;
+  $("founderDecisionForm").hidden=true;
+  $("prepareFounderPacket").hidden=true;
+ }
+ async function openReview(id){
+  if(!isAuthenticatedFounder)return showNotice("Founder sign-in required.");
+  try{
+   const result=await fetchJson("/api/staff/requests/"+encodeURIComponent(id));
+   reviewSelection={id,report:result.report,version:result.request.version};
+   const project=result.request;
+   $("founderReviewPanel").hidden=false;
+   $("reviewProjectName").textContent=project.title;
+   $("reviewProjectDescription").textContent=project.description;
+   $("founderDecisionFeedback").textContent="";
+   $("reviewPacket").replaceChildren();
+   $("prepareFounderPacket").hidden=project.status!=="pending"||Boolean(result.report);
+   $("founderDecisionForm").hidden=project.status!=="pending"||!result.report;
+   if(result.report){
+    const sections=result.report.packet?.sections||[];
+    $("reviewPacket").append(node("p","muted","Rule-based specialist assessment only. AI never authorizes projects."));
+    if(!sections.length)$("reviewPacket").append(node("p","muted","All advisory roles are paused; human review still required."));
+    sections.forEach(section=>{
+     const box=node("div","founder-assessment");
+     add(box,node("b","",section.name+" — "+section.label),node("p","muted",section.summary));
+     for(const flag of section.flags||[])box.append(node("p","founder-flag","⚠ "+flag));
+     $("reviewPacket").append(box);
+    });
+   }else $("reviewPacket").append(node("p","muted","Prepare a current specialist packet before a human decision."));
+   $("founderReviewPanel").scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(err){showNotice("Review unavailable: "+err.message);}
+ }
+ async function prepareReview(){
+  if(!reviewSelection)return;
+  const button=$("prepareFounderPacket");button.disabled=true;
+  try{
+   await mutate("/api/staff/requests/"+encodeURIComponent(reviewSelection.id)+"/prepare","POST",{});
+   await openReview(reviewSelection.id);
+   showNotice("Reports prepared; human approval or decline still required.");
+  }catch(err){$("founderDecisionFeedback").textContent=err.message;}
+  finally{button.disabled=false;}
+ }
+ async function decideReview(event){
+  event.preventDefault();
+  if(!reviewSelection?.report)return;
+  const form=$("founderDecisionForm");
+  if(!form.reportValidity())return;
+  const decision=$("founderDecision").value,reason=$("founderDecisionReason").value.trim();
+  if(reason.length<12){$("founderDecisionFeedback").textContent="Give a meaningful reason of at least 12 characters.";return;}
+  if(!confirm("Confirm your HUMAN "+decision.replace("_"," ")+" decision? This enters the protected audit trail."))return;
+  const button=$("submitFounderDecision");button.disabled=true;
+  try{
+   await mutate("/api/staff/requests/"+encodeURIComponent(reviewSelection.id)+"/decision","POST",{
+    decision,rationale:reason,reportId:reviewSelection.report.id
+   });
+   closeReview();$("founderDecisionReason").value="";
+   await checkSession();showNotice("Your human decision was recorded.");
+  }catch(err){$("founderDecisionFeedback").textContent=err.message;}
+  finally{button.disabled=false;}
+ }
  async function fetchJson(path){
   const response=await fetch(path,{cache:"no-store",credentials:"same-origin"});
   const data=await response.json().catch(()=>({}));
@@ -269,6 +339,9 @@
   });
   $("dismissStatus").addEventListener("click",()=>$("founderStatus").hidden=true);
   $("refreshSession").addEventListener("click",checkSession);
+  $("closeFounderReview").addEventListener("click",closeReview);
+  $("prepareFounderPacket").addEventListener("click",prepareReview);
+  $("founderDecisionForm").addEventListener("submit",decideReview);
   renderAgents();
   setTheme(storedTheme()||"global-blue");
   activateSection("overview");
