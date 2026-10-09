@@ -7,8 +7,10 @@ test("staff backend starts closed and requires dedicated production settings",()
  const good={NODE_ENV:"production",STAFF_BACKEND_ENABLED:"true",
  STAFF_DB_URL:"postgres://localhost/asd_industry_staff",
  STAFF_ORIGIN:"https://staff.asdindustry.example",
- STAFF_SESSION_PEPPER:"Z".repeat(40)};
+ STAFF_SESSION_PEPPER:"Z".repeat(40),STAFF_MFA_KEY:"a".repeat(64)};
  assert.equal(Auth.configured(good),true);
+ assert.equal(Auth.configured({...good,STAFF_MFA_KEY:undefined}),false);
+ assert.equal(Auth.configured({...good,STAFF_MFA_KEY:"weak"}),false);
  assert.equal(Auth.configured({...good,STAFF_BACKEND_ENABLED:"false"}),false);
  assert.equal(Auth.configured({...good,STAFF_ORIGIN:"http://staff.asdindustry.example"}),false);
  assert.equal(Auth.configured({...good,STAFF_ORIGIN:"https://staff.asdindustry.example/anything"}),false);
