@@ -44,6 +44,15 @@ CREATE TABLE IF NOT EXISTS industry_account_recovery_cases (
 );
 CREATE INDEX IF NOT EXISTS industry_account_recovery_status_idx
  ON industry_account_recovery_cases(status,created_at DESC);
--- Keep all newly created private tables inaccessible to staff-runtime roles by default.
--- Explicit column-granular grants are subject to a later least-privilege review.
+-- Existing restricted runtime staff identity can read VERIFIED opt-in public badge data only.
+-- It receives NO SELECT or UPDATE privilege on founder emergency profiles or recovery cases.
+DO $
+BEGIN
+ IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname='asd_industry_staff_runtime') THEN
+  GRANT SELECT ON industry_staff_public_profiles TO asd_industry_staff_runtime;
+ END IF;
+END $;
+-- The owner must verify employment and opt-in from an isolated privileged admin process.
+-- No browser or staff service is granted INSERT/UPDATE/DELETE on badge metadata.
+
 COMMIT;
