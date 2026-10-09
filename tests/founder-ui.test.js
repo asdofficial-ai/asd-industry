@@ -75,3 +75,18 @@ test("Account preferences and AI controls are persisted separately from user pro
  assert.match(migration,/industry_ai_agent_controls/);
  assert.match(migrator,/002_founder_operations\.sql/);
 });
+
+test("Founder has a distinct sign-in route and no public self-provisioning",()=>{
+ const html=fs.readFileSync(path.join(pub,"founder-login.html"),"utf8");
+ const app=fs.readFileSync(path.join(pub,"founder-login.js"),"utf8");
+ const founder=fs.readFileSync(path.join(pub,"founder.html"),"utf8");
+ assert.match(html,/PRIVATE FOUNDER ACCESS/);
+ assert.match(html,/id="founderLoginForm"/);
+ assert.match(html,/id="founderLoginEmail"/);
+ assert.match(html,/id="founderLoginPassword"/);
+ assert.match(app,/\.staff\?\.role!=="founder"/);
+ assert.match(app,/location\.assign\("\/founder\.html"\)/);
+ assert.match(app,/if\(!current\.enabled\)/);
+ assert.match(founder,/href="\/founder-login\.html"/);
+ assert.doesNotMatch(html,/type="text" name="founderRole"/);
+});
