@@ -35,12 +35,12 @@
  const node=(tag,cls,value)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=String(value);return n};
  const add=(p,...ns)=>{ns.forEach(n=>p.append(n));return p};
  const safeText=v=>typeof v==="string"?v:"";
- let activeSection="overview",isAuthenticatedFounder=false,authDetails=null,realData=null;
+ let activeSection="overview",isAuthenticatedFounder=false,authDetails=null,realData=null,reviewSelection=null;
  const storageKey="asd-industry-founder-theme-v1";
  function storedTheme(){try{return localStorage.getItem(storageKey)}catch{return null}}
  function saveTheme(value){try{localStorage.setItem(storageKey,value)}catch{}}
  function themeOf(id){return THEMES.find(x=>x.id===id)||THEMES[2]}
- function setTheme(id){
+ function setTheme(id,{skipSync=false}={}){
   const theme=themeOf(id);
   document.body.dataset.founderTheme=theme.id;
   document.querySelector('meta[name="theme-color"]').setAttribute("content",theme.colors[0]);
@@ -49,6 +49,10 @@
   $("activeThemeDescription").textContent=theme.name+" — "+theme.mood+". Applies throughout this Founder account on this device.";
   saveTheme(theme.id);
   buildThemeGallery();buildMiniThemes();
+  if(isAuthenticatedFounder&&!skipSync){
+   mutate("/api/staff/founder/preferences","PUT",{theme:theme.id})
+    .catch(err=>showNotice("Saved on this device, but theme sync failed: "+err.message));
+  }
  }
  function themeCard(theme,index){
   const article=node("article","theme-card"+(theme.id===document.body.dataset.founderTheme?" active":""));
@@ -198,6 +202,8 @@
    if(profile?.staff?.role!=="founder")throw Error("Your session does not have founder-level authorization.");
    const result=await fetchJson("/api/staff/founder/overview");
    isAuthenticatedFounder=true;authDetails=profile.staff;realData=result;
+   if(result.founderTheme&&THEMES.some(t=>t.id===result.founderTheme))
+    setTheme(result.founderTheme,{skipSync:true});
    $("environmentLabel").innerHTML="<i></i> FOUNDER SESSION";
    $("founderAuthStatus").textContent="Authenticated founder: "+profile.staff.email+" · Founder role verified on server.";
    $("statusText").textContent="Authenticated founder overview: data comes from the protected ASD Industry staff database.";
@@ -206,7 +212,7 @@
    $("founderAuthStatus").textContent="No active founder session. "+err.message+" Authenticate through the separate human-staff console when enabled.";
    $("statusText").textContent="Visual preview only — "+err.message+" No real administrator actions are available.";
   }
-  loadMetrics();renderSecurity();renderPeople();renderProjects();
+  loadMetrics();renderAgents();renderSecurity();renderPeople();renderProjects();
  }
  function init(){
   document.querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>activateSection(b.dataset.jump)));
