@@ -49,8 +49,7 @@
       input.value = name;
       input.setCustomValidity("");
       input.dispatchEvent(new Event("change", {bubbles:true}));
-      close();
-      input.focus();
+      close(); // Don't re-open the list or force the mobile keyboard after a tap.
     }
     function open(query = "") {
       visible = countries.filter(name => nameMatches(name, normal(query)));
