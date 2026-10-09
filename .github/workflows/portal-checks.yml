@@ -1,7 +1,7 @@
 name: ASD Industry multi-page project workflow checks
 on:
   push:
-    branches: [feature/v0.5-multipage-private-projects]
+    branches: [feature/v0.5-multipage-private-projects, feature/v0.6-ai-staff-human-review]
   pull_request:
     branches: [main]
 permissions:
@@ -16,5 +16,8 @@ jobs:
           node-version: '22'
       - run: node --check public/portal-core.js
       - run: node --check public/portal.js
+      - run: node --check public/staff-core.js
+      - run: node --check public/staff-dashboard.js
+      - run: node --check lib/ai-staff-runner.js
       - run: node --check public/app.js
-      - run: node --test tests/portal-core.test.js
+      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js
