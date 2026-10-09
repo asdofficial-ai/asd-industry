@@ -2,7 +2,7 @@
 (()=>{
  const $=id=>document.getElementById(id);
  const mode=document.body.dataset.console;
- const endpoint=mode==="founder"?"/founder/overview":"/support/overview";
+ const endpoint=mode==="founder"?"/founder/overview":mode==="manager"?"/manager/overview":"/support/overview";
  const notify=(message)=>{$("serviceStatus").textContent=message;};
  const make=(tag,text,cls)=>{const el=document.createElement(tag);el.textContent=String(text);if(cls)el.className=cls;return el;};
  async function request(path,options={}){
@@ -20,6 +20,7 @@
  async function loadPrivate(){
   const me=await request("/me");
   if(mode==="founder"&&me.staff.role!=="founder")throw Error("Only the verified Founder can open this console.");
+  if(mode==="manager"&&!["founder","manager"].includes(me.staff.role))throw Error("Manager access is required.");
   if(mode==="support"&&!["founder","manager","support"].includes(me.staff.role))
    throw Error("Only human support or authorized managers can open this desk.");
   const data=await request(endpoint);
@@ -34,6 +35,11 @@
      ["Staff audit events",data.counts.audit_events],["Account recovery","Not activated"]])addFact(name,value);
    $("policyText").append(make("p","Emergency contacts, alternate recovery methods, security alerts, backups, escalation steps and succession procedures will be stored privately only after founder MFA and encrypted-profile access are implemented."));
    $("policyText").append(make("p","We do not request emergency documents, account passwords, NIN/BVN, recovery codes or payment information in this demo."));
+  }else if(mode==="manager"){
+   addFact("Requests awaiting human review",data.counts.awaiting_human_review);
+   addFact("Prepared advisory reports",data.counts.prepared_advisory_reports);
+   $("policyText").append(make("p","Managers can coordinate queue reviews but cannot approve or decline a project, assign Founder identity, access private emergency records or reveal passwords."));
+   $("policyText").append(make("p","AI agents and Support accounts remain separate. Staff permissions are checked by the server, not by this page."));
   }else{
    addFact("Human recovery review","Not activated");addFact("Password lookup","Impossible by design");
    $("policyText").append(make("p","When enabled, human agents will use independently verified ownership evidence and two-person approval where appropriate to authorize a one-time password reset. Agents cannot see, recover or disclose the original password."));
