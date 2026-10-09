@@ -71,3 +71,7 @@ Run `npm install && node --test tests/portal-core.test.js tests/staff-workflow.t
 GitHub Actions additionally creates a disposable PostgreSQL 16 database, executes both migrations and runs `tests/staff-db.integration.test.js` against the real authenticated API routes.
 
 **Dev-preview completion is not equivalent to activating a production-grade Founder Account.** Do not enable real minor accounts, real chat, real model processing or payments until required protections are implemented.
+
+## Dedicated Founder sign-in
+
+`/founder-login.html` is the Founder-only branded entrance. It uses the existing protected staff authentication endpoint, but rejects and logs out sessions whose server-validated role is not `founder`. This route does not register an account or bypass the server's disabled status. In preview mode it explains that activation is pending and links to the seven-theme Founder UI. Staff sessions remain restricted to `/api/staff` and are carried only by HttpOnly, Secure, SameSite cookies.
