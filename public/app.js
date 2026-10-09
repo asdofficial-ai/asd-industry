@@ -107,6 +107,167 @@
     return [...document.querySelectorAll('input[name="interests"]:checked')].map(e => e.value);
   }
   const profileForm = byId("profileForm");
+  const avatarStyles = ["ocean","mint","ember","violet","midnight"];
+  const skillCheckboxes = [...document.querySelectorAll('input[name="skills"]')];
+  const maxSkills = 8;
+  const deriveHandle = nickname => {
+    const handle = String(nickname || "").normalize("NFKD").toLowerCase()
+      .replace(/[^a-z0-9._]+/g,".").replace(/^[._]+|[._]+$/g,"").slice(0,22);
+    return handle.length >= 3 ? handle : "builder.demo";
+  };
+  function normalizeProfileExtras() {
+    const p = state.profile;
+    if (!p) return;
+    if (typeof p.handle !== "string" || !/^[a-z0-9._]{3,22}$/.test(p.handle)) p.handle=deriveHandle(p.nickname);
+    if (typeof p.bio !== "string") p.bio="";
+    if (!Array.isArray(p.skills)) p.skills=[];
+    if (!Array.isArray(p.completedProjects)) p.completedProjects=[];
+    if (!avatarStyles.includes(p.avatarStyle)) p.avatarStyle="ocean";
+    if (typeof p.avatarImage !== "string" || !p.avatarImage.startsWith("data:image/")) p.avatarImage="";
+    if (!Number.isFinite(p.ideasExplored)) p.ideasExplored=state.idea?1:0;
+  }
+  function renderBuilderProfile() {
+    normalizeProfileExtras();
+    const p = state.profile || {};
+    const name = p.nickname || "Builder";
+    byId("profileDisplayName").textContent=name;
+    byId("profileDisplayHandle").textContent="@"+(p.handle || "builder");
+    byId("profileDisplayCountry").textContent=p.country || "Country not selected";
+    byId("profileDisplayAge").textContent=p.ageGroup ? p.ageGroup+" years" : "Age group pending";
+    byId("profileDisplayBio").textContent=p.bio || "Your story starts here. Add a short introduction about what you'd like to build.";
+    const avatar = byId("profilePreviewAvatar");
+    avatar.dataset.avatarStyle=p.avatarStyle || "ocean";
+    byId("profileAvatarInitial").textContent=name.charAt(0).toUpperCase();
+    const img=byId("profilePreviewImage");
+    const hasImage=Boolean(p.avatarImage);
+    img.hidden=!hasImage;
+    if (hasImage) img.src=p.avatarImage;
+    else img.removeAttribute("src");
+    byId("profileAvatarInitial").hidden=hasImage;
+    document.querySelectorAll(".avatar-choice").forEach(button => {
+      button.setAttribute("aria-pressed",String(button.dataset.avatarStyle === (p.avatarStyle || "ocean") && !hasImage));
+    });
+    const completed=Array.isArray(p.completedProjects)?p.completedProjects:[];
+    const skills=Array.isArray(p.skills)?p.skills:[];
+    byId("profileStatsIdeas").textContent=String(Math.max(Number(p.ideasExplored)||0,state.idea?1:0));
+    byId("profileStatsCompleted").textContent=String(completed.length);
+    byId("profileStatsSkills").textContent=String(skills.length);
+    byId("profileStatsVerification").textContent="Pending";
+    function chips(targetId, values, fallback) {
+      const target=byId(targetId);
+      target.replaceChildren();
+      if (!values.length) { target.append(node("span","profile-empty-inline",fallback));return; }
+      values.forEach(value=>target.append(node("span","profile-skill-chip",value)));
+    }
+    chips("profilePreviewSkills",skills,"No skills listed yet.");
+    chips("profilePreviewInterests",Array.isArray(p.interests)?p.interests:[],"Choose interests when you start a project.");
+    const history=byId("profileProjectHistory");
+    history.replaceChildren();
+    if (!completed.length) {
+      history.append(node("p","profile-history-empty","No completed demo projects yet. Build a project and mark it complete in your workspace to see it here."));
+    } else {
+      completed.forEach((item,index) => {
+        const row=node("div","profile-project-entry");
+        row.append(node("span","profile-project-icon","✓"));
+        const details=node("div","profile-project-details");
+        details.append(node("strong","",item.title || "Untitled project"));
+        const date=item.completedAt && !Number.isNaN(Date.parse(item.completedAt))
+          ? new Date(item.completedAt).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})
+          : "In this demo";
+        details.append(node("small","",date+" · Self-marked complete · Local only"));
+        row.append(details);history.append(row);
+      });
+    }
+  }
+  function updateSkillStatus() {
+    const count=skillCheckboxes.filter(cb=>cb.checked).length;
+    byId("skillsStatus").textContent=count ? count+" of "+maxSkills+" skills selected" : "No skills selected yet.";
+  }
+  function syncProfileEditor() {
+    normalizeProfileExtras();
+    const p=state.profile || {};
+    byId("nickname").value=p.nickname || "";
+    byId("age").value=p.ageGroup || "";
+    byId("email").value=p.email || "";
+    byId("country").value=p.country || "";
+    byId("handle").value=p.handle || deriveHandle(p.nickname);
+    byId("profileBioInput").value=p.bio || "";
+    byId("profileBioCount").textContent=byId("profileBioInput").value.length+" / 180";
+    byId("role").value=p.role || "";
+    byId("availability").value=p.availability || "";
+    document.querySelectorAll('input[name="interests"]').forEach(input => {
+      input.checked=Array.isArray(p.interests) && p.interests.includes(input.value);
+    });
+    skillCheckboxes.forEach(input=>{input.checked=Array.isArray(p.skills) && p.skills.includes(input.value);});
+    updateSkillStatus();renderBuilderProfile();
+  }
+  byId("editProfileJump").addEventListener("click",()=>{
+    byId("profileForm").scrollIntoView({behavior:"smooth",block:"start"});
+    // Let mobile users reach the form without automatically opening their keyboard.
+  });
+  byId("profileBioInput").addEventListener("input",()=>{
+    byId("profileBioCount").textContent=byId("profileBioInput").value.length+" / 180";
+  });
+  skillCheckboxes.forEach(input=>input.addEventListener("change",()=>{
+    const count=skillCheckboxes.filter(cb=>cb.checked).length;
+    if(count>maxSkills) {
+      input.checked=false;
+      byId("skillsStatus").textContent="Maximum of "+maxSkills+" skills. Deselect one to add another.";
+      return;
+    }
+    updateSkillStatus();
+  }));
+  document.querySelectorAll(".avatar-choice").forEach(button=>{
+    button.addEventListener("click",()=>{
+      if (!state.profile) return;
+      state.profile.avatarStyle=button.dataset.avatarStyle;
+      state.profile.avatarImage="";
+      byId("avatarStatus").textContent="Avatar changed · saved locally in this tab.";
+      save();renderBuilderProfile();
+    });
+  });
+  byId("avatarRemove").addEventListener("click",()=>{
+    if (!state.profile) return;
+    state.profile.avatarImage="";
+    byId("avatarUpload").value="";
+    byId("avatarStatus").textContent="Picture removed · using your selected avatar instead.";
+    save();renderBuilderProfile();
+  });
+  byId("avatarUpload").addEventListener("change",event=>{
+    const file=event.target.files && event.target.files[0];
+    event.target.value="";
+    if(!state.profile || !file) return;
+    if(!["image/png","image/jpeg","image/webp"].includes(file.type) || file.size>3*1024*1024) {
+      byId("avatarStatus").textContent="Use a PNG, JPG or WebP image smaller than 3 MB.";
+      return;
+    }
+    const objectURL=URL.createObjectURL(file);
+    const image=new Image();
+    image.onload=()=>{
+      URL.revokeObjectURL(objectURL);
+      try {
+        const canvas=document.createElement("canvas");
+        canvas.width=160;canvas.height=160;
+        const ctx=canvas.getContext("2d");
+        if(!ctx) throw Error("Canvas unavailable");
+        const side=Math.min(image.naturalWidth,image.naturalHeight);
+        if(!side) throw Error("Image has no dimensions");
+        const sx=(image.naturalWidth-side)/2,sy=(image.naturalHeight-side)/2;
+        ctx.drawImage(image,sx,sy,side,side,0,0,160,160);
+        const url=canvas.toDataURL("image/webp",0.72);
+        if(!url.startsWith("data:image/") || url.length>200000) throw Error("Preview too large");
+        state.profile.avatarImage=url;
+        save();renderBuilderProfile();
+        byId("avatarStatus").textContent="Picture added · compressed to 160px and saved only in this tab.";
+      } catch (_) {byId("avatarStatus").textContent="This picture could not be processed. Try another PNG or JPG."; }
+    };
+    image.onerror=()=>{
+      URL.revokeObjectURL(objectURL);
+      byId("avatarStatus").textContent="Could not read that picture. Please try a valid PNG or JPG.";
+    };
+    image.src=objectURL;
+  });
+
   // No verification email is sent; the UI always reflects the actual unverified demo state.
   function renderEmailVerification() {
     const hasEmail = Boolean(state.profile && state.profile.email);
