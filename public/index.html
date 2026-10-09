@@ -29,7 +29,7 @@
         <div class="gate-form-wrap">
           <div class="gate-topline"><span class="gate-kicker">ASD INDUSTRY / 001</span><span class="gate-pill">SIGN UP · DEMO</span></div>
           <h2>Sign up to <em>build.</em></h2>
-          <p class="gate-subheading">Choose a nickname and age group to explore ASD Industry. You can tell us about your skills later, when you start a project. No email, password or payment is needed in this demo.</p>
+          <p class="gate-subheading">Choose a nickname, age group, email and country to explore ASD Industry. Your project skills come later. This is a local demo: no account is created and no verification email is sent.</p>
           <form id="signupForm" class="gate-form">
             <div class="gate-form-row">
               <label>Builder nickname
@@ -44,9 +44,30 @@
                 </select>
               </label>
             </div>
+            <div class="gate-form-row">
+              <label>Email address
+                <input id="signupEmail" name="email" type="email" maxlength="254" placeholder="e.g. builder@example.com" autocomplete="email" spellcheck="false" required>
+              </label>
+              <label>Country
+                <input id="signupCountry" name="country" type="text" list="countryOptions" minlength="2" maxlength="80" placeholder="e.g. Nigeria" autocomplete="country-name" required>
+              </label>
+            </div>
+            <datalist id="countryOptions">
+              <option value="Nigeria"><option value="Ghana"><option value="Kenya"><option value="South Africa">
+              <option value="Cameroon"><option value="Benin"><option value="Niger"><option value="Chad">
+              <option value="Senegal"><option value="Côte d’Ivoire"><option value="Togo"><option value="Uganda">
+              <option value="Tanzania"><option value="Rwanda"><option value="Ethiopia"><option value="Egypt">
+              <option value="Morocco"><option value="Algeria"><option value="Tunisia"><option value="Zambia">
+              <option value="Zimbabwe"><option value="United States"><option value="United Kingdom"><option value="Canada">
+              <option value="India"><option value="Pakistan"><option value="Bangladesh"><option value="China">
+              <option value="Japan"><option value="South Korea"><option value="Indonesia"><option value="Malaysia">
+              <option value="Saudi Arabia"><option value="United Arab Emirates"><option value="Qatar"><option value="Turkey">
+              <option value="France"><option value="Germany"><option value="Italy"><option value="Spain">
+              <option value="Netherlands"><option value="Australia"><option value="Brazil"><option value="Mexico">
+            </datalist>
             <div class="gate-onboarding-hint"><span class="gate-hint-icon">✦</span><span><b>Just the basics for now.</b> You'll choose your skills, interests and available time only when you want to build a project or find teammates.</span></div>
-            <div class="gate-notice">ⓘ <span><b>Safe demo only.</b> This is not a real account. Nothing is posted online and any teammates are fictional. Visitors under 18 will need verified guardian consent and proper protection before real accounts or chat can launch. Please use a nickname, not your real name.</span></div>
-            <label class="gate-confirm"><input id="signupAcknowledge" type="checkbox" required><span>I understand this is a browser-only demo and won't enter personal or contact details.</span></label>
+            <div class="gate-notice">ⓘ <span><b>Safe demo only.</b> This is not a real account. Nothing is posted online and any teammates are fictional. The email and country you enter are saved only in this browser tab, not sent to our server. For testing, use an example email instead of your personal one. Real accounts for under-18s require appropriate guardian consent and safety protections.</span></div>
+            <label class="gate-confirm"><input id="signupAcknowledge" type="checkbox" required><span>I understand this is a browser-only demo. Email and country stay in this tab and no verification message will be sent.</span></label>
             <p id="signupStatus" class="gate-error" role="alert" aria-live="polite"></p>
             <button class="gate-submit" type="submit">Enter ASD Industry <span>↗</span></button>
           </form>
@@ -110,7 +131,7 @@
       </section>
     </section>
     <section class="view hidden" id="view-profile" data-view="profile" aria-labelledby="profileTitle">
-      <div class="page-heading"><p class="kicker">01 / YOUR FOUNDATION</p><h1 id="profileTitle">Start as a <em>builder.</em></h1><p>Create a local demo profile so we can show how matching works. Use a nickname—no real names or contact details.</p></div>
+      <div class="page-heading"><p class="kicker">01 / YOUR FOUNDATION</p><h1 id="profileTitle">Start as a <em>builder.</em></h1><p>Manage your local builder details here. Email verification will be available in a later version; no messages are sent in this demo.</p></div>
       <div class="content-grid">
         <form class="panel form-panel" id="profileForm">
           <div class="panel-header"><h2>Your builder profile</h2><span class="tag">LOCAL DEMO</span></div>
@@ -118,7 +139,19 @@
             <label>Builder nickname <input name="nickname" id="nickname" type="text" minlength="2" maxlength="24" placeholder="e.g. FutureBuilder" autocomplete="off" required></label>
             <label>Age group <select name="age" id="age" required><option value="">Choose a group</option><option value="12-14">12–14</option><option value="15-17">15–17</option><option value="18+">18+</option></select></label>
           </div>
-          <label>Your interests <small>(choose at least one)</small></label>
+          <div class="form-row two-cols">
+            <label>Email address <input id="email" name="email" type="email" maxlength="254" placeholder="e.g. builder@example.com" autocomplete="email" spellcheck="false" required></label>
+            <label>Country <input id="country" name="country" type="text" list="countryOptions" minlength="2" maxlength="80" placeholder="e.g. Nigeria" autocomplete="country-name" required></label>
+          </div>
+          <div class="email-verification-panel" aria-labelledby="emailVerificationTitle">
+            <span class="email-verification-icon" aria-hidden="true">✉</span>
+            <div class="email-verification-text">
+              <strong id="emailVerificationTitle">Email verification</strong>
+              <p id="emailVerificationMessage">Not verified. Verification emails are not available in this demo yet.</p>
+            </div>
+            <span class="email-verification-badge" id="emailVerificationBadge">UNVERIFIED</span>
+          </div>
+          <label>Your interests <small>(optional until you start a project)</small></label>
           <div class="choice-grid" id="interestsChoices">
             <label><input type="checkbox" name="interests" value="AI"><span>AI</span></label>
             <label><input type="checkbox" name="interests" value="Websites"><span>Websites</span></label>
@@ -143,7 +176,7 @@
         </form>
         <aside class="aside-stack">
           <div class="panel light-panel"><div class="panel-mini-icon">✳</div><h3>Everyone has a starting point.</h3><p>You don't need to be an expert. Curiosity, commitment and the willingness to learn are valuable.</p><div class="mini-divider"></div><span class="big-type">YOUR SKILLS.<br>YOUR FUTURE.</span></div>
-          <div class="panel safety-panel"><p class="kicker">SAFETY FIRST</p><h3>Real young people deserve real protection.</h3><p>There are no real public profiles or personal messages in this prototype. Don't enter identifying information.</p></div>
+          <div class="panel safety-panel"><p class="kicker">SAFETY FIRST</p><h3>Real young people deserve real protection.</h3><p>There are no real public profiles, verification emails or personal messages in this prototype. Use a sample email for testing; real youth accounts will need appropriate safeguards.</p></div>
         </aside>
       </div>
     </section>
