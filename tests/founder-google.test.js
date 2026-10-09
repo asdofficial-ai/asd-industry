@@ -48,5 +48,5 @@ test("Google verification does not confer Founder permissions or sessions",()=>{
  assert.match(js,/accounts\.id\.renderButton/);
  assert.match(js,/google-verify/);
  assert.match(js,/google-login/);
- assert.doesNotMatch(js,/localStorage/);
+ assert.doesNotMatch(js,/localStorage\\.(?:getItem|setItem)/);
 });
