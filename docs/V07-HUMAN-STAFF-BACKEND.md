@@ -36,7 +36,7 @@ Role checks are in the backend. Decisions are recorded transactionally in dedica
 
 Safeguarded setup, from a trusted private environment:
 1. `STAFF_DB_URL`: a new dedicated DB. Never commit it.
-2. Run `npm run staff:migrate` manually.
+2. Run `npm run staff:migrate` manually using `STAFF_ADMIN_DB_URL` in a trusted terminal.
 3. Privately set `NEW_STAFF_EMAIL`, `NEW_STAFF_PASSWORD` (16+ chars) and `NEW_STAFF_ROLE` (`founder`, `reviewer`, `safety`), and run `npm run staff:provision`.
 4. Set **all** `NODE_ENV=production`, `STAFF_BACKEND_ENABLED=true`, `STAFF_ORIGIN=https://...`, `STAFF_DB_URL`, and `STAFF_SESSION_PEPPER` (random secret 32+ chars) only on a dedicated HTTPS staff test service. Do not activate this on the public youth demo.
 5. Staff access at `/staff-console.html` is only for trusted adult testers with the privately provisioned login.
@@ -94,3 +94,7 @@ A constrained PostgreSQL privilege role **`asd_industry_staff_runtime`** has bee
 A dedicated GitHub Actions job now provisions disposable PostgreSQL 16, applies `001_staff_review.sql`, and tests HTTP login, reviewer/safety role restrictions, staff report preparation, human-only approval, duplicate decision rejection, origin checks, logout and audit records. This CI job uses only synthetic adult-test data and disposable test credentials, never the live Neon project.
 
 **No production staff login was activated.** A passing test against disposable PostgreSQL does not constitute a production security assessment.
+
+### Administrative credentials separation
+
+The runtime uses only `STAFF_DB_URL` with the restricted login. **Migration and staff-account provisioning scripts now use `STAFF_ADMIN_DB_URL` exclusively**, which must be available only in a trusted operator's private environment, never set as a Render public-service environment variable. Those scripts reject reuse of the runtime URL. Before real staff-account provisioning, complete MFA, identity verification, safe invitation and review of the privileged account lifecycle.
