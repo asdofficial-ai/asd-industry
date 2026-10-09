@@ -46,9 +46,10 @@ async function testProfile(width,browser){
     const transparentPng=Buffer.from(
       "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMMTK1jIAUwkaR6VMOohiGlAQDg6AFUhq9CZAAAAABJRU5ErkJggg==","base64");
     await page.locator("#avatarUpload").setInputFiles({name:"me.png",mimeType:"image/png",buffer:transparentPng});
-    await page.waitForFunction(()=>/Picture added|could not be processed|Could not read/.test(document.querySelector("#avatarStatus").textContent),{timeout:5000});
-    assert.match(await page.locator("#avatarStatus").textContent(),/Picture added/);
+    await page.waitForFunction(()=>/Picture ready|could not be processed|Could not read/.test(document.querySelector("#avatarStatus").textContent),{timeout:5000});
+    assert.match(await page.locator("#avatarStatus").textContent(),/Picture ready/);
     assert.ok(await page.locator("#editAvatarImage").isVisible());
+    assert.equal(await page.locator("#view-profile #profilePreviewImage").getAttribute("src"),null,"profile image must not save until user presses Save");
     await page.locator("#profileForm button[type=submit]").click();
     assert.ok(await page.locator("#view-profile").isVisible(),"Save returns to profile overview");
     assert.equal(await page.locator("#profileDisplayHandle").textContent(),"@sample.dev");
