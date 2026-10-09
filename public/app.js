@@ -13,7 +13,7 @@
     {id:"SAMPLE-07", nick:"LaunchLab", role:"Business strategy", interests:["Business","Finance","Apps"], availability:"weekends"},
     {id:"SAMPLE-08", nick:"BrightBridge", role:"Sales", interests:["Education","Marketing","Business"], availability:"evenings"}
   ];
-  const views = ["home", "profile", "ideas", "workspace", "chat", "review"];
+  const views = ["home", "profile", "profile-edit", "ideas", "workspace", "chat", "review"];
   const byId = id => document.getElementById(id);
   const node = (tag, className, text) => {
     const item = document.createElement(tag);
@@ -38,13 +38,26 @@
   };
   const gate = byId("accessGate");
   const siteShell = byId("siteShell");
-  function showGate() {
+  function setAccessMode(mode) {
+    const login=mode==="login";
+    byId("signupPanel").hidden=login;
+    byId("loginPanel").hidden=!login;
+    byId("signupTab").setAttribute("aria-selected",String(!login));
+    byId("loginTab").setAttribute("aria-selected",String(login));
+    byId("signupTab").classList.toggle("is-active",!login);
+    byId("loginTab").classList.toggle("is-active",login);
+    document.title=(login ? "Log in · Coming Soon" : "Join ASD Industry") + " · Builder Demo";
+    if (location.hash !== (login?"#login":"#signup")) history.replaceState(null, "", login?"#login":"#signup");
+  }
+  function showGate(mode) {
     gate.hidden = false;
     siteShell.hidden = true;
-    document.title = "Join ASD Industry · Builder Demo";
-    if (location.hash !== "#signup") history.replaceState(null, "", "#signup");
+    setAccessMode(mode==="login" || (!mode && location.hash==="#login")?"login":"signup");
     window.scrollTo({top:0,behavior:"auto"});
   }
+  byId("signupTab").addEventListener("click",()=>setAccessMode("signup"));
+  byId("loginTab").addEventListener("click",()=>setAccessMode("login"));
+  byId("loginToSignup").addEventListener("click",()=>setAccessMode("signup"));
   function showSite() {
     gate.hidden = true;
     siteShell.hidden = false;
@@ -65,6 +78,7 @@
     if (to==="review") renderRisks();
     if (to==="ideas") renderMatches();
     if (to==="profile") renderBuilderProfile();
+    if (to==="profile-edit") syncProfileEditor();
   }
   document.querySelectorAll("[data-nav]").forEach(button =>
     button.addEventListener("click", event => {
@@ -72,7 +86,10 @@
       go(button.dataset.nav);
     })
   );
-  window.addEventListener("hashchange", () => go(location.hash.slice(1)));
+  window.addEventListener("hashchange", () => {
+    if (!state.entryCompleted && ["login","signup"].includes(location.hash.slice(1))) showGate(location.hash.slice(1));
+    else go(location.hash.slice(1));
+  });
   // Responsive navigation: visible and operable on touch screens and keyboards.
   const header = document.querySelector(".header");
   const menuToggle = byId("mobileMenuToggle");
@@ -108,7 +125,8 @@
     return [...document.querySelectorAll('input[name="interests"]:checked')].map(e => e.value);
   }
   const profileForm = byId("profileForm");
-  const avatarStyles = ["ocean","mint","ember","violet","midnight"];
+  let pendingAvatarImage=""; // Editor changes are committed only by Save changes.
+  // Uploaded image or a neutral initial-only fallback; no preset color selection.
   const skillCheckboxes = [...document.querySelectorAll('input[name="skills"]')];
   const maxSkills = 8;
   const deriveHandle = nickname => {
@@ -123,7 +141,7 @@
     if (typeof p.bio !== "string") p.bio="";
     if (!Array.isArray(p.skills)) p.skills=[];
     if (!Array.isArray(p.completedProjects)) p.completedProjects=[];
-    if (!avatarStyles.includes(p.avatarStyle)) p.avatarStyle="ocean";
+    p.avatarStyle="neutral"; // Legacy demo preset colors are retired.
     if (typeof p.avatarImage !== "string" || !p.avatarImage.startsWith("data:image/")) p.avatarImage="";
     if (!Number.isFinite(p.ideasExplored)) p.ideasExplored=state.idea?1:0;
   }
@@ -137,7 +155,7 @@
     byId("profileDisplayAge").textContent=p.ageGroup ? p.ageGroup+" years" : "Age group pending";
     byId("profileDisplayBio").textContent=p.bio || "Your story starts here. Add a short introduction about what you'd like to build.";
     const avatar = byId("profilePreviewAvatar");
-    avatar.dataset.avatarStyle=p.avatarStyle || "ocean";
+    avatar.dataset.avatarStyle="neutral";
     byId("profileAvatarInitial").textContent=name.charAt(0).toUpperCase();
     const img=byId("profilePreviewImage");
     const hasImage=Boolean(p.avatarImage);
@@ -145,9 +163,8 @@
     if (hasImage) img.src=p.avatarImage;
     else img.removeAttribute("src");
     byId("profileAvatarInitial").hidden=hasImage;
-    document.querySelectorAll(".avatar-choice").forEach(button => {
-      button.setAttribute("aria-pressed",String(button.dataset.avatarStyle === (p.avatarStyle || "ocean") && !hasImage));
-    });
+    // The edit screen has its own staged picture preview.
+
     const completed=Array.isArray(p.completedProjects)?p.completedProjects:[];
     const skills=Array.isArray(p.skills)?p.skills:[];
     byId("profileStatsIdeas").textContent=String(Math.max(Number(p.ideasExplored)||0,state.idea?1:0));
@@ -184,9 +201,19 @@
     const count=skillCheckboxes.filter(cb=>cb.checked).length;
     byId("skillsStatus").textContent=count ? count+" of "+maxSkills+" skills selected" : "No skills selected yet.";
   }
+  function renderEditAvatar() {
+    const hasImage=Boolean(pendingAvatarImage);
+    byId("editAvatarInitial").textContent=(byId("nickname").value||state.profile?.nickname||"B").charAt(0).toUpperCase();
+    byId("editAvatarInitial").hidden=hasImage;
+    const image=byId("editAvatarImage");
+    image.hidden=!hasImage;
+    if (hasImage) image.src=pendingAvatarImage;
+    else image.removeAttribute("src");
+  }
   function syncProfileEditor() {
     normalizeProfileExtras();
     const p=state.profile || {};
+    pendingAvatarImage=p.avatarImage || "";
     byId("nickname").value=p.nickname || "";
     byId("age").value=p.ageGroup || "";
     byId("email").value=p.email || "";
@@ -200,12 +227,11 @@
       input.checked=Array.isArray(p.interests) && p.interests.includes(input.value);
     });
     skillCheckboxes.forEach(input=>{input.checked=Array.isArray(p.skills) && p.skills.includes(input.value);});
-    updateSkillStatus();renderBuilderProfile();
+    updateSkillStatus();renderBuilderProfile();renderEditAvatar();
   }
-  byId("editProfileJump").addEventListener("click",()=>{
-    byId("profileForm").scrollIntoView({behavior:"smooth",block:"start"});
-    // Let mobile users reach the form without automatically opening their keyboard.
-  });
+  byId("editProfileJump").addEventListener("click",()=>go("profile-edit"));
+  byId("backToProfile").addEventListener("click",()=>go("profile"));
+  byId("cancelProfileEdit").addEventListener("click",()=>go("profile"));
   byId("profileBioInput").addEventListener("input",()=>{
     byId("profileBioCount").textContent=byId("profileBioInput").value.length+" / 180";
   });
@@ -218,21 +244,12 @@
     }
     updateSkillStatus();
   }));
-  document.querySelectorAll(".avatar-choice").forEach(button=>{
-    button.addEventListener("click",()=>{
-      if (!state.profile) return;
-      state.profile.avatarStyle=button.dataset.avatarStyle;
-      state.profile.avatarImage="";
-      byId("avatarStatus").textContent="Avatar changed · saved locally in this tab.";
-      save();renderBuilderProfile();
-    });
-  });
   byId("avatarRemove").addEventListener("click",()=>{
     if (!state.profile) return;
-    state.profile.avatarImage="";
+    pendingAvatarImage="";
     byId("avatarUpload").value="";
-    byId("avatarStatus").textContent="Picture removed · using your selected avatar instead.";
-    save();renderBuilderProfile();
+    byId("avatarStatus").textContent="Picture removal ready · Save changes to confirm.";
+    renderEditAvatar();
   });
   byId("avatarChooseButton").addEventListener("click",()=>byId("avatarUpload").click());
   byId("handle").addEventListener("blur",()=>{
@@ -247,10 +264,10 @@
       return;
     }
     const owner=state.profile;
-    const objectURL=URL.createObjectURL(file);
+    // Convert the selected file locally to a data URL permitted by our strict image CSP.
+    const reader=new FileReader();
     const image=new Image();
     image.onload=()=>{
-      URL.revokeObjectURL(objectURL);
       if (state.profile !== owner) return; // Prevent photo leaks across a reset or new demo session.
       try {
         const canvas=document.createElement("canvas");
@@ -263,16 +280,22 @@
         ctx.drawImage(image,sx,sy,side,side,0,0,160,160);
         const url=canvas.toDataURL("image/webp",0.72);
         if(!url.startsWith("data:image/") || url.length>200000) throw Error("Preview too large");
-        state.profile.avatarImage=url;
-        save();renderBuilderProfile();
-        byId("avatarStatus").textContent="Picture added · compressed to 160px and saved only in this tab.";
+        pendingAvatarImage=url;
+        renderEditAvatar();
+        byId("avatarStatus").textContent="Picture ready · compressed to 160px. Save changes to keep it in this tab.";
       } catch (_) {byId("avatarStatus").textContent="This picture could not be processed. Try another PNG or JPG."; }
     };
     image.onerror=()=>{
-      URL.revokeObjectURL(objectURL);
       byId("avatarStatus").textContent="Could not read that picture. Please try a valid PNG or JPG.";
     };
-    image.src=objectURL;
+    reader.onload=()=>{
+      if (state.profile !== owner) return;
+      image.src=String(reader.result || "");
+    };
+    reader.onerror=()=>{
+      byId("avatarStatus").textContent="Could not read that file. Please try a different picture.";
+    };
+    reader.readAsDataURL(file);
   });
 
   // No verification email is sent; the UI always reflects the actual unverified demo state.
@@ -315,7 +338,7 @@
     state = {
       entryCompleted:true,
       profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,email:contact.email,country:contact.country,
-        handle:deriveHandle(nick),bio:"",avatarStyle:"ocean",avatarImage:"",skills:[],completedProjects:[],ideasExplored:0,
+        handle:deriveHandle(nick),bio:"",avatarStyle:"neutral",avatarImage:"",skills:[],completedProjects:[],ideasExplored:0,
         role:"",availability:"",interests:[]},
       idea:null,
       project:null
@@ -338,7 +361,7 @@
     try { sessionStorage.removeItem(STORE_KEY); } catch (_) {}
     signupForm.reset();profileForm.reset();ideaForm.reset();
     byId("avatarUpload").value="";
-    byId("avatarStatus").textContent="Choose an avatar instead of a personal photo if you're under 18.";
+    byId("avatarStatus").textContent="Upload a picture from your device or keep the initials icon. Avoid identifiable photos of minors.";
     syncProfileEditor();
     renderEmailVerification();
     byId("chatForm").reset();
@@ -349,9 +372,14 @@
     renderMatches();renderRisks();
     showGate();
   }
-  byId("signOut").addEventListener("click", () => {
-    if (confirm("Exit and clear all demo profile, project, chat and task data from this tab?")) leaveDemo();
-  });
+  const logOutDemo = () => {
+    if (confirm("Log out and clear this tab's demo profile, projects and messages? This preview cannot log you back in yet.")) {
+      leaveDemo();
+      setAccessMode("login");
+    }
+  };
+  byId("signOut").addEventListener("click", logOutDemo);
+  byId("profileLogout").addEventListener("click", logOutDemo);
 
   profileForm.addEventListener("submit", event => {
     event.preventDefault();
@@ -380,6 +408,7 @@
       ageGroup:byId("age").value,
       email:contact.email,
       country:contact.country,
+      avatarImage:pendingAvatarImage,
       skills,
       interests,
       role:byId("role").value,
@@ -394,7 +423,9 @@
     save();
     renderEmailVerification();
     renderBuilderProfile();
-    byId("profileStatus").textContent="Profile saved in this browser tab · "+state.profile.id+". Email remains unverified.";
+    byId("profileStatus").textContent="Changes saved in this browser tab. Email remains unverified.";
+    byId("profileNotice").textContent="✓ Your profile changes are saved in this browser tab.";
+    go("profile");
   });
   syncProfileEditor();
   renderEmailVerification();
@@ -538,7 +569,7 @@
       const line = node("div","member");
       const avatar=node("div","avatar",(member.nick || "?").charAt(0).toUpperCase());
       if (!member.demo && state.profile) {
-        avatar.dataset.avatarStyle=state.profile.avatarStyle || "ocean";
+        avatar.dataset.avatarStyle="neutral";
         if (state.profile.avatarImage) {
           const photo=node("img","member-avatar-image");
           photo.src=state.profile.avatarImage;

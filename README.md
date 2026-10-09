@@ -8,9 +8,9 @@ This is a **reconstruction from the October 8, 2026 handoff**, not the recovered
 
 - **Design 3** responsive dark-blue landing page, desktop and mobile navigation.
 - **Phone homepage refinement (Oct 9)**: mobile hero now stacks intro, actions and skyline without floating-card overlaps; the four process steps form a compact 2×2 grid, toolkit has three concise rows, and footer uses less space. Desktop styles and existing navigation remain separate. The responsive smoke test checks 320/360/390/430/600/660/768/1280px sizes for clipping and overlap.
-- **Sign-up-first gateway**: asks for nickname, age group, email and country. Email and country are stored only in the current browser tab; no real account is created or email sent. Returning visitors in the same tab retain their demo session.
-- **Exit / reset** buttons clear the browser-tab session and return to the signup screen.
-- **Step 2 Builder Profiles**: premium private builder card with nickname, editable @handle, country, age group, short bio, five preset avatar styles or an optional locally resized photo (PNG/JPG/WebP, max 3 MB, reduced to 160 × 160), optional skill tags, and project/idea stats. **Email always shows UNVERIFIED**; no email service is connected.
+- **Sign-up / Log in tabs**: sign-up still creates only a browser-local demo (nickname, age group, test email, country). Log in is a visually prepared but intentionally disabled preview—no account or password system exists. The password containers are disabled and never collect or store credentials.
+- **Log out / reset** buttons clear the browser-tab session. Profile has a Log out button; logging out leads to the honest Log in preview (which cannot authenticate until the real system is built). Reset returns to sign-up.
+- **View-only Builder Profile + separate Edit Profile screen**: Profile shows the builder card, skills, project stats and history. Pressing Edit profile goes to a separate route where you can change your picture, handle, bio, country, email, age group, skills and project preferences. The preset avatar color buttons are removed; use a neutral initials placeholder or upload any chosen PNG/JPG/WebP picture (max 3 MB, resized locally to 160 × 160). **Email always shows UNVERIFIED**; no email service is connected.
 - **Self-marked completed-project history**: click **Mark project complete** in Workspace. It appears under Profile's completed projects; these entries are self-reported, local-only and are not credentials or verified achievements.
 - Skills, interests, role, and availability can be set or updated separately in Profile, but they are prompted when starting a project—not on sign-up.
 - Idea submission and transparent keyword-based risk hints (**not** an AI assessment).
@@ -59,12 +59,12 @@ v0.4 protected database/data model; v0.5 verified authentication plus minor safe
 
 1. Open the Render URL in a fresh browser tab; the **Sign up to build** screen must appear *before* the homepage.
 2. Choose nickname, age group, valid demo email and country; acknowledge the demo-only notice, then **Enter ASD Industry**.
-3. You should reach the homepage. Open **Profile** to see the private builder card, email/country and **UNVERIFIED** badge. Try a preset avatar, a username, bio, skills, optional local image and saving; the page should update without redirecting. No email is sent.
+3. The initial gateway offers Sign up and Log in. Log in and all password fields are disabled, clearly marked coming soon; no credentials should be collected. Use Sign up to enter the local demo. Open **Profile**: the editor must not be visible. Click **Edit profile** to navigate to the dedicated editor. Upload a picture or leave initials, update username, bio, country and skills, then save to return to Profile. Email remains UNVERIFIED.
 4. Open **Find your team**, describe a project, choose your role, interests and availability, then click **Find sample teammates**. Compatibility cards must display, explicitly marked fictional.
 5. Click **Create simulated project team**. Workspace task creation, completion, deletion, and local notes should work. Click **Mark project complete**, then return to Profile and verify it appears in self-marked history.
 6. Open **Group chat** via the top navigation or Workspace's **Open group chat** button. Send and delete local-only messages.
 7. Open **Risk review**; rule-based checklist should reflect the idea topic. The AI assistant button links here.
-8. Click **Exit** in the header (or **Reset my demo data** in the footer), confirm, and verify the sign-up screen returns and the previous chat/project are gone.
+8. Click **Log out** in Profile or the header; confirm and verify that the browser-tab data is deleted and the Log in preview appears. Real re-login is not yet available. **Reset my demo data** in the footer returns to sign-up.
 9. Repeat on a narrow phone viewport and wide desktop. Mobile hamburger navigation should open/close correctly.
 
 **No functionality in this demo constitutes actual user registration, legal ownership, age verification or guardian consent.** Real team chat with young users must remain disabled until moderation, reporting/blocking, verified safeguarding and authentication are implemented.

@@ -38,6 +38,31 @@ test("demo profile save preserves optional data and doesn't redirect to ideas",(
   assert.match(script,/state\.project\.completed=true/);
 });
 
+test("profile overview is separate from the editor and saves return to overview",()=>{
+  const profileStart=html.indexOf('id="view-profile"');
+  const editStart=html.indexOf('id="view-profile-edit"');
+  const formStart=html.indexOf('id="profileForm"');
+  const ideasStart=html.indexOf('id="view-ideas"');
+  assert.ok(profileStart>=0 && editStart>profileStart && formStart>editStart && formStart<ideasStart);
+  assert.ok(!html.slice(profileStart,editStart).includes('id="profileForm"'));
+  assert.match(script,/go\("profile-edit"\)/);
+  assert.match(script,/go\("profile"\)/);
+  assert.match(script,/byId\("profileLogout"\)\.addEventListener/);
+});
+test("password and login controls exist but cannot accept real credentials",()=>{
+  for(const id of ["signupTab","loginTab","signupPanel","loginPanel",
+    "signupPasswordPreview","loginEmailPreview","loginPasswordPreview","profileLogout"]){
+    assert.ok(ids.includes(id),"missing auth shell element "+id);
+  }
+  for(const id of ["signupPasswordPreview","loginPasswordPreview"]){
+    assert.match(html,new RegExp('id="'+id+'"[^>]*disabled'));
+  }
+  assert.match(html,/Log in · Coming soon/);
+  assert.match(script,/setAccessMode\("login"\)/);
+  assert.doesNotMatch(html,/id="avatarChoices"/);
+  assert.doesNotMatch(html,/class="avatar-choice"/);
+  assert.match(html,/id="avatarUpload"/);
+});
 test("country picker accepts 249 country/territory entries and alphabetical selection",()=>{
   const sandbox={document:{querySelectorAll:()=>[]},window:{}};
   vm.runInNewContext(picker,sandbox,{timeout:1000});

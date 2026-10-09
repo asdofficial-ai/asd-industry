@@ -25,3 +25,5 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Check responsive layout and overlap
         run: node tests/mobile-layout.e2e.cjs
+      - name: Test account shell and separated profile flow
+        run: node tests/profile-flows.e2e.cjs
