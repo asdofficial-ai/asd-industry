@@ -143,34 +143,11 @@
   renderProjects();
  }
  function initReview(){
-  const target=$("reviewApplications");
-  function draw(){
-   target.replaceChildren();
-   const pending=state.projects.filter(p=>p.stage==="pending");
-   if(!pending.length){empty(target,"No pending applications","Submit an application from Projects to test this separate administrative workflow.", "Go to Projects","/projects.html");return;}
-   pending.forEach(project=>{
-    const card=element("article","project-card");
-    append(card,element("h3","",project.title),
-       element("p","muted",project.description),
-       element("p","muted","Founder: "+project.founder+" · Requested members: "+project.seats+" · "+project.category));
-    const actions=element("div","project-actions");
-    append(actions,btn("Simulate ASD Industry approval",()=>{
-      if(!confirm("Simulate a staff approval? No real ASD Industry decision is made."))return;
-      try{Core.decide(state,project,"approved","demo-staff-preview","Approved in demonstration for recruitment testing.");save();draw();}
-      catch(err){alert(err.message);}
-    },"primary"));
-    append(actions,btn("Request changes",()=>{
-      const reason=window.prompt("What should the founder improve?","Clarify how the first prototype will be tested.");
-      if(reason===null)return;
-      try{Core.decide(state,project,"changes-requested","demo-staff-preview",reason);save();draw();}
-      catch(err){alert(err.message);}
-    },"warn"));
-    card.append(actions);target.append(card);
-   });
-  }
-  draw();
+  if(!window.ASDStaffDashboard||!window.ASDStaffCore)
+   throw Error("Staff preview modules are missing.");
+  window.ASDStaffDashboard.init({Core,state,save,element,append,btn,empty});
  }
- function activeGroup(area){
+  function activeGroup(area){
   return state.projects.find(p=>Core.canAccess(p,name,area));
  }
  function guarded(area){
