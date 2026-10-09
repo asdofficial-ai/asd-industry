@@ -184,9 +184,25 @@
   prev.append(infoRow("⛨","Safety staff","Risk reviews and escalation; no approvals","Restricted"));
   const dir=$("staffDirectory");dir.replaceChildren();
   const people=realData?.staffDirectory;
-  if(!people){dir.append(node("p","empty-panel","Real staff identities are hidden. The console requires an authenticated Founder session and dedicated server database."));return;}
+  if(!people){dir.append(node("p","empty-panel","Real staff identities are hidden. Sign in with an authorized Founder account to manage your team."));return;}
   if(!people.length){dir.append(node("p","empty-panel","No human staff accounts registered."));return;}
-  people.forEach(p=>dir.append(infoRow("♧",safeText(p.email),safeText(p.role),p.enabled?"Enabled":"Disabled")));
+  people.forEach(p=>{
+   const row=infoRow("♧",safeText(p.email),safeText(p.role),p.enabled?"Enabled":"Suspended");
+   if(p.role!=="founder"&&p.id){
+    const button=node("button","cta ghost founder-toggle",p.enabled?"Suspend":"Restore");
+    button.type="button";button.setAttribute("aria-label",(p.enabled?"Suspend ":"Restore ")+p.email);
+    button.addEventListener("click",async()=>{
+     if(!confirm((p.enabled?"Suspend":"Restore")+" staff access for "+p.email+"? Suspension revokes active sessions."))return;
+     button.disabled=true;
+     try{
+      await mutate("/api/staff/founder/staff/"+encodeURIComponent(p.id),"PATCH",{enabled:!p.enabled});
+      await checkSession();showNotice("Human staff access updated.");
+     }catch(err){showNotice(err.message);button.disabled=false;}
+    });
+    row.append(button);
+   }
+   dir.append(row);
+  });
  }
  function renderProjects(){
   const summary=$("approvalPreview");summary.replaceChildren();
@@ -206,7 +222,14 @@
   }
   const requests=realData?.latestRequests||[];
   if(!requests.length){queue.append(node("p","empty-panel","No submitted review requests in the founder database."));return;}
-  requests.forEach(p=>queue.append(infoRow("▣",p.title,p.creator_label+" · "+p.category+" · "+p.requested_seats+" teammates",p.status)));
+  requests.forEach(p=>{
+   const row=infoRow("▣",p.title,p.creator_label+" · "+p.category+" · "+p.requested_seats+" teammates",p.status);
+   if(p.status==="pending"){
+    const button=node("button","cta ghost founder-toggle","Review");
+    button.type="button";button.addEventListener("click",()=>openReview(p.id));row.append(button);
+   }
+   queue.append(row);
+  });
  }
  async function fetchJson(path){
   const response=await fetch(path,{cache:"no-store",credentials:"same-origin"});
