@@ -35,8 +35,9 @@
   submit.disabled=true;error.textContent="";
   try{
    const outcome=await api("/login",{method:"POST",headers:{"Content-Type":"application/json"},
-     body:JSON.stringify({email:document.getElementById("founderLoginEmail").value,password:document.getElementById("founderLoginPassword").value})});
+     body:JSON.stringify({email:document.getElementById("founderLoginEmail").value,password:document.getElementById("founderLoginPassword").value,totp:document.getElementById("founderLoginTotp").value.trim()})});
    document.getElementById("founderLoginPassword").value="";
+   document.getElementById("founderLoginTotp").value="";
    if(outcome?.staff?.role!=="founder"){
     await api("/logout",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).catch(()=>{});
     throw Error("This account does not have Founder authorization.");
