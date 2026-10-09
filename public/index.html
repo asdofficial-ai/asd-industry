@@ -8,6 +8,7 @@
   <title>ASD Industry — Build the Future Together</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/access.css">
+  <script src="/country-picker.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -48,23 +49,15 @@
               <label>Email address
                 <input id="signupEmail" name="email" type="email" maxlength="254" placeholder="e.g. builder@example.com" autocomplete="email" spellcheck="false" required>
               </label>
-              <label>Country
-                <input id="signupCountry" name="country" type="text" list="countryOptions" minlength="2" maxlength="80" placeholder="e.g. Nigeria" autocomplete="country-name" required>
-              </label>
+              <div class="country-field">
+                <label for="signupCountry">Country</label>
+                <div class="country-picker" data-country-picker>
+                  <input id="signupCountry" class="country-input" name="country" type="text" minlength="2" maxlength="80" placeholder="Type or choose country" role="combobox" aria-autocomplete="list" aria-controls="signupCountryList" aria-expanded="false" aria-haspopup="listbox" autocomplete="off" spellcheck="false" required>
+                  <button type="button" class="country-picker-toggle" aria-label="Show all countries A to Z" aria-controls="signupCountryList" aria-expanded="false"><span aria-hidden="true">▾</span></button>
+                  <div id="signupCountryList" class="country-picker-list" role="listbox" aria-label="Countries and territories alphabetically" hidden></div>
+                </div>
+              </div>
             </div>
-            <datalist id="countryOptions">
-              <option value="Nigeria"><option value="Ghana"><option value="Kenya"><option value="South Africa">
-              <option value="Cameroon"><option value="Benin"><option value="Niger"><option value="Chad">
-              <option value="Senegal"><option value="Côte d’Ivoire"><option value="Togo"><option value="Uganda">
-              <option value="Tanzania"><option value="Rwanda"><option value="Ethiopia"><option value="Egypt">
-              <option value="Morocco"><option value="Algeria"><option value="Tunisia"><option value="Zambia">
-              <option value="Zimbabwe"><option value="United States"><option value="United Kingdom"><option value="Canada">
-              <option value="India"><option value="Pakistan"><option value="Bangladesh"><option value="China">
-              <option value="Japan"><option value="South Korea"><option value="Indonesia"><option value="Malaysia">
-              <option value="Saudi Arabia"><option value="United Arab Emirates"><option value="Qatar"><option value="Turkey">
-              <option value="France"><option value="Germany"><option value="Italy"><option value="Spain">
-              <option value="Netherlands"><option value="Australia"><option value="Brazil"><option value="Mexico">
-            </datalist>
             <div class="gate-onboarding-hint"><span class="gate-hint-icon">✦</span><span><b>Just the basics for now.</b> You'll choose your skills, interests and available time only when you want to build a project or find teammates.</span></div>
             <div class="gate-notice">ⓘ <span><b>Safe demo only.</b> This is not a real account. Nothing is posted online and any teammates are fictional. The email and country you enter are saved only in this browser tab, not sent to our server. For testing, use an example email instead of your personal one. Real accounts for under-18s require appropriate guardian consent and safety protections.</span></div>
             <label class="gate-confirm"><input id="signupAcknowledge" type="checkbox" required><span>I understand this is a browser-only demo. Email and country stay in this tab and no verification message will be sent.</span></label>
@@ -141,7 +134,14 @@
           </div>
           <div class="form-row two-cols">
             <label>Email address <input id="email" name="email" type="email" maxlength="254" placeholder="e.g. builder@example.com" autocomplete="email" spellcheck="false" required></label>
-            <label>Country <input id="country" name="country" type="text" list="countryOptions" minlength="2" maxlength="80" placeholder="e.g. Nigeria" autocomplete="country-name" required></label>
+            <div class="country-field">
+              <label for="country">Country</label>
+              <div class="country-picker" data-country-picker>
+                <input id="country" class="country-input" name="country" type="text" minlength="2" maxlength="80" placeholder="Type or choose country" role="combobox" aria-autocomplete="list" aria-controls="countryList" aria-expanded="false" aria-haspopup="listbox" autocomplete="off" spellcheck="false" required>
+                <button type="button" class="country-picker-toggle" aria-label="Show all countries A to Z" aria-controls="countryList" aria-expanded="false"><span aria-hidden="true">▾</span></button>
+                <div id="countryList" class="country-picker-list" role="listbox" aria-label="Countries and territories alphabetically" hidden></div>
+              </div>
+            </div>
           </div>
           <div class="email-verification-panel" aria-labelledby="emailVerificationTitle">
             <span class="email-verification-icon" aria-hidden="true">✉</span>
