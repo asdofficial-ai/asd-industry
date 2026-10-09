@@ -107,6 +107,22 @@
     return [...document.querySelectorAll('input[name="interests"]:checked')].map(e => e.value);
   }
   const profileForm = byId("profileForm");
+  // No verification email is sent; the UI always reflects the actual unverified demo state.
+  function renderEmailVerification() {
+    const hasEmail = Boolean(state.profile && state.profile.email);
+    byId("emailVerificationBadge").textContent = "UNVERIFIED";
+    byId("emailVerificationMessage").textContent = hasEmail
+      ? "Not verified yet. Email verification will be available later; no email has been sent."
+      : "Add an email address to your profile. Verification will be available later.";
+  }
+  function readContactDetails(emailId, countryId) {
+    const email = byId(emailId).value.trim().toLowerCase();
+    const country = byId(countryId).value.trim().replace(/\s+/g, " ");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || country.length < 2 || country.length > 80) {
+      return null;
+    }
+    return {email, country};
+  }
 
   // Demo-only access gate. This is not identity verification or real registration.
   const signupForm = byId("signupForm");
@@ -115,8 +131,9 @@
     if (!signupForm.reportValidity()) return;
     const nick = byId("signupNickname").value.trim();
     const age = byId("signupAge").value;
-    if (nick.length < 2 || nick.length > 24 || !["12-14","15-17","18+"].includes(age)) {
-      byId("signupStatus").textContent = "Choose a nickname and an age group to enter.";
+    const contact = readContactDetails("signupEmail", "signupCountry");
+    if (nick.length < 2 || nick.length > 24 || !["12-14","15-17","18+"].includes(age) || !contact) {
+      byId("signupStatus").textContent = "Enter a nickname, age group, valid email and country to enter.";
       return;
     }
     if (!byId("signupAcknowledge").checked) {
@@ -125,7 +142,7 @@
     }
     state = {
       entryCompleted:true,
-      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,role:"",availability:"",interests:[]},
+      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,email:contact.email,country:contact.country,role:"",availability:"",interests:[]},
       idea:null,
       project:null
     };
@@ -133,6 +150,9 @@
     // Populate the builder profile page from the entry form.
     byId("nickname").value = nick;
     byId("age").value = age;
+    byId("email").value = contact.email;
+    byId("country").value = contact.country;
+    renderEmailVerification();
     byId("role").value = "";
     byId("availability").value = "";
     document.querySelectorAll('input[name="interests"]').forEach(input=>{input.checked=false;});
@@ -168,8 +188,9 @@
     const role=byId("role").value;
     const availability=byId("availability").value;
     const hasAnyProjectPreferences = Boolean(role || availability || interests.length);
-    if (nickname.length < 2 || nickname.length > 24 || !["12-14","15-17","18+"].includes(byId("age").value)) {
-      byId("profileStatus").textContent = "Choose a nickname and age group.";
+    const contact = readContactDetails("email", "country");
+    if (nickname.length < 2 || nickname.length > 24 || !["12-14","15-17","18+"].includes(byId("age").value) || !contact) {
+      byId("profileStatus").textContent = "Enter a nickname, age group, valid email and country.";
       return;
     }
     if (hasAnyProjectPreferences && (!role || !availability || !interests.length)) {
@@ -180,6 +201,8 @@
       id:"ASD-DEMO-0001",
       nickname:nickname,
       ageGroup:byId("age").value,
+      email:contact.email,
+      country:contact.country,
       interests,
       role,
       availability
@@ -187,19 +210,25 @@
     syncIdeaBuilderFromProfile();
     // Profile changes remain local and can be used for subsequent project matches.
     save();
+    renderEmailVerification();
     byId("profileStatus").textContent = "Saved only in this browser tab — "+state.profile.id+".";
     go("ideas");
   });
   if (state.profile) {
     byId("nickname").value = state.profile.nickname || "";
     byId("age").value = state.profile.ageGroup || "";
+    byId("email").value = state.profile.email || "";
+    byId("country").value = state.profile.country || "";
     byId("role").value = state.profile.role || "";
     byId("availability").value = state.profile.availability || "";
     for (const checkbox of document.querySelectorAll('input[name="interests"]')) {
       checkbox.checked = (state.profile.interests || []).includes(checkbox.value);
     }
-    byId("profileStatus").textContent = "Demo nickname saved · "+state.profile.id+". Builder skills are chosen when you start a project.";
+    byId("profileStatus").textContent = state.profile.email && state.profile.country
+      ? "Demo profile saved · "+state.profile.id+". Builder skills are chosen when you start a project."
+      : "Complete your email and country here to update your existing demo profile.";
   }
+  renderEmailVerification();
 
   const ideaForm = byId("ideaForm");
   const projectInterestInputs = [...document.querySelectorAll('input[name="ideaInterests"]')];
