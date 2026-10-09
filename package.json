@@ -1,15 +1,20 @@
 {
   "name": "asd-industry",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
-  "description": "ASD Industry browser-local youth project-building demonstration",
+  "description": "ASD Industry youth-building demo with isolated, disabled-by-default adult-only account beta",
   "main": "server.js",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check public/app.js"
+    "check": "node --check server.js && node --check public/app.js && node --check lib/account-core.js && node --check lib/account-api.js && node --check scripts/migrate.js && node --check lib/email-verification.js && node --check lib/email-service.js && node --check public/beta-signup.js",
+    "test": "node --test",
+    "db:migrate": "node scripts/migrate.js"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
   }
 }

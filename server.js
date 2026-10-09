@@ -16,13 +16,15 @@ app.use((req, res, next) => {
 app.get("/health", (req, res) => res.json({
   status: "ok",
   service: "asd-industry",
-  version: "v0.3-reconstruction",
+  version: "v0.4-account-foundation",
   mode: "demo"
 }));
 app.get("/api/status", (req, res) => res.json({
   mode: "demo",
   message: "No accounts, payments, real matching, or personal information endpoints are enabled."
 }));
+// Beta API fails closed unless all server-side secrets and invite flags are configured.
+app.use("/api/beta", require("./lib/account-api").accountRouter());
 app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res) => res.status(404).json({ error: "Not found" }));
 if (require.main === module) {
