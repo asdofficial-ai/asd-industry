@@ -7,9 +7,9 @@
  function status(text){$("staffAvailability").textContent=text}
  function feedback(text){const el=$("loginFeedback");el.textContent=text}
  function showLogin(){staff=null;$("staffIdentity").textContent="Not signed in";$("logoutBtn").hidden=true;
-  $("staffConsole").hidden=true;$("loginView").hidden=!backendEnabled;}
- function showStaff(user){staff=user;$("loginView").hidden=true;$("staffConsole").hidden=false;$("logoutBtn").hidden=false;
-  $("staffIdentity").textContent=user.email+" · "+user.role;
+  $("staffConsole").hidden=true;$("supportReferral").hidden=true;$("loginView").hidden=!backendEnabled;}
+ function showStaff(user){staff=user;$("loginView").hidden=true;$("staffConsole").hidden=user.role==="support";$("supportReferral").hidden=user.role!=="support";$("logoutBtn").hidden=false;
+  $("staffIdentity").textContent=user.email+" · "+user.role+(user.badge?.verified?" · VERIFIED HUMAN STAFF":" · PRIVATE ACCOUNT (NO PUBLIC BADGE)");
   $("staffTestIntake").hidden=!["founder","reviewer"].includes(user.role);}
  async function api(path,options={}){
   const r=await fetch("/api/staff"+path,{credentials:"same-origin",cache:"no-store",...options,
@@ -109,7 +109,7 @@
    status(backendEnabled?"Private adult-test staff service is available. Verified human staff credentials are required.":
      "Backend disabled: no real staff account, approval or database activity is available. The staff role demo lives in the separate preview.");
    if(!backendEnabled)return;
-   try{const session=await api("/me");showStaff(session.staff);await refresh();}
+   try{const session=await api("/me");showStaff(session.staff);if(session.staff.role!=="support")await refresh();}
    catch{showLogin();}
   }catch(e){backendEnabled=false;status("Private staff API is unavailable. No real decisions can be made.");}
  }
@@ -117,7 +117,7 @@
   e.preventDefault();$("loginBtn").disabled=true;feedback("Authenticating your staff credentials…");
   try{
    const r=await post("/login",{email:$("staffEmail").value,password:$("staffPassword").value});
-   $("staffPassword").value="";feedback("");showStaff(r.staff);await refresh();
+   $("staffPassword").value="";feedback("");const me=await api("/me");showStaff(me.staff);if(me.staff.role!=="support")await refresh();
   }catch(err){feedback(err.message);}finally{$("loginBtn").disabled=false;}
  });
  $("logoutBtn").addEventListener("click",async()=>{
