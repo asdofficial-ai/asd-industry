@@ -71,8 +71,7 @@
   if(project.reviewNote)append(card,element("div","review-note","ASD Industry review simulation: "+project.reviewNote));
   const actions=element("div","project-actions");
   if(project.stage==="pending"){
-   append(actions,element("span","muted","Awaiting ASD Industry review. Recruitment is locked."));
-   append(actions,link("View staff review preview ↗","/review.html","ghost"));
+   append(actions,element("span","muted","Awaiting ASD Industry review. Recruitment and group creation remain locked."));
   }
   if(project.stage==="changes-requested"){
    append(actions,btn("Revise and resubmit",()=>{
