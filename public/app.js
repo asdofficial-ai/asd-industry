@@ -234,6 +234,10 @@
     byId("avatarStatus").textContent="Picture removed · using your selected avatar instead.";
     save();renderBuilderProfile();
   });
+  byId("avatarChooseButton").addEventListener("click",()=>byId("avatarUpload").click());
+  byId("handle").addEventListener("blur",()=>{
+    byId("handle").value=byId("handle").value.trim().replace(/^@/,"").toLowerCase();
+  });
   byId("avatarUpload").addEventListener("change",event=>{
     const file=event.target.files && event.target.files[0];
     event.target.value="";
@@ -242,10 +246,12 @@
       byId("avatarStatus").textContent="Use a PNG, JPG or WebP image smaller than 3 MB.";
       return;
     }
+    const owner=state.profile;
     const objectURL=URL.createObjectURL(file);
     const image=new Image();
     image.onload=()=>{
       URL.revokeObjectURL(objectURL);
+      if (state.profile !== owner) return; // Prevent photo leaks across a reset or new demo session.
       try {
         const canvas=document.createElement("canvas");
         canvas.width=160;canvas.height=160;
@@ -380,6 +386,10 @@
       availability:byId("availability").value
     };
     // Editing the profile must not erase locally completed projects or avatar data.
+    if (state.project && Array.isArray(state.project.members)) {
+      const me=state.project.members.find(member=>!member.demo);
+      if (me) {me.nick=nickname+" (you)";me.role=state.profile.role || "Project builder";}
+    }
     syncIdeaBuilderFromProfile();
     save();
     renderEmailVerification();
