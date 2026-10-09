@@ -87,3 +87,17 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 @media(max-width:720px){.founder-main{padding:18px 13px 32px}.founder-title{display:block}.founder-title h1{font-size:32px}.title-buttons{justify-content:flex-start;margin-top:14px}.founder-topbar{padding:0 13px;height:58px}.top-crumb{font-size:9px}.environment{font-size:8px;padding:7px}.user-name{display:none}.circle-button{width:31px;height:31px}.hero-content{width:80%;padding:24px}.hero-card{min-height:260px}.hero-art{width:70%;opacity:.56}.hero-content h2{font-size:34px}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.metric-card{min-height:105px;padding:12px}.metric-card strong{font-size:21px}.founder-layout{grid-template-columns:1fr}.theme-gallery{grid-template-columns:1fr}.directory-grid{grid-template-columns:1fr}.settings-grid{grid-template-columns:1fr}.featured-themes{display:block}.theme-mini-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.founder-footer{display:block}.founder-footer span{display:block;margin:5px 0}}
 @media(max-width:420px){.environment{display:none}.theme-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-content h2{font-size:29px}.theme-card-body{display:block}.theme-card-actions{margin-top:12px}.workspace-flow{grid-template-columns:1fr}.title-buttons .cta{white-space:normal}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* Keep contrast accessible in the navy sidebar of the white executive theme. */
+body[data-founder-theme="executive-white"] .founder-sidebar{color:#e8f2ff}
+body[data-founder-theme="executive-white"] .founder-brand strong,
+body[data-founder-theme="executive-white"] .nav-link.is-current,
+body[data-founder-theme="executive-white"] .sidebar-footer p{color:#edf5ff}
+body[data-founder-theme="executive-white"] .nav-link{color:#9cb7d3}
+body[data-founder-theme="executive-white"] .nav-link:hover{color:#fff}
+body[data-founder-theme="executive-white"] .sidebar-footer{background:#183552}
+body[data-founder-theme="executive-white"] .founder-brand small,
+body[data-founder-theme="executive-white"] .side-heading,
+body[data-founder-theme="executive-white"] .sidebar-context{color:#a9c2dc}
+body[data-founder-theme="executive-white"] .hero-content .overline{color:#ecf6ff}
+body[data-founder-theme="executive-white"] .hero-content h2 em{color:#b0dcff}
