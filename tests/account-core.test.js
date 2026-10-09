@@ -14,6 +14,13 @@ test("bad account fields are rejected",()=>{
  assert.throws(()=>normalizeAccount({...valid,email:"not an email"}));
  assert.throws(()=>normalizeAccount({...valid,password:"short"}));
 });
+test("strong-password policy rejects guessing patterns or identity reuse",()=>{
+ assert.throws(()=>normalizeAccount({...valid,password:"passwordpassword123"}),/less predictable/);
+ assert.throws(()=>normalizeAccount({...valid,password:"FutureBuilder!5678"}),/less predictable/);
+ assert.throws(()=>normalizeAccount({...valid,password:"tester5555555555"}),/less predictable/);
+ assert.throws(()=>normalizeAccount({...valid,password:"shortPwd123"}),/at least 12 characters/);
+ assert.doesNotThrow(()=>normalizeAccount({...valid,password:"Copper River Green Trees 8392!"}));
+});
 test("profiles only permit approved roles, times and tags",()=>{
  const p=normalizeProfile({role:"Developer",availability:"weekends",interests:["Apps","AI","AI"]});
  assert.deepEqual(p.interests,["Apps","AI"]);
