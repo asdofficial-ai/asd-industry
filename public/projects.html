@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071321"><meta name="description" content="ASD Industry — build projects with purpose. Demo only.">
+<title>Project applications | ASD Industry</title><link rel="stylesheet" href="/portal.css">
+<script defer src="/portal-core.js"></script><script defer src="/portal.js"></script></head>
+<body data-page="projects">
+<div id="portalApp" hidden>
+<div class="app-layout"><aside class="sidebar"><a class="sidebar-brand" href="/home.html"><span class="brand-a">A✦</span><span>ASD <b>INDUSTRY</b><small>BUILD YOUR FUTURE</small></span></a>
+<div class="sidebar-title">PLATFORM</div><nav class="side-nav" aria-label="Platform navigation"><a data-nav="home" href="/home.html"><span class="nav-symbol">⌂</span><span>Home</span></a><a data-nav="discover" href="/discover.html"><span class="nav-symbol">◇</span><span>Discover</span></a><a data-nav="projects" href="/projects.html"><span class="nav-symbol">▣</span><span>Projects</span></a><a data-nav="team" href="/team.html"><span class="nav-symbol">◉</span><span>Team chat</span></a><a data-nav="workspace" href="/workspace.html"><span class="nav-symbol">☷</span><span>Workspace</span></a><a data-nav="profile" href="/profile.html"><span class="nav-symbol">♙</span><span>Profile</span></a><a data-nav="notifications" href="/notifications.html"><span class="nav-symbol">♢</span><span>Alerts</span></a></nav>
+<div class="sidebar-bottom"><p><span class="status-dot"></span> PRIVATE PREVIEW</p><p>Demo profiles and fictional matches only.</p></div></aside>
+<div class="app-main"><header class="topbar"><button id="mobileMenu" type="button" aria-label="Toggle main menu" aria-controls="mobileSidebar" aria-expanded="false">☰</button><span class="breadcrumb">ASD INDUSTRY <span> / </span> PROJECT APPLICATIONS</span><div class="top-actions"><a href="/notifications.html" title="Notifications" aria-label="Notifications">♢</a><a href="/profile.html" class="header-profile"><span id="headerAvatar">B</span><b id="headerNickname">Builder</b></a></div></header>
+<nav id="mobileSidebar" class="mobile-drawer" hidden aria-label="All platform pages"><a data-nav="home" href="/home.html"><span class="nav-symbol">⌂</span><span>Home</span></a><a data-nav="discover" href="/discover.html"><span class="nav-symbol">◇</span><span>Discover</span></a><a data-nav="projects" href="/projects.html"><span class="nav-symbol">▣</span><span>Projects</span></a><a data-nav="team" href="/team.html"><span class="nav-symbol">◉</span><span>Team chat</span></a><a data-nav="workspace" href="/workspace.html"><span class="nav-symbol">☷</span><span>Workspace</span></a><a data-nav="profile" href="/profile.html"><span class="nav-symbol">♙</span><span>Profile</span></a><a data-nav="notifications" href="/notifications.html"><span class="nav-symbol">♢</span><span>Alerts</span></a></nav>
+<main class="page-content"><div class="page-heading"><p class="eyebrow">IDEAS INTO ACTION</p><h1>Start a <em>real idea.</em></h1><p>Apply first. Once ASD Industry approves the application, the founder recruits the number of teammates they choose.</p></div>
+<div class="two-panel">
+ <section class="column-stack">
+  <section class="panel"><div class="panel-top"><h2>New project application</h2><span class="tag">Step 1 · Apply</span></div>
+   <form id="projectForm" class="stack-form">
+    <label>Project name<input id="projectTitle" maxlength="70" minlength="3" placeholder="e.g. FarmLink" required></label>
+    <label>What problem will your project solve?<textarea id="projectDescription" rows="5" maxlength="900" minlength="35" required placeholder="Describe the idea and who it will help. Don't include sensitive details."></textarea></label>
+    <div class="field-grid"><label>Category<select id="projectCategory" required><option value="">Choose a category</option></select></label><label>Additional teammates needed<input type="number" id="projectSeats" min="1" max="12" value="3" required></label></div>
+    <fieldset class="chip-field"><legend>Skills you hope to recruit <span>(optional)</span></legend><div id="roleChoices" class="chips"></div></fieldset>
+    <div class="soft-note">Only you can see the application in this demo. ASD Industry approval is simulated on a separate review-preview page; it is not automatically approved.</div>
+    <button type="submit" class="action primary full">Submit request to ASD Industry ↗</button><p id="projectFeedback" class="form-feedback" role="status"></p>
+   </form>
+  </section>
+  <section class="panel"><div class="panel-top"><h2>My project applications</h2><span class="tag">Founder dashboard</span></div><div id="myProjects" class="column-stack"></div></section>
+ </section>
+ <aside class="column-stack">
+  <section class="panel process"><h3>How project teams start</h3><div class="step"><b>01</b><div><strong>Apply</strong><p>Founder submits the idea and requested team size.</p></div></div><div class="step"><b>02</b><div><strong>ASD Industry reviews</strong><p>The decision is made before recruitment opens.</p></div></div><div class="step"><b>03</b><div><strong>Recruit</strong><p>Founder reviews matches and fills the requested places.</p></div></div><div class="step"><b>04</b><div><strong>Create group</strong><p>Founder creates the private team chat and workspace.</p></div></div></section>
+  <section class="panel"><h3>Who controls the group?</h3><p class="muted">The project founder decides how many teammates are needed and creates the group after recruitment. It is not a public chat room.</p></section>
+ </aside>
+</div></main>
+<footer class="app-footer"><span>ASD Industry · Build your younger self for the future.</span><span>DEMO ONLY · No real accounts or team communication</span></footer>
+</div></div><nav class="bottom-nav" aria-label="Mobile navigation"><a data-mobile="home" href="/home.html"><span>⌂</span><small>Home</small></a><a data-mobile="discover" href="/discover.html"><span>◇</span><small>Discover</small></a><a data-mobile="projects" href="/projects.html"><span>▣</span><small>Projects</small></a><a data-mobile="team" href="/team.html"><span>◉</span><small>Team chat</small></a><a data-mobile="profile" href="/profile.html"><span>♙</span><small>Profile</small></a></nav></div>
+<noscript>This prototype needs JavaScript. Open the sign-up page with JavaScript enabled.</noscript>
+</body></html>

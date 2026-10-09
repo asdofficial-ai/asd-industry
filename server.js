@@ -16,13 +16,15 @@ app.use((req, res, next) => {
 app.get("/health", (req, res) => res.json({
   status: "ok",
   service: "asd-industry",
-  version: "v0.3-reconstruction",
+  version: "v0.7-staff-backend-staged",
   mode: "demo"
 }));
 app.get("/api/status", (req, res) => res.json({
   mode: "demo",
   message: "No accounts, payments, real matching, or personal information endpoints are enabled."
 }));
+// Staff API is fail-closed and has no open registration. It requires dedicated credentials and database.
+app.use("/api/staff", require("./lib/human-staff-api").router());
 app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res) => res.status(404).json({ error: "Not found" }));
 if (require.main === module) {

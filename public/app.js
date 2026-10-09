@@ -52,6 +52,10 @@
   }
   function go(to) {
     if (!state.entryCompleted || !state.profile) { showGate(); return; }
+    // Signup leads into the real multi-page preview, not the old one-page prototype.
+    window.location.assign("/home.html");
+    return;
+    // Legacy page views below are retained for backward-compatibility during migration.
     showSite();
     if (!views.includes(to)) to = "home";
     for (const v of views) byId("view-"+v).classList.toggle("hidden", v !== to);

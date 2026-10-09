@@ -1,0 +1,58 @@
+name: ASD Industry multi-page project workflow checks
+on:
+  push:
+    branches: [feature/v0.5-multipage-private-projects, feature/v0.6-ai-staff-human-review, feature/v0.7-human-staff-backend]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: node --check server.js
+      - run: node --check public/portal-core.js
+      - run: node --check public/portal.js
+      - run: node --check public/staff-core.js
+      - run: node --check public/staff-dashboard.js
+      - run: node --check lib/ai-staff-runner.js
+      - run: node --check public/staff-console.js
+      - run: node --check lib/human-staff-api.js
+      - run: node --check lib/staff-auth-core.js
+      - run: node --check scripts/staff-migrate.js
+      - run: node --check scripts/staff-provision.js
+      - run: node --check public/app.js
+      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js
+
+  postgres-integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: staff_ci
+          POSTGRES_PASSWORD: disposable_ci_only
+          POSTGRES_DB: asd_industry_staff
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U staff_ci -d asd_industry_staff"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      STAFF_TEST_DATABASE_URL: postgresql://staff_ci:disposable_ci_only@127.0.0.1:5432/asd_industry_staff
+      STAFF_ADMIN_DB_URL: postgresql://staff_ci:disposable_ci_only@127.0.0.1:5432/asd_industry_staff
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: node scripts/staff-migrate.js
+      - run: node --test tests/staff-db.integration.test.js
