@@ -5,8 +5,13 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 app.disable("x-powered-by");
 app.use((req, res, next) => {
+  const founderGooglePage=req.path==="/founder-login.html";
+  // Only the Founder sign-in page may load Google's official identity widget.
+  const csp=founderGooglePage
+    ? "default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://accounts.google.com; img-src 'self' data: https://accounts.google.com https://lh3.googleusercontent.com; frame-src https://accounts.google.com; connect-src 'self' https://accounts.google.com; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+    : "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://images.unsplash.com; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'";
   res.set({
-    "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://images.unsplash.com; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",
+    "Content-Security-Policy": csp,
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
