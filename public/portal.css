@@ -25,3 +25,43 @@
 @media(max-width:640px){.page-content{padding:22px 14px 30px}.page-heading{margin-bottom:18px}.page-heading h1{font-size:31px}.two-panel,.team-layout{grid-template-columns:1fr}.card-grid{grid-template-columns:1fr 1fr;gap:9px}.panel{padding:16px}.panel h2{font-size:17px}.compose-actions{flex-wrap:wrap}.compose-actions .action{margin-left:auto}.field-grid{grid-template-columns:1fr}.filterbar{margin-top:5px}.header-profile b{display:none}.breadcrumb{font-size:9px}.app-footer{display:none}.chat-log{height:310px}.bottom-nav a small{font-size:9px}.app-main{padding-bottom:76px}}
 @media(max-width:390px){.card-grid{grid-template-columns:1fr}.bottom-nav a{padding:4px 3px;min-width:48px}.bottom-nav a small{font-size:8px}.profile-banner{gap:12px}.profile-avatar{width:59px;height:59px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Human-supervised AI staff headquarters. Dense, separated workflow panels. */
+.staff-cockpit .page-heading{margin-bottom:17px}
+.staff-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0 23px}
+.staff-stat{display:grid;gap:5px;background:linear-gradient(120deg,#162f49,#102339);border:1px solid #355473;border-radius:11px;padding:16px}
+.staff-stat strong{font-size:26px;font-weight:900;letter-spacing:-.06em;color:#eaf4ff}
+.staff-stat span{color:#90b7d8;font-size:11px;font-weight:700}
+.staff-personnel{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:27px}
+.staff-person-card{display:flex;flex-direction:column;align-items:flex-start;gap:9px;min-height:205px;border:1px solid #2d4a65;border-radius:12px;background:#122438;padding:15px}
+.staff-person-card strong{font-size:13px;line-height:1.35;letter-spacing:-.025em;color:#eaf3ff}
+.staff-person-card p{font-size:10px;line-height:1.65;flex:1;margin:0}
+.staff-person-card .tag{font-size:9px}
+.agent-symbol{display:grid;place-items:center;width:39px;height:39px;color:#a9d7ff;font-size:25px;border-radius:9px;background:#1c4164;border:1px solid #3e6b97;flex-shrink:0}
+.staff-layout{display:grid;grid-template-columns:minmax(230px,.64fr) minmax(0,1.36fr);gap:15px;align-items:start}
+.staff-inbox,.staff-detail{min-height:430px}
+.staff-inbox .panel-top{margin-bottom:4px}
+.staff-queue-item{display:grid;gap:10px;border-bottom:1px solid #2b445d;padding:15px 0}
+.staff-queue-item:last-child{border-bottom:0}.staff-queue-item:first-child{padding-top:14px}
+.staff-queue-item.is-selected{border-left:3px solid #65a9f1;padding-left:12px;background:linear-gradient(90deg,#1f3b5b44,transparent)}
+.staff-queue-head{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
+.staff-queue-head strong{font-size:12px;overflow-wrap:anywhere}
+.staff-queue-head .tag{font-size:9px;white-space:nowrap}
+.staff-queue-item p{margin:0;font-size:10px}
+.staff-queue-item .action{justify-self:start}
+.agent-report-list{display:grid;gap:12px;margin:17px 0 25px}
+.staff-report-card{background:linear-gradient(125deg,#132e49,#0d2237);border:1px solid #305577;border-radius:11px;padding:15px}
+.agent-report-header{display:flex;align-items:center;gap:12px}
+.agent-headline strong{display:block;font-size:13px}.agent-headline small{display:block;color:#8fb8dd;font-size:10px;margin-top:3px}
+.staff-report-card>p{font-size:12px;color:#b6cbdf;margin:12px 0 0}
+.agent-flags{padding-left:19px;color:#ffcca3;font-size:11px;line-height:1.7}
+.staff-report-card .agent-action{color:#84c2ff;font-size:10px;font-weight:770;letter-spacing:.025em;margin:11px 0 0}
+.staff-handoff{padding:20px;border:1px solid #326996;border-radius:13px;background:radial-gradient(circle at 100% 0%,#25528a4d,transparent 65%),#122b43}
+.staff-handoff h3{margin:5px 0 8px}.staff-handoff .muted{margin-bottom:16px}
+.review-actions{display:flex;gap:10px;flex-wrap:wrap}
+.staff-detail>.form-feedback{padding-top:10px}
+.staff-security{margin-top:18px;background:#101e30}
+.staff-security p{max-width:1100px;color:#a6bfd6;margin:0}
+@media(max-width:1180px){.staff-personnel{grid-template-columns:repeat(3,minmax(0,1fr))}.staff-person-card{min-height:165px}.staff-layout{grid-template-columns:minmax(230px,.65fr) minmax(0,1.35fr)}}
+@media(max-width:780px){.staff-personnel{grid-template-columns:repeat(2,minmax(0,1fr))}.staff-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.staff-layout{grid-template-columns:1fr}.staff-person-card{min-height:170px}.staff-detail{min-height:0}.staff-inbox{min-height:0}}
+@media(max-width:430px){.staff-personnel{gap:8px}.staff-person-card{padding:11px;min-height:194px}.staff-person-card strong{font-size:12px}.staff-person-card p{font-size:10px}.staff-report-card{padding:12px}.staff-handoff{padding:14px}.staff-stat{padding:12px}}
