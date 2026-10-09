@@ -4,9 +4,9 @@ const crypto=require("node:crypto");
 const {Client}=require("pg");
 const {emailAddress,hashPassword,ROLES}=require("../lib/staff-auth-core");
 async function run(){
- const url=process.env.STAFF_DB_URL;
- if(!url)throw Error("STAFF_DB_URL must point to the dedicated ASD Industry staff database.");
- if(process.env.DATABASE_URL&&url===process.env.DATABASE_URL)throw Error("Use a separate database for staff.");
+ const url=process.env.STAFF_ADMIN_DB_URL;
+ if(!url)throw Error("STAFF_ADMIN_DB_URL must point to the separate ASD Industry staff administrator database connection.");
+ if((process.env.DATABASE_URL&&url===process.env.DATABASE_URL)||(process.env.STAFF_DB_URL&&url===process.env.STAFF_DB_URL))throw Error("Use a separate database for staff.");
  const email=emailAddress(process.env.NEW_STAFF_EMAIL);
  const password=process.env.NEW_STAFF_PASSWORD;
  const role=process.env.NEW_STAFF_ROLE;
