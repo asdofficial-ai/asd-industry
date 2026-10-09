@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/access.css">
   <link rel="stylesheet" href="/mobile-home.css">
+  <link rel="stylesheet" href="/profile-account.css">
   <script src="/country-picker.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
@@ -29,7 +30,9 @@
       </div>
       <div class="gate-form-side">
         <div class="gate-form-wrap">
-          <div class="gate-topline"><span class="gate-kicker">ASD INDUSTRY / 001</span><span class="gate-pill">SIGN UP · DEMO</span></div>
+          <div class="gate-topline"><span class="gate-kicker">ASD INDUSTRY / 001</span><span class="gate-pill">ACCOUNTS · PREVIEW</span></div>
+          <div class="auth-tabs" role="tablist" aria-label="Account actions"><button type="button" role="tab" id="signupTab" aria-controls="signupPanel" aria-selected="true" class="auth-tab is-active">Sign up</button><button type="button" role="tab" id="loginTab" aria-controls="loginPanel" aria-selected="false" class="auth-tab">Log in</button></div>
+          <div id="signupPanel" role="tabpanel" aria-labelledby="signupTab">
           <h2>Sign up to <em>build.</em></h2>
           <p class="gate-subheading">Choose a nickname, age group, email and country to explore ASD Industry. Your project skills come later. This is a local demo: no account is created and no verification email is sent.</p>
           <form id="signupForm" class="gate-form">
@@ -59,13 +62,28 @@
                 </div>
               </div>
             </div>
+            <label class="auth-future-label">Password <small>· available when real accounts launch</small>
+              <input id="signupPasswordPreview" type="password" placeholder="Password setup coming soon" autocomplete="off" disabled>
+            </label>
             <div class="gate-onboarding-hint"><span class="gate-hint-icon">✦</span><span><b>Just the basics for now.</b> You'll choose your skills, interests and available time only when you want to build a project or find teammates.</span></div>
             <div class="gate-notice">ⓘ <span><b>Safe demo only.</b> This is not a real account. Nothing is posted online and any teammates are fictional. The email and country you enter are saved only in this browser tab, not sent to our server. For testing, use an example email instead of your personal one. Real accounts for under-18s require appropriate guardian consent and safety protections.</span></div>
             <label class="gate-confirm"><input id="signupAcknowledge" type="checkbox" required><span>I understand this is a browser-only demo. Email and country stay in this tab and no verification message will be sent.</span></label>
             <p id="signupStatus" class="gate-error" role="alert" aria-live="polite"></p>
             <button class="gate-submit" type="submit">Enter ASD Industry <span>↗</span></button>
           </form>
-          <p class="gate-footnote">No registration fee collected · No passwords · No real team messaging</p>
+          <p class="gate-footnote">Browser-only demo · Password is not active · No real team messaging</p>
+          </div>
+          <div id="loginPanel" class="auth-login-panel" role="tabpanel" aria-labelledby="loginTab" hidden>
+            <h2>Welcome <em>back.</em></h2>
+            <p class="gate-subheading">Log in is prepared for our next update. No accounts exist in this preview, so signing in is not available yet.</p>
+            <div class="gate-form auth-login-form">
+              <label>Email address <input type="email" id="loginEmailPreview" placeholder="Email login coming soon" autocomplete="off" disabled></label>
+              <label>Password <input type="password" id="loginPasswordPreview" placeholder="Password login coming soon" autocomplete="off" disabled></label>
+              <button type="button" class="gate-submit auth-disabled-button" disabled>Log in · Coming soon <span>🔒</span></button>
+            </div>
+            <div class="gate-notice auth-login-notice">ⓘ <span><b>Not available yet.</b> Real login and password authentication need a secure account database and appropriate user protections. You can still explore using the Sign up demo.</span></div>
+            <button type="button" id="loginToSignup" class="auth-signup-link">← Continue with the demo</button>
+          </div>
         </div>
       </div>
     </div>
@@ -81,7 +99,7 @@
         <button type="button" class="nav-button" data-nav="ideas">Find your team</button>
         <button type="button" class="nav-button" data-nav="workspace">Workspace</button><button type="button" class="nav-button" data-nav="chat">Group chat</button><button type="button" class="nav-button nav-review" data-nav="review">Risk review</button>
       </nav>
-      <div class="header-actions"><span class="nav-live" title="Browser-local demo, no live community"><span></span> DEMO</span><button type="button" class="btn btn-small btn-accent header-cta" data-nav="ideas">Start building <span aria-hidden="true">↗</span></button><button type="button" class="btn btn-small btn-ghost header-exit" id="signOut" title="Leave the demo and return to the sign-up screen">Exit ↗</button><button type="button" class="menu-toggle" id="mobileMenuToggle" aria-label="Open navigation" aria-controls="primaryNavigation" aria-expanded="false"><span></span><span></span><span></span></button></div>
+      <div class="header-actions"><span class="nav-live" title="Browser-local demo, no live community"><span></span> DEMO</span><button type="button" class="btn btn-small btn-accent header-cta" data-nav="ideas">Start building <span aria-hidden="true">↗</span></button><button type="button" class="btn btn-small btn-ghost header-exit" id="signOut" title="Leave the demo and return to the sign-up screen">Log out ↗</button><button type="button" class="menu-toggle" id="mobileMenuToggle" aria-label="Open navigation" aria-controls="primaryNavigation" aria-expanded="false"><span></span><span></span><span></span></button></div>
     </div>
   </header>
   <main id="main">
@@ -135,7 +153,7 @@
         <section class="builder-profile-hero panel" aria-label="Your builder profile preview">
           <div class="profile-cover"><span class="profile-cover-identity">ASD INDUSTRY <b>✳</b> / BUILDER PROFILE</span><span class="profile-cover-demo">PRIVATE PREVIEW</span></div>
           <div class="profile-hero-body">
-            <div class="profile-avatar-big" id="profilePreviewAvatar" data-avatar-style="ocean" aria-label="Your avatar">
+            <div class="profile-avatar-big" id="profilePreviewAvatar" aria-label="Your avatar">
               <span id="profileAvatarInitial">A</span>
               <img id="profilePreviewImage" alt="Your uploaded profile preview" hidden>
             </div>
@@ -145,7 +163,7 @@
               <div class="profile-hero-meta"><span id="profileDisplayHandle">@builder</span><span aria-hidden="true">•</span><span id="profileDisplayCountry">Country not selected</span><span aria-hidden="true">•</span><span id="profileDisplayAge">Age group</span></div>
               <p id="profileDisplayBio" class="profile-hero-bio">Your story starts here. Add a short introduction about what you'd like to build.</p>
             </div>
-            <button class="btn btn-small btn-outline-light profile-edit-jump" id="editProfileJump" type="button">✎ Edit profile</button>
+            <button class="btn btn-small btn-outline-light profile-edit-jump" id="editProfileJump" type="button">✎ Edit profile →</button>
           </div>
           <div class="profile-stats" aria-label="Local profile statistics">
             <div><strong id="profileStatsIdeas">0</strong><span>Ideas explored</span></div>
@@ -154,25 +172,51 @@
             <div><strong id="profileStatsVerification">Pending</strong><span>Email verification</span></div>
           </div>
           <p class="profile-stat-note">*Project completions are self-marked in this demo. No real teammates, qualifications or achievements have been verified.</p>
+          <div class="profile-account-bar"><div><strong>Account access</strong><small>Preview mode · Your demo data stays in this tab until you log out.</small></div><button id="profileLogout" type="button" class="btn btn-ghost">Log out ↗</button></div>
+          <p id="profileNotice" class="profile-save-notice" role="status" aria-live="polite"></p>
         </section>
         <div class="profile-columns">
+
+          <aside class="profile-aside-stack">
+            <section class="panel profile-progress-panel">
+              <div class="panel-header"><h2>Your progress</h2><span class="tag">LOCAL ONLY</span></div>
+              <p class="profile-aside-intro">Your skills and completed projects will show here as you build.</p>
+              <p class="profile-aside-label">SKILLS</p>
+              <div id="profilePreviewSkills" class="profile-preview-chips"><span class="profile-empty-inline">No skills listed yet.</span></div>
+              <p class="profile-aside-label">INTERESTS</p>
+              <div id="profilePreviewInterests" class="profile-preview-chips"><span class="profile-empty-inline">Choose interests when you start a project.</span></div>
+            </section>
+            <section class="panel profile-history-panel">
+              <div class="panel-header"><h2>Completed projects</h2><span class="tag">SELF-MARKED</span></div>
+              <div id="profileProjectHistory" aria-live="polite"><p class="profile-history-empty">No completed demo projects yet. Build a project and mark it complete in your workspace to see it here.</p></div>
+              <button type="button" class="btn btn-small btn-accent profile-project-link" data-nav="ideas">＋ Start a project</button>
+            </section>
+            <section class="panel safety-panel">
+              <p class="kicker">PRIVACY FIRST</p><h3>Your identity is yours.</h3>
+              <p>No public profiles, real chats, email messages or uploads to our servers are active here. Your information is cleared when you exit or close this demo tab.</p>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </section>
+    <section class="view hidden" id="view-profile-edit" data-view="profile-edit" aria-labelledby="profileEditTitle">
+      <div class="page-heading profile-edit-heading">
+        <p class="kicker">PROFILE / EDIT DETAILS</p>
+        <h1 id="profileEditTitle">Edit your <em>profile.</em></h1>
+        <p>Update your photo, username, bio, country and skills. These changes are private to this demo tab.</p>
+        <button type="button" id="backToProfile" class="btn btn-ghost profile-back">← Back to profile</button>
+      </div>
+      <div class="profile-edit-layout">
           <form class="panel form-panel profile-editor" id="profileForm">
-            <div class="panel-header"><h2>Edit your profile</h2><span class="tag">PRIVATE · DEMO</span></div>
+            <div class="panel-header"><h2>Profile settings</h2><span class="tag">PRIVATE · DEMO</span></div>
             <div class="profile-edit-section">
-              <div class="profile-edit-head"><h3>01 <span>Your avatar</span></h3><p>Pick a style or use an image from your device. Images never leave this browser tab.</p></div>
-              <div class="avatar-options" id="avatarChoices" role="group" aria-label="Choose avatar color">
-                <button type="button" class="avatar-choice" data-avatar-style="ocean" aria-label="Ocean blue avatar" aria-pressed="true"><span>✦</span></button>
-                <button type="button" class="avatar-choice" data-avatar-style="mint" aria-label="Emerald green avatar" aria-pressed="false"><span>✦</span></button>
-                <button type="button" class="avatar-choice" data-avatar-style="ember" aria-label="Sunset orange avatar" aria-pressed="false"><span>✦</span></button>
-                <button type="button" class="avatar-choice" data-avatar-style="violet" aria-label="Cosmic violet avatar" aria-pressed="false"><span>✦</span></button>
-                <button type="button" class="avatar-choice" data-avatar-style="midnight" aria-label="Midnight black avatar" aria-pressed="false"><span>✦</span></button>
-              </div>
+              <div class="profile-edit-head"><h3>01 <span>Your avatar</span></h3><p>Upload a photo you choose from your phone or computer. Your original stays on your device and the smaller preview is saved only in this tab.</p></div>
               <div class="profile-avatar-upload">
-                <button id="avatarChooseButton" type="button" class="btn btn-small btn-ghost profile-upload-label">＋ Add a picture</button>
+                <button id="avatarChooseButton" type="button" class="btn btn-small btn-ghost profile-upload-label">＋ Upload profile picture</button>
                 <input id="avatarUpload" class="profile-file-input" type="file" accept="image/png,image/jpeg,image/webp" tabindex="-1">
                 <button type="button" id="avatarRemove" class="btn btn-small btn-ghost">Remove picture</button>
               </div>
-              <p id="avatarStatus" class="profile-helper" role="status">Choose an avatar instead of a personal photo if you're under 18. Images are resized and saved only in this tab.</p>
+              <p id="avatarStatus" class="profile-helper" role="status">Choose a picture from your device or keep the simple initial icon. Avoid identifiable photos of minors in this preview.</p>
             </div>
             <div class="profile-edit-section">
               <div class="profile-edit-head"><h3>02 <span>About you</span></h3><p>Choose a display name and a demo username. No identity checks or username reservation yet.</p></div>
@@ -246,29 +290,9 @@
               </div>
             </div>
             <div class="info-box" id="guardianNotice"><b>Privacy first.</b> There is no real registration or public profile in this demo. Don't enter sensitive data or upload identifying photographs of minors. Real under-18 participation will need appropriate guardian consent and safety checks.</div>
-            <button type="submit" class="btn btn-accent submit-btn">Save builder profile <span aria-hidden="true">→</span></button>
+            <div class="profile-edit-actions"><button type="button" class="btn btn-ghost" id="cancelProfileEdit">← Cancel</button><button type="submit" class="btn btn-accent submit-btn">Save changes <span aria-hidden="true">✓</span></button></div>
             <p class="field-hint" id="profileStatus" role="status" aria-live="polite"></p>
           </form>
-          <aside class="profile-aside-stack">
-            <section class="panel profile-progress-panel">
-              <div class="panel-header"><h2>Your progress</h2><span class="tag">LOCAL ONLY</span></div>
-              <p class="profile-aside-intro">Your skills and completed projects will show here as you build.</p>
-              <p class="profile-aside-label">SKILLS</p>
-              <div id="profilePreviewSkills" class="profile-preview-chips"><span class="profile-empty-inline">No skills listed yet.</span></div>
-              <p class="profile-aside-label">INTERESTS</p>
-              <div id="profilePreviewInterests" class="profile-preview-chips"><span class="profile-empty-inline">Choose interests when you start a project.</span></div>
-            </section>
-            <section class="panel profile-history-panel">
-              <div class="panel-header"><h2>Completed projects</h2><span class="tag">SELF-MARKED</span></div>
-              <div id="profileProjectHistory" aria-live="polite"><p class="profile-history-empty">No completed demo projects yet. Build a project and mark it complete in your workspace to see it here.</p></div>
-              <button type="button" class="btn btn-small btn-accent profile-project-link" data-nav="ideas">＋ Start a project</button>
-            </section>
-            <section class="panel safety-panel">
-              <p class="kicker">PRIVACY FIRST</p><h3>Your identity is yours.</h3>
-              <p>No public profiles, real chats, email messages or uploads to our servers are active here. Your information is cleared when you exit or close this demo tab.</p>
-            </section>
-          </aside>
-        </div>
       </div>
     </section>
     <section class="view hidden" id="view-ideas" data-view="ideas" aria-labelledby="ideaTitle">
