@@ -323,7 +323,7 @@
    $("statusText").textContent="Authenticated founder overview: data comes from the protected ASD Industry staff database.";
   }catch(err){
    $("environmentLabel").innerHTML="<i></i> PREVIEW MODE";
-   $("founderAuthStatus").textContent="No active founder session. "+err.message+" Authenticate through the separate human-staff console when enabled.";
+   $("founderAuthStatus").textContent="No active founder session. "+err.message+" Use the dedicated Founder sign-in page when enabled.";
    $("statusText").textContent="Visual preview only — "+err.message+" No real administrator actions are available.";
   }
   loadMetrics();renderAgents();renderSecurity();renderPeople();renderProjects();
