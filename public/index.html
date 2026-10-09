@@ -123,61 +123,151 @@
         </div>
       </section>
     </section>
+
     <section class="view hidden" id="view-profile" data-view="profile" aria-labelledby="profileTitle">
-      <div class="page-heading"><p class="kicker">01 / YOUR FOUNDATION</p><h1 id="profileTitle">Start as a <em>builder.</em></h1><p>Manage your local builder details here. Email verification will be available in a later version; no messages are sent in this demo.</p></div>
-      <div class="content-grid">
-        <form class="panel form-panel" id="profileForm">
-          <div class="panel-header"><h2>Your builder profile</h2><span class="tag">LOCAL DEMO</span></div>
-          <div class="form-row two-cols">
-            <label>Builder nickname <input name="nickname" id="nickname" type="text" minlength="2" maxlength="24" placeholder="e.g. FutureBuilder" autocomplete="off" required></label>
-            <label>Age group <select name="age" id="age" required><option value="">Choose a group</option><option value="12-14">12–14</option><option value="15-17">15–17</option><option value="18+">18+</option></select></label>
+      <div class="page-heading profile-page-heading">
+        <p class="kicker">01 / YOUR BUILDER IDENTITY</p>
+        <h1 id="profileTitle">Built different. <em>Built by you.</em></h1>
+        <p>Create your own builder identity and track what you're learning. This is a private, browser-only preview—not a public profile or an actual account.</p>
+      </div>
+      <div class="builder-profile-layout">
+        <section class="builder-profile-hero panel" aria-label="Your builder profile preview">
+          <div class="profile-cover"><span class="profile-cover-identity">ASD INDUSTRY <b>✳</b> / BUILDER PROFILE</span><span class="profile-cover-demo">PRIVATE PREVIEW</span></div>
+          <div class="profile-hero-body">
+            <div class="profile-avatar-big" id="profilePreviewAvatar" data-avatar-style="ocean" aria-label="Your avatar">
+              <span id="profileAvatarInitial">A</span>
+              <img id="profilePreviewImage" alt="Your uploaded profile preview" hidden>
+            </div>
+            <div class="profile-hero-identity">
+              <p class="kicker">BUILDER CARD · LOCAL DEMO</p>
+              <h2 id="profileDisplayName">Builder</h2>
+              <div class="profile-hero-meta"><span id="profileDisplayHandle">@builder</span><span aria-hidden="true">•</span><span id="profileDisplayCountry">Country not selected</span><span aria-hidden="true">•</span><span id="profileDisplayAge">Age group</span></div>
+              <p id="profileDisplayBio" class="profile-hero-bio">Your story starts here. Add a short introduction about what you'd like to build.</p>
+            </div>
+            <button class="btn btn-small btn-outline-light profile-edit-jump" id="editProfileJump" type="button">✎ Edit profile</button>
           </div>
-          <div class="form-row two-cols">
-            <label>Email address <input id="email" name="email" type="email" maxlength="254" placeholder="e.g. builder@example.com" autocomplete="email" spellcheck="false" required></label>
-            <div class="country-field">
-              <label for="country">Country</label>
-              <div class="country-picker" data-country-picker>
-                <input id="country" class="country-input" name="country" type="text" minlength="2" maxlength="80" placeholder="Type or choose country" role="combobox" aria-autocomplete="list" aria-controls="countryList" aria-expanded="false" aria-haspopup="listbox" autocomplete="off" spellcheck="false" required>
-                <button type="button" class="country-picker-toggle" aria-label="Show all countries A to Z" aria-controls="countryList" aria-expanded="false"><span aria-hidden="true">▾</span></button>
-                <div id="countryList" class="country-picker-list" role="listbox" aria-label="Countries and territories alphabetically" hidden></div>
+          <div class="profile-stats" aria-label="Local profile statistics">
+            <div><strong id="profileStatsIdeas">0</strong><span>Ideas explored</span></div>
+            <div><strong id="profileStatsCompleted">0</strong><span>Projects completed*</span></div>
+            <div><strong id="profileStatsSkills">0</strong><span>Skills listed</span></div>
+            <div><strong id="profileStatsVerification">Pending</strong><span>Email verification</span></div>
+          </div>
+          <p class="profile-stat-note">*Project completions are self-marked in this demo. No real teammates, qualifications or achievements have been verified.</p>
+        </section>
+        <div class="profile-columns">
+          <form class="panel form-panel profile-editor" id="profileForm">
+            <div class="panel-header"><h2>Edit your profile</h2><span class="tag">PRIVATE · DEMO</span></div>
+            <div class="profile-edit-section">
+              <div class="profile-edit-head"><h3>01 <span>Your avatar</span></h3><p>Pick a style or use an image from your device. Images never leave this browser tab.</p></div>
+              <div class="avatar-options" id="avatarChoices" role="group" aria-label="Choose avatar color">
+                <button type="button" class="avatar-choice" data-avatar-style="ocean" aria-label="Ocean blue avatar" aria-pressed="true"><span>✦</span></button>
+                <button type="button" class="avatar-choice" data-avatar-style="mint" aria-label="Emerald green avatar" aria-pressed="false"><span>✦</span></button>
+                <button type="button" class="avatar-choice" data-avatar-style="ember" aria-label="Sunset orange avatar" aria-pressed="false"><span>✦</span></button>
+                <button type="button" class="avatar-choice" data-avatar-style="violet" aria-label="Cosmic violet avatar" aria-pressed="false"><span>✦</span></button>
+                <button type="button" class="avatar-choice" data-avatar-style="midnight" aria-label="Midnight black avatar" aria-pressed="false"><span>✦</span></button>
+              </div>
+              <div class="profile-avatar-upload">
+                <label for="avatarUpload" class="btn btn-small btn-ghost profile-upload-label">＋ Add a picture</label>
+                <input id="avatarUpload" class="profile-file-input" type="file" accept="image/png,image/jpeg,image/webp">
+                <button type="button" id="avatarRemove" class="btn btn-small btn-ghost">Remove picture</button>
+              </div>
+              <p id="avatarStatus" class="profile-helper" role="status">Choose an avatar instead of a personal photo if you're under 18. Images are resized and saved only in this tab.</p>
+            </div>
+            <div class="profile-edit-section">
+              <div class="profile-edit-head"><h3>02 <span>About you</span></h3><p>Choose a display name and a demo username. No identity checks or username reservation yet.</p></div>
+              <div class="form-row two-cols">
+                <label>Builder nickname <input name="nickname" id="nickname" type="text" minlength="2" maxlength="24" placeholder="e.g. FutureBuilder" autocomplete="off" required></label>
+                <label>Username <small>(your @handle)</small><input id="handle" type="text" minlength="3" maxlength="22" pattern="[A-Za-z0-9._]{3,22}" placeholder="e.g. future.builder" autocomplete="off" spellcheck="false" required></label>
+              </div>
+              <label>Short bio <small>(up to 180 characters)</small>
+                <textarea id="profileBioInput" rows="3" maxlength="180" placeholder="What do you enjoy building? What motivates you?"></textarea>
+              </label>
+              <span class="profile-char-count" id="profileBioCount">0 / 180</span>
+              <div class="form-row two-cols">
+                <label>Age group <select name="age" id="age" required><option value="">Choose a group</option><option value="12-14">12–14</option><option value="15-17">15–17</option><option value="18+">18+</option></select></label>
+                <div class="country-field">
+                  <label for="country">Country</label>
+                  <div class="country-picker" data-country-picker>
+                    <input id="country" class="country-input" name="country" type="text" minlength="2" maxlength="80" placeholder="Type or choose country" role="combobox" aria-autocomplete="list" aria-controls="countryList" aria-expanded="false" aria-haspopup="listbox" autocomplete="off" spellcheck="false" required>
+                    <button type="button" class="country-picker-toggle" aria-label="Show all countries A to Z" aria-controls="countryList" aria-expanded="false"><span aria-hidden="true">▾</span></button>
+                    <div id="countryList" class="country-picker-list" role="listbox" aria-label="Countries and territories alphabetically" hidden></div>
+                  </div>
+                </div>
+              </div>
+              <label>Email address <input id="email" name="email" type="email" maxlength="254" placeholder="e.g. builder@example.com" autocomplete="email" spellcheck="false" required></label>
+              <div class="email-verification-panel" aria-labelledby="emailVerificationTitle">
+                <span class="email-verification-icon" aria-hidden="true">✉</span>
+                <div class="email-verification-text">
+                  <strong id="emailVerificationTitle">Email verification</strong>
+                  <p id="emailVerificationMessage">Not verified. Verification emails are not available in this demo yet.</p>
+                </div>
+                <span class="email-verification-badge" id="emailVerificationBadge">UNVERIFIED</span>
               </div>
             </div>
-          </div>
-          <div class="email-verification-panel" aria-labelledby="emailVerificationTitle">
-            <span class="email-verification-icon" aria-hidden="true">✉</span>
-            <div class="email-verification-text">
-              <strong id="emailVerificationTitle">Email verification</strong>
-              <p id="emailVerificationMessage">Not verified. Verification emails are not available in this demo yet.</p>
+            <div class="profile-edit-section">
+              <div class="profile-edit-head"><h3>03 <span>Your skills</span></h3><p>Choose up to eight things you can do or are learning. You can always update them.</p></div>
+              <div class="choice-grid profile-skills-grid" id="skillsChoices">
+                <label><input type="checkbox" name="skills" value="Coding"><span>Coding</span></label>
+                <label><input type="checkbox" name="skills" value="UI/UX"><span>UI/UX</span></label>
+                <label><input type="checkbox" name="skills" value="Graphic design"><span>Graphic design</span></label>
+                <label><input type="checkbox" name="skills" value="Research"><span>Research</span></label>
+                <label><input type="checkbox" name="skills" value="Marketing"><span>Marketing</span></label>
+                <label><input type="checkbox" name="skills" value="Writing"><span>Writing</span></label>
+                <label><input type="checkbox" name="skills" value="Video editing"><span>Video editing</span></label>
+                <label><input type="checkbox" name="skills" value="Public speaking"><span>Public speaking</span></label>
+                <label><input type="checkbox" name="skills" value="Project planning"><span>Project planning</span></label>
+                <label><input type="checkbox" name="skills" value="AI tools"><span>AI tools</span></label>
+                <label><input type="checkbox" name="skills" value="Sales"><span>Sales</span></label>
+                <label><input type="checkbox" name="skills" value="Problem solving"><span>Problem solving</span></label>
+              </div>
+              <p id="skillsStatus" class="profile-helper" role="status">No skills selected yet.</p>
             </div>
-            <span class="email-verification-badge" id="emailVerificationBadge">UNVERIFIED</span>
-          </div>
-          <label>Your interests <small>(optional until you start a project)</small></label>
-          <div class="choice-grid" id="interestsChoices">
-            <label><input type="checkbox" name="interests" value="AI"><span>AI</span></label>
-            <label><input type="checkbox" name="interests" value="Websites"><span>Websites</span></label>
-            <label><input type="checkbox" name="interests" value="Apps"><span>Apps</span></label>
-            <label><input type="checkbox" name="interests" value="Business"><span>Business</span></label>
-            <label><input type="checkbox" name="interests" value="Marketing"><span>Marketing</span></label>
-            <label><input type="checkbox" name="interests" value="Design"><span>Design</span></label>
-            <label><input type="checkbox" name="interests" value="Finance"><span>Finance</span></label>
-            <label><input type="checkbox" name="interests" value="Education"><span>Education</span></label>
-            <label><input type="checkbox" name="interests" value="Gaming"><span>Gaming</span></label>
-            <label><input type="checkbox" name="interests" value="Content"><span>Content</span></label>
-            <label><input type="checkbox" name="interests" value="Agriculture"><span>Agriculture</span></label>
-            <label><input type="checkbox" name="interests" value="Other"><span>Other</span></label>
-          </div>
-          <div class="form-row two-cols">
-            <label>Your strongest role <select id="role" name="role"><option value="">Select a role</option><option>Project leader</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option><option>I want to learn</option></select></label>
-            <label>Time available <select id="availability" name="availability"><option value="">Select availability</option><option value="weekends">Weekends</option><option value="evenings">Evenings</option><option value="flexible">Flexible</option></select></label>
-          </div>
-          <div class="info-box" id="guardianNotice"><b>Under 18?</b> Real participation will require appropriate guardian consent and platform safety checks. This demo does not verify consent or create an account.</div>
-          <button type="submit" class="btn btn-accent submit-btn">Save demo profile <span aria-hidden="true">→</span></button>
-          <p class="field-hint" id="profileStatus" role="status"></p>
-        </form>
-        <aside class="aside-stack">
-          <div class="panel light-panel"><div class="panel-mini-icon">✳</div><h3>Everyone has a starting point.</h3><p>You don't need to be an expert. Curiosity, commitment and the willingness to learn are valuable.</p><div class="mini-divider"></div><span class="big-type">YOUR SKILLS.<br>YOUR FUTURE.</span></div>
-          <div class="panel safety-panel"><p class="kicker">SAFETY FIRST</p><h3>Real young people deserve real protection.</h3><p>There are no real public profiles, verification emails or personal messages in this prototype. Use a sample email for testing; real youth accounts will need appropriate safeguards.</p></div>
-        </aside>
+            <div class="profile-edit-section">
+              <div class="profile-edit-head"><h3>04 <span>Project preferences</span></h3><p>These are optional. You'll choose your role, interests and availability for each project when you start it.</p></div>
+              <label>Your interests <small>(optional)</small></label>
+              <div class="choice-grid" id="interestsChoices">
+                <label><input type="checkbox" name="interests" value="AI"><span>AI</span></label>
+                <label><input type="checkbox" name="interests" value="Websites"><span>Websites</span></label>
+                <label><input type="checkbox" name="interests" value="Apps"><span>Apps</span></label>
+                <label><input type="checkbox" name="interests" value="Business"><span>Business</span></label>
+                <label><input type="checkbox" name="interests" value="Marketing"><span>Marketing</span></label>
+                <label><input type="checkbox" name="interests" value="Design"><span>Design</span></label>
+                <label><input type="checkbox" name="interests" value="Finance"><span>Finance</span></label>
+                <label><input type="checkbox" name="interests" value="Education"><span>Education</span></label>
+                <label><input type="checkbox" name="interests" value="Gaming"><span>Gaming</span></label>
+                <label><input type="checkbox" name="interests" value="Content"><span>Content</span></label>
+                <label><input type="checkbox" name="interests" value="Agriculture"><span>Agriculture</span></label>
+                <label><input type="checkbox" name="interests" value="Other"><span>Other</span></label>
+              </div>
+              <div class="form-row two-cols">
+                <label>Your strongest role <select id="role" name="role"><option value="">Select a role</option><option>Project leader</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option><option>I want to learn</option></select></label>
+                <label>Time available <select id="availability" name="availability"><option value="">Select availability</option><option value="weekends">Weekends</option><option value="evenings">Evenings</option><option value="flexible">Flexible</option></select></label>
+              </div>
+            </div>
+            <div class="info-box" id="guardianNotice"><b>Privacy first.</b> There is no real registration or public profile in this demo. Don't enter sensitive data or upload identifying photographs of minors. Real under-18 participation will need appropriate guardian consent and safety checks.</div>
+            <button type="submit" class="btn btn-accent submit-btn">Save builder profile <span aria-hidden="true">→</span></button>
+            <p class="field-hint" id="profileStatus" role="status" aria-live="polite"></p>
+          </form>
+          <aside class="profile-aside-stack">
+            <section class="panel profile-progress-panel">
+              <div class="panel-header"><h2>Your progress</h2><span class="tag">LOCAL ONLY</span></div>
+              <p class="profile-aside-intro">Your skills and completed projects will show here as you build.</p>
+              <p class="profile-aside-label">SKILLS</p>
+              <div id="profilePreviewSkills" class="profile-preview-chips"><span class="profile-empty-inline">No skills listed yet.</span></div>
+              <p class="profile-aside-label">INTERESTS</p>
+              <div id="profilePreviewInterests" class="profile-preview-chips"><span class="profile-empty-inline">Choose interests when you start a project.</span></div>
+            </section>
+            <section class="panel profile-history-panel">
+              <div class="panel-header"><h2>Completed projects</h2><span class="tag">SELF-MARKED</span></div>
+              <div id="profileProjectHistory" aria-live="polite"><p class="profile-history-empty">No completed demo projects yet. Build a project and mark it complete in your workspace to see it here.</p></div>
+              <button type="button" class="btn btn-small btn-accent profile-project-link" data-nav="ideas">＋ Start a project</button>
+            </section>
+            <section class="panel safety-panel">
+              <p class="kicker">PRIVACY FIRST</p><h3>Your identity is yours.</h3>
+              <p>No public profiles, real chats, email messages or uploads to our servers are active here. Your information is cleared when you exit or close this demo tab.</p>
+            </section>
+          </aside>
+        </div>
       </div>
     </section>
     <section class="view hidden" id="view-ideas" data-view="ideas" aria-labelledby="ideaTitle">
