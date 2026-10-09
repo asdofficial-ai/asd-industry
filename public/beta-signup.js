@@ -32,10 +32,25 @@
   busy("signupBtn",!enabled);
   busy("loginBtn",!enabled);
  }
+ const passwordStrength=()=>{
+  const password=$("betaPassword").value;
+  const feedback=$("passwordStrength");
+  const uniqueGroups=[/[a-z]/,/[A-Z]/,/[0-9]/,/[^a-zA-Z0-9\s]/].filter(re=>re.test(password)).length;
+  const obviouslyWeak=/password|qwerty|letmein|admin123|welcome123|12345678/i.test(password);
+  const score=password.length<12||obviouslyWeak?0:password.length>=20?3:password.length>=16&&uniqueGroups>=3?3:password.length>=12&&uniqueGroups>=2?2:1;
+  feedback.textContent="Password strength: "+(["Needs improvement","Fair — consider a longer passphrase","Good","Strong"][score])+". Use a unique password.";
+ };
+ $("betaPassword").addEventListener("input",passwordStrength);
+ $("forgotPassword").addEventListener("click",()=>{
+   $("recoveryNotice").textContent="Human-assisted recovery is planned but is not active yet. Support will verify account ownership, then authorize a new password—never reveal an old password. Do not send documents, passwords, identity numbers, or recovery codes in chat.";
+ });
  $("accountForm").addEventListener("submit",async event=>{
   event.preventDefault();
   if(!enabled){status("signupFeedback","Real email verification is not yet available.");return;}
   if(!$("accountForm").reportValidity())return;
+  if($("betaPassword").value!==$("betaConfirmPassword").value){
+   status("signupFeedback","The two passwords do not match.");return;
+  }
   busy("signupBtn",true);status("signupFeedback","Sending verification email…");
   email=$("betaEmail").value.trim().toLowerCase();
   invite=$("betaInvite").value;
@@ -44,7 +59,7 @@
      handle:$("betaHandle").value.trim(),email,password:$("betaPassword").value,
      ageGroup:$("betaAge").value,inviteCode:invite
    });
-   $("betaPassword").value="";
+   $("betaPassword").value="";$("betaConfirmPassword").value="";
    $("verifyAddress").textContent=email;
    status("signupFeedback","");view("verifyPanel");
   }catch(e){status("signupFeedback",e.message);}
