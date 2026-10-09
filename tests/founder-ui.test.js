@@ -90,3 +90,15 @@ test("Founder has a distinct sign-in route and no public self-provisioning",()=>
  assert.match(founder,/href="\/founder-login\.html"/);
  assert.doesNotMatch(html,/type="text" name="founderRole"/);
 });
+
+test("Founder sign-in requires a six-digit authenticator code in addition to password",()=>{
+ const html=fs.readFileSync(path.join(pub,"founder-login.html"),"utf8");
+ const js=fs.readFileSync(path.join(pub,"founder-login.js"),"utf8");
+ const api=fs.readFileSync(path.join(__dirname,"../lib/human-staff-api.js"),"utf8");
+ assert.match(html,/id="founderLoginTotp"/);
+ assert.match(html,/autocomplete="one-time-code"/);
+ assert.match(js,/totp:document\.getElementById\("founderLoginTotp"\)/);
+ assert.match(api,/record\.rows\[0\]\.role==="founder"/);
+ assert.match(api,/industry_staff_mfa/);
+ assert.match(api,/last_accepted_counter<\$2/);
+});
