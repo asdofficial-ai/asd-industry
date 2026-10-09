@@ -21,6 +21,20 @@
    <h2>Welcome back, Founder.</h2>
    <p class="muted">This entrance is reserved for your personally provisioned Founder account. Normal builder accounts do not have executive access.</p>
    <div id="founderLoginStatus" role="status" class="login-status">Checking protected sign-in…</div>
+   <section class="google-signin-card" id="founderGoogleCard" hidden aria-labelledby="googleSigninHeading">
+     <h3 id="googleSigninHeading">Continue with Google</h3>
+     <p class="muted">Use your approved personal Gmail. No paid company email is required.</p>
+     <div id="founderGoogleButton" class="founder-google-button" aria-label="Google sign-in"></div>
+     <p id="founderGoogleFeedback" class="login-status" role="status" aria-live="polite"></p>
+     <form id="founderGoogleMfaForm" hidden>
+       <label>Founder authenticator code
+         <input id="founderGoogleTotp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="6 digits" required>
+       </label>
+       <button id="founderGoogleComplete" type="submit" class="cta primary">Unlock Founder Account securely →</button>
+     </form>
+   </section>
+   <p class="login-note" id="founderGoogleSetupMessage">Checking Google Sign-In configuration…</p>
+   <details id="founderPasswordOption" hidden><summary>Use password and authenticator instead</summary>
    <form id="founderLoginForm" hidden>
     <label>Founder email<input id="founderLoginEmail" type="email" autocomplete="username" maxlength="254" required></label>
     <label>Password<input id="founderLoginPassword" type="password" autocomplete="current-password" required minlength="16"></label>
@@ -28,7 +42,7 @@
     <p class="login-note">Your Founder Account requires both your password and an authenticator-app code.</p>
     <button type="submit" id="founderLoginSubmit" class="cta primary">Sign in to Founder Command Center →</button>
     <p id="founderLoginError" role="alert" class="login-error"></p>
-   </form>
+   </form></details>
    <a class="cta ghost" href="/founder.html">Explore Founder visual preview ↗</a>
    <p class="login-note">Security note: the Founder backend stays disabled until a private Founder identity, strong authentication, and trusted database connection are configured. Never send passwords in chat.</p>
   </div>
