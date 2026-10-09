@@ -63,3 +63,34 @@ The `/api/staff/intake` endpoint only imports fictional or approved adult test d
 `npm install && node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js`.
 
 These are automated code-level checks; a live database, full authorization and end-to-end browser testing are still required before deployment with real users.
+
+## Database setup checkpoint — 2026-10-09
+
+Neon project **ASD Industry** (`plain-moon-61920823`), database `asd_industry_staff`, branch `main`, is separate from the unrelated ASDP Staging and ASD Pay databases. Six v0.7 staff-review tables are applied, with no staff accounts or review records inserted.
+
+A constrained PostgreSQL privilege role **`asd_industry_staff_runtime`** has been created and verified. It intentionally has **NOLOGIN**, cannot create databases/roles/schema objects and inherits no other roles. Its grants are limited to:
+
+| Table | Runtime privileges |
+|---|---|
+| `industry_staff_accounts` | SELECT only |
+| `industry_staff_sessions` | SELECT, INSERT, DELETE |
+| `industry_review_requests` | SELECT, INSERT, UPDATE |
+| `industry_staff_reports` | SELECT, INSERT |
+| `industry_human_decisions` | INSERT only |
+| `industry_staff_audit` | INSERT only |
+
+**A separate restricted LOGIN role is still needed before connecting Render**. An unused Neon-generated login role that inherited broad privileges was deleted. Never configure the app with the Neon owner password or the ASD Pay/ASDP staging database.
+
+### Human-administered connection process
+
+1. In Neon SQL Editor, select the **ASD Industry** project and **asd_industry_staff** database. As the database owner, create a separate LOGIN role with `NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT NOREPLICATION NOBYPASSRLS` and a strong random password that stays outside GitHub and this chat.
+2. Grant *only* the existing `asd_industry_staff_runtime` group role to that LOGIN role (with inherited privileges). Verify the login has no owner/superuser/role-creation privileges and no `CREATE` privilege on `public`.
+3. In Render service `asd-industry-staff-v07-preview`, configure `STAFF_DB_URL` privately under Environment using the restricted login connection string. Never paste database passwords, full connection strings or session peppers into ChatGPT.
+4. **Keep `STAFF_BACKEND_ENABLED=false`** until staff identity/MFA, secure invitation provisioning, and server authorization tests have passed. Do not create or upload real accounts for minors.
+5. Configure `STAFF_ORIGIN` to the exact HTTPS staff-console origin and a unique random `STAFF_SESSION_PEPPER` in Render when preparing a separate adult-only test environment. Ensure all credentials use TLS.
+
+### Verified CI
+
+A dedicated GitHub Actions job now provisions disposable PostgreSQL 16, applies `001_staff_review.sql`, and tests HTTP login, reviewer/safety role restrictions, staff report preparation, human-only approval, duplicate decision rejection, origin checks, logout and audit records. This CI job uses only synthetic adult-test data and disposable test credentials, never the live Neon project.
+
+**No production staff login was activated.** A passing test against disposable PostgreSQL does not constitute a production security assessment.
