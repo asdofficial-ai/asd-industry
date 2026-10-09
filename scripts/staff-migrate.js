@@ -4,10 +4,10 @@
 const fs=require("node:fs"),path=require("node:path");
 const {Client}=require("pg");
 async function run(){
- const url=process.env.STAFF_DB_URL;
- if(!url)throw Error("STAFF_DB_URL must point to an isolated ASD Industry database.");
- if(process.env.DATABASE_URL&&url===process.env.DATABASE_URL)
-  throw Error("STAFF_DB_URL must not reuse the existing app database.");
+ const url=process.env.STAFF_ADMIN_DB_URL;
+ if(!url)throw Error("STAFF_ADMIN_DB_URL must point to an isolated ASD Industry administrator database connection.");
+ if((process.env.DATABASE_URL&&url===process.env.DATABASE_URL)||(process.env.STAFF_DB_URL&&url===process.env.STAFF_DB_URL))
+  throw Error("STAFF_ADMIN_DB_URL must not reuse the existing app database.");
  const client=new Client({connectionString:url});
  await client.connect();
  try{
