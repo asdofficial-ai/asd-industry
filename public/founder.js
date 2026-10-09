@@ -132,13 +132,34 @@
  }
  function renderAgents(){
   const grid=$("aiDirectory");grid.replaceChildren();
-  AGENTS.forEach(a=>{
+  const enabledById=new Map((realData?.aiRoles||[]).map(a=>[a.agent_id,a.review_enabled]));
+  const agentIds=["intake","safety","feasibility","matching","operations"];
+  AGENTS.forEach((a,index)=>{
+   const id=agentIds[index],enabled=enabledById.get(id)!==false;
    const card=node("article","directory-card");
-   add(card,node("div","directory-mark",a.icon),node("h3","",a.name),node("span","panel-overline",a.kind),node("p","",a.about),node("span","status-tag","POLICY: ADVISORY ONLY"));
+   add(card,node("div","directory-mark",a.icon),node("h3","",a.name),
+    node("span","panel-overline",a.kind),node("p","",a.about),
+    node("span","status-tag",isAuthenticatedFounder?(enabled?"ASSESSMENT ENABLED":"ASSESSMENT PAUSED"):"ADVISORY ROLE / PREVIEW"));
+   if(isAuthenticatedFounder){
+    const button=node("button","cta ghost founder-toggle",enabled?"Pause reports":"Enable reports");
+    button.type="button";button.setAttribute("aria-label",(enabled?"Pause ":"Enable ")+a.name+" report contributions");
+    button.addEventListener("click",async()=>{
+     if(!confirm((enabled?"Pause":"Enable")+" "+a.name+" in future rule-based report packets? This does not activate live AI models."))return;
+     button.disabled=true;
+     try{
+      await mutate("/api/staff/founder/agents/"+id,"PATCH",{reviewEnabled:!enabled});
+      await checkSession();showNotice("Updated "+a.name+" policy. Real model execution remains disabled.");
+     }catch(err){showNotice(err.message);button.disabled=false;}
+    });
+    card.append(button);
+   }
    grid.append(card);
   });
   const prev=$("aiPreview");prev.replaceChildren();
-  AGENTS.slice(0,4).forEach(a=>prev.append(infoRow(a.icon,a.name,a.kind,"Review →")));
+  AGENTS.slice(0,4).forEach((a,index)=>{
+   const mode=isAuthenticatedFounder?(enabledById.get(agentIds[index])===false?"Paused":"Enabled"):"Advisory";
+   prev.append(infoRow(a.icon,a.name,a.kind,mode));
+  });
  }
  function renderSecurity(){
   const root=$("securityPreview");root.replaceChildren();
