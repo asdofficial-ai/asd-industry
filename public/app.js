@@ -125,6 +125,7 @@
     return [...document.querySelectorAll('input[name="interests"]:checked')].map(e => e.value);
   }
   const profileForm = byId("profileForm");
+  let pendingAvatarImage=""; // Editor changes are committed only by Save changes.
   // Uploaded image or a neutral initial-only fallback; no preset color selection.
   const skillCheckboxes = [...document.querySelectorAll('input[name="skills"]')];
   const maxSkills = 8;
@@ -162,12 +163,7 @@
     if (hasImage) img.src=p.avatarImage;
     else img.removeAttribute("src");
     byId("profileAvatarInitial").hidden=hasImage;
-    byId("editAvatarInitial").textContent=name.charAt(0).toUpperCase();
-    byId("editAvatarInitial").hidden=hasImage;
-    const editImage=byId("editAvatarImage");
-    editImage.hidden=!hasImage;
-    if (hasImage) editImage.src=p.avatarImage;
-    else editImage.removeAttribute("src");
+    // The edit screen has its own staged picture preview.
 
     const completed=Array.isArray(p.completedProjects)?p.completedProjects:[];
     const skills=Array.isArray(p.skills)?p.skills:[];
@@ -205,9 +201,19 @@
     const count=skillCheckboxes.filter(cb=>cb.checked).length;
     byId("skillsStatus").textContent=count ? count+" of "+maxSkills+" skills selected" : "No skills selected yet.";
   }
+  function renderEditAvatar() {
+    const hasImage=Boolean(pendingAvatarImage);
+    byId("editAvatarInitial").textContent=(byId("nickname").value||state.profile?.nickname||"B").charAt(0).toUpperCase();
+    byId("editAvatarInitial").hidden=hasImage;
+    const image=byId("editAvatarImage");
+    image.hidden=!hasImage;
+    if (hasImage) image.src=pendingAvatarImage;
+    else image.removeAttribute("src");
+  }
   function syncProfileEditor() {
     normalizeProfileExtras();
     const p=state.profile || {};
+    pendingAvatarImage=p.avatarImage || "";
     byId("nickname").value=p.nickname || "";
     byId("age").value=p.ageGroup || "";
     byId("email").value=p.email || "";
@@ -221,7 +227,7 @@
       input.checked=Array.isArray(p.interests) && p.interests.includes(input.value);
     });
     skillCheckboxes.forEach(input=>{input.checked=Array.isArray(p.skills) && p.skills.includes(input.value);});
-    updateSkillStatus();renderBuilderProfile();
+    updateSkillStatus();renderBuilderProfile();renderEditAvatar();
   }
   byId("editProfileJump").addEventListener("click",()=>go("profile-edit"));
   byId("backToProfile").addEventListener("click",()=>go("profile"));
@@ -240,10 +246,10 @@
   }));
   byId("avatarRemove").addEventListener("click",()=>{
     if (!state.profile) return;
-    state.profile.avatarImage="";
+    pendingAvatarImage="";
     byId("avatarUpload").value="";
-    byId("avatarStatus").textContent="Picture removed. Your neutral initials will show instead.";
-    save();renderBuilderProfile();
+    byId("avatarStatus").textContent="Picture removal ready · Save changes to confirm.";
+    renderEditAvatar();
   });
   byId("avatarChooseButton").addEventListener("click",()=>byId("avatarUpload").click());
   byId("handle").addEventListener("blur",()=>{
@@ -274,9 +280,9 @@
         ctx.drawImage(image,sx,sy,side,side,0,0,160,160);
         const url=canvas.toDataURL("image/webp",0.72);
         if(!url.startsWith("data:image/") || url.length>200000) throw Error("Preview too large");
-        state.profile.avatarImage=url;
-        save();renderBuilderProfile();
-        byId("avatarStatus").textContent="Picture added · compressed to 160px and saved only in this tab.";
+        pendingAvatarImage=url;
+        renderEditAvatar();
+        byId("avatarStatus").textContent="Picture ready · compressed to 160px. Save changes to keep it in this tab.";
       } catch (_) {byId("avatarStatus").textContent="This picture could not be processed. Try another PNG or JPG."; }
     };
     image.onerror=()=>{
@@ -396,6 +402,7 @@
       ageGroup:byId("age").value,
       email:contact.email,
       country:contact.country,
+      avatarImage:pendingAvatarImage,
       skills,
       interests,
       role:byId("role").value,
