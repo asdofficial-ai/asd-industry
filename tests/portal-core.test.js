@@ -69,3 +69,21 @@ test("each portal destination is an actual separate HTML page",()=>{
  const legacy=fs.readFileSync(path.join(__dirname,"../public/app.js"),"utf8");
  assert.match(legacy,/location\.assign\("\/home\.html"\)/);
 });
+
+test("browser page controller binds only to IDs present in one of the page documents",()=>{
+ const pages=["home","discover","projects","team","workspace","profile","notifications","review"];
+ const all=pages.map(name=>fs.readFileSync(path.join(__dirname,"../public",name+".html"),"utf8")).join("\n");
+ const ids=new Set([...all.matchAll(/id="([^"]+)"/g)].map(m=>m[1]));
+ const controller=fs.readFileSync(path.join(__dirname,"../public/portal.js"),"utf8");
+ const referenced=[...controller.matchAll(/\$\("([^"]+)"\)/g)].map(m=>m[1]);
+ const missing=[...new Set(referenced.filter(x=>!ids.has(x)))];
+ assert.deepEqual(missing,[]);
+});
+test("review actions are not linked from user-facing navigation",()=>{
+ for(const name of ["home","discover","projects","team","workspace","profile","notifications"]){
+  const html=fs.readFileSync(path.join(__dirname,"../public",name+".html"),"utf8");
+  assert.doesNotMatch(html,/href="\/review\.html"/);
+ }
+ const script=fs.readFileSync(path.join(__dirname,"../public/portal.js"),"utf8");
+ assert.doesNotMatch(script,/View staff review preview/);
+});
