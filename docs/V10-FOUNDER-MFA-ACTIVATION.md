@@ -43,3 +43,15 @@ The backend **cannot be enabled** without `STAFF_MFA_KEY` — a random 32-byte k
 The system's development tests cover RFC 6238 TOTP generation, encrypted seed authentication, expired and replayed codes, mandatory MFA before Founder sessions, denied non-Founder access, staff/reviewer role restrictions, project-review approvals and audit records. GitHub Actions uses an ephemeral PostgreSQL database.
 
 **The Founder Account is not yet activated.** User choice of Founder email and private password setup are still required. Do not claim this beta is ready to accept data from minors or to provide secure team chat.
+
+## Development environment checkpoint (2026-10-09)
+
+A fresh, least-privileged PostgreSQL LOGIN role `asd_industry_staff_service` has been created in Neon and verified not to be a database owner, role creator, schema creator or privileged account writer. It inherits only the permissions held by the pre-existing `asd_industry_staff_runtime` group.
+
+The separate Render preview now has **private** environment settings for `STAFF_DB_URL`, `STAFF_SESSION_PEPPER`, `STAFF_MFA_KEY`, and `STAFF_ORIGIN`. The actual secrets were never written to the repository or shared in chat. Both `STAFF_BACKEND_ENABLED=false` and `AI_STAFF_ENABLED=false` remain explicitly set.
+
+**Key handoff caveat:** The initial `STAFF_MFA_KEY` was configured privately on Render during deployment. It was not exported to a trusted provisioning terminal. Because no Founder MFA record exists yet, its encryption key may be safely **rotated before first enrollment**: a trusted operator must generate a fresh key in the private provisioning environment, use that key when running `staff:enroll-mfa`, and configure the identical key in Render's private settings before enabling staff sign-in. Once any MFA records exist, rotating the key without securely decrypting/re-encrypting all records would lock those accounts out. Do not print or share the key.
+
+The deployment passed 41 build unit tests. The latest PostgreSQL/MFA integration test is in GitHub Actions and must also pass before enabling any real staff sign-in. The Neon database currently has **zero** staff accounts, zero Founder authenticator records and zero project decisions. The first legitimate Founder identity must be independently verified before provisioning.
+
+**Do not enable the backend or create youth accounts at this checkpoint.**
