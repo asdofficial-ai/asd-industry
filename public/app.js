@@ -64,6 +64,7 @@
     if (to==="chat") renderChat();
     if (to==="review") renderRisks();
     if (to==="ideas") renderMatches();
+    if (to==="profile") renderBuilderProfile();
   }
   document.querySelectorAll("[data-nav]").forEach(button =>
     button.addEventListener("click", event => {
@@ -307,20 +308,17 @@
     }
     state = {
       entryCompleted:true,
-      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,email:contact.email,country:contact.country,role:"",availability:"",interests:[]},
+      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,email:contact.email,country:contact.country,
+        handle:deriveHandle(nick),bio:"",avatarStyle:"ocean",avatarImage:"",skills:[],completedProjects:[],ideasExplored:0,
+        role:"",availability:"",interests:[]},
       idea:null,
       project:null
     };
     save();
-    // Populate the builder profile page from the entry form.
-    byId("nickname").value = nick;
-    byId("age").value = age;
-    byId("email").value = contact.email;
-    byId("country").value = contact.country;
+    // Populate the new builder editor with the demo's local identity.
+    profileForm.reset();
+    syncProfileEditor();
     renderEmailVerification();
-    byId("role").value = "";
-    byId("availability").value = "";
-    document.querySelectorAll('input[name="interests"]').forEach(input=>{input.checked=false;});
     ideaForm.reset();
     byId("ideaStatus").textContent="";
     byId("profileStatus").textContent="Basic demo profile saved. Add interests when you're ready to build a project.";
@@ -333,6 +331,10 @@
     state={entryCompleted:false,profile:null,idea:null,project:null};
     try { sessionStorage.removeItem(STORE_KEY); } catch (_) {}
     signupForm.reset();profileForm.reset();ideaForm.reset();
+    byId("avatarUpload").value="";
+    byId("avatarStatus").textContent="Choose an avatar instead of a personal photo if you're under 18.";
+    syncProfileEditor();
+    renderEmailVerification();
     byId("chatForm").reset();
     byId("profileStatus").textContent="";
     byId("ideaStatus").textContent="";
@@ -348,51 +350,43 @@
   profileForm.addEventListener("submit", event => {
     event.preventDefault();
     if (!profileForm.reportValidity()) return;
-    const nickname = byId("nickname").value.trim();
-    const interests = selectedInterests();
-    const role=byId("role").value;
-    const availability=byId("availability").value;
-    const hasAnyProjectPreferences = Boolean(role || availability || interests.length);
-    const contact = readContactDetails("email", "country");
-    if (nickname.length < 2 || nickname.length > 24 || !["12-14","15-17","18+"].includes(byId("age").value) || !contact) {
-      byId("profileStatus").textContent = "Enter a nickname, age group, valid email and country.";
+    const nickname=byId("nickname").value.trim();
+    const handle=byId("handle").value.trim().toLowerCase();
+    const bio=byId("profileBioInput").value.trim();
+    const skills=skillCheckboxes.filter(input=>input.checked).map(input=>input.value);
+    const interests=selectedInterests();
+    const contact=readContactDetails("email","country");
+    if (!state.profile || nickname.length<2 || nickname.length>24 ||
+        !/^[a-z0-9._]{3,22}$/.test(handle) || bio.length>180 ||
+        !["12-14","15-17","18+"].includes(byId("age").value) || !contact) {
+      byId("profileStatus").textContent="Please check your nickname, username, email and country.";
       return;
     }
-    if (hasAnyProjectPreferences && (!role || !availability || !interests.length)) {
-      byId("profileStatus").textContent = "To set your project preferences, choose a role, availability and at least one interest — or leave all three blank until later.";
+    if (skills.length>maxSkills) {
+      byId("profileStatus").textContent="Choose no more than "+maxSkills+" skills.";
       return;
     }
-    state.profile = {
-      id:"ASD-DEMO-0001",
-      nickname:nickname,
+    state.profile={
+      ...state.profile,
+      nickname,
+      handle,
+      bio,
       ageGroup:byId("age").value,
       email:contact.email,
       country:contact.country,
+      skills,
       interests,
-      role,
-      availability
+      role:byId("role").value,
+      availability:byId("availability").value
     };
+    // Editing the profile must not erase locally completed projects or avatar data.
     syncIdeaBuilderFromProfile();
-    // Profile changes remain local and can be used for subsequent project matches.
     save();
     renderEmailVerification();
-    byId("profileStatus").textContent = "Saved only in this browser tab — "+state.profile.id+".";
-    go("ideas");
+    renderBuilderProfile();
+    byId("profileStatus").textContent="Profile saved in this browser tab · "+state.profile.id+". Email remains unverified.";
   });
-  if (state.profile) {
-    byId("nickname").value = state.profile.nickname || "";
-    byId("age").value = state.profile.ageGroup || "";
-    byId("email").value = state.profile.email || "";
-    byId("country").value = state.profile.country || "";
-    byId("role").value = state.profile.role || "";
-    byId("availability").value = state.profile.availability || "";
-    for (const checkbox of document.querySelectorAll('input[name="interests"]')) {
-      checkbox.checked = (state.profile.interests || []).includes(checkbox.value);
-    }
-    byId("profileStatus").textContent = state.profile.email && state.profile.country
-      ? "Demo profile saved · "+state.profile.id+". Builder skills are chosen when you start a project."
-      : "Complete your email and country here to update your existing demo profile.";
-  }
+  syncProfileEditor();
   renderEmailVerification();
 
   const ideaForm = byId("ideaForm");
@@ -426,6 +420,10 @@
     if (title.length < 3 || description.length < 25) {
       byId("ideaStatus").textContent = "Please add a title and describe your idea in more detail.";
       return;
+    }
+    if (!state.idea || state.idea.title!==title || state.idea.description!==description ||
+        state.idea.topic!==byId("ideaTopic").value) {
+      state.profile.ideasExplored=(Number(state.profile.ideasExplored)||0)+1;
     }
     state.idea = {
       title, description,
@@ -493,6 +491,8 @@
         state.project = {
           title:state.idea.title,
           description:state.idea.description,
+          topic:state.idea.topic,
+          completed:false,
           members:[
             {nick:state.profile.nickname+" (you)",role:state.profile.role,demo:false},
             ...matches.map(b=>({nick:b.nick,role:b.role,demo:true}))
@@ -518,6 +518,10 @@
     if (!project) return;
     byId("workspaceProjectTitle").textContent = project.title;
     byId("workspaceProjectDescription").textContent = project.description;
+    byId("workspaceProjectBadge").textContent=project.completed ? "✓ COMPLETED · DEMO" : "● IN PROGRESS";
+    byId("workspaceProjectBadge").dataset.completed=String(Boolean(project.completed));
+    byId("completeDemoProject").textContent=project.completed ? "✓ Completed (demo)" : "✓ Mark project complete";
+    byId("completeDemoProject").disabled=Boolean(project.completed);
     const members = byId("workspaceMembers");
     members.replaceChildren();
     (project.members || []).forEach(member => {
@@ -532,6 +536,23 @@
     renderTasks();
     renderNotes();
   }
+  byId("completeDemoProject").addEventListener("click",()=>{
+    if (!state.project || state.project.completed || !state.profile) return;
+    if (!confirm("Mark this demo project as completed? It will appear in your private profile history as self-marked, not verified.")) return;
+    normalizeProfileExtras();
+    const date=new Date().toISOString();
+    state.project.completed=true;
+    state.project.completedAt=date;
+    state.profile.completedProjects.unshift({
+      title:state.project.title,
+      topic:state.project.topic || "Project",
+      completedAt:date
+    });
+    state.profile.completedProjects=state.profile.completedProjects.slice(0,20);
+    save();
+    renderWorkspace();
+    renderBuilderProfile();
+  });
   function renderTasks() {
     const project = state.project;
     if (!project) return;
