@@ -7,6 +7,7 @@ const {once}=require("node:events");
 const crypto=require("node:crypto");
 const {Pool}=require("pg");
 const Auth=require("../lib/staff-auth-core");
+const MFA=require("../lib/staff-mfa");
 if(!process.env.STAFF_TEST_DATABASE_URL) {
  test("database integration requires a disposable STAFF_TEST_DATABASE_URL", {skip:true},()=>{});
 } else {
@@ -16,10 +17,11 @@ if(!process.env.STAFF_TEST_DATABASE_URL) {
  process.env.STAFF_DB_URL=URL;
  process.env.STAFF_ORIGIN=origin;
  process.env.STAFF_SESSION_PEPPER="ci-only-ephemeral-not-a-production-session-secret-2026";
+ process.env.STAFF_MFA_KEY="a".repeat(64);
  process.env.STAFF_BACKEND_ENABLED="true";
  process.env.NODE_ENV="production";
  const app=require("../server");
- let pool, server,base,ownerId,safetyId,founderId;
+ let pool, server,base,ownerId,safetyId,founderId,founderSeed;
  const pass="CI-only-fake-staff-password-2026!";
  const json=(data)=>({method:"POST",headers:{"content-type":"application/json",origin},body:JSON.stringify(data)});
  const request=(path,options)=>fetch(base+"/api/staff"+path,options);
@@ -37,6 +39,9 @@ if(!process.env.STAFF_TEST_DATABASE_URL) {
   const h=await Auth.hashPassword(pass);
   await pool.query("INSERT INTO industry_staff_accounts(id,email,password_hash,role) VALUES($1,$2,$3,'reviewer'),($4,$5,$6,'safety'),($7,$8,$9,'founder')",
    [ownerId,"adult-reviewer@ci.invalid",h,safetyId,"safety-reviewer@ci.invalid",h,founderId,"founder@ci.invalid",h]);
+  founderSeed=MFA.randomSecret();
+  await pool.query("INSERT INTO industry_staff_mfa(staff_id,secret_ciphertext) VALUES($1,$2)",
+    [founderId,MFA.seal(founderSeed,founderId,process.env.STAFF_MFA_KEY)]);
   server=app.listen(0,"127.0.0.1");await once(server,"listening");
   base="http://127.0.0.1:"+server.address().port;
  });
@@ -61,7 +66,15 @@ if(!process.env.STAFF_TEST_DATABASE_URL) {
   r=await request("/founder/overview",{headers:{cookie:reviewerCookie}});assert.equal(r.status,403);
   r=await request("/founder/overview",{headers:{cookie:safetyCookie}});assert.equal(r.status,403);
   r=await request("/login",json({email:"founder@ci.invalid",password:pass}));
+  assert.equal(r.status,401); // Password alone never grants Founder access.
+  r=await request("/login",json({email:"founder@ci.invalid",password:pass,totp:"000000"}));
+  assert.equal(r.status,401);
+  const founderCounter=Math.floor(Date.now()/30000);
+  const founderOtp=MFA.codeAt(founderSeed,founderCounter);
+  r=await request("/login",json({email:"founder@ci.invalid",password:pass,totp:founderOtp}));
   assert.equal(r.status,200);const founderCookie=cookie(r);
+  r=await request("/login",json({email:"founder@ci.invalid",password:pass,totp:founderOtp}));
+  assert.equal(r.status,401); // Authenticator code cannot be reused.
   assert.equal((await r.json()).staff.role,"founder");
   r=await request("/founder/overview",{headers:{cookie:founderCookie}});
   assert.equal(r.status,200);const snapshot=await r.json();
