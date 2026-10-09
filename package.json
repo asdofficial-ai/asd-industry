@@ -1,6 +1,6 @@
 {
   "name": "asd-industry",
-  "version": "0.7.0",
+  "version": "0.9.0",
   "private": true,
   "description": "ASD Industry browser-local youth project-building demonstration",
   "main": "server.js",
@@ -12,7 +12,9 @@
     "check": "node --check server.js && node --check public/app.js",
     "staff:migrate": "node scripts/staff-migrate.js",
     "staff:provision": "node scripts/staff-provision.js",
-    "test:staff": "node --test tests/staff-auth.test.js"
+    "test:staff": "node --test tests/staff-auth.test.js",
+    "test": "node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/founder-ui.test.js",
+    "postinstall": "npm test"
   },
   "dependencies": {
     "express": "^4.21.2",
