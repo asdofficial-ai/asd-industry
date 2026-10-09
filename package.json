@@ -1,6 +1,6 @@
 {
   "name": "asd-industry",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "ASD Industry browser-local youth project-building demonstration",
   "main": "server.js",
@@ -13,12 +13,13 @@
     "staff:migrate": "node scripts/staff-migrate.js",
     "staff:provision": "node scripts/staff-provision.js",
     "test:staff": "node --test tests/staff-auth.test.js",
-    "test": "node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/founder-ui.test.js tests/staff-mfa.test.js",
+    "test": "node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/founder-ui.test.js tests/staff-mfa.test.js tests/founder-google.test.js",
     "postinstall": "npm test",
     "staff:enroll-mfa": "node scripts/staff-enroll-mfa.js"
   },
   "dependencies": {
     "express": "^4.21.2",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "google-auth-library": "^10.9.1"
   }
 }
