@@ -536,7 +536,17 @@
     members.replaceChildren();
     (project.members || []).forEach(member => {
       const line = node("div","member");
-      line.append(node("div","avatar",(member.nick || "?").charAt(0).toUpperCase()));
+      const avatar=node("div","avatar",(member.nick || "?").charAt(0).toUpperCase());
+      if (!member.demo && state.profile) {
+        avatar.dataset.avatarStyle=state.profile.avatarStyle || "ocean";
+        if (state.profile.avatarImage) {
+          const photo=node("img","member-avatar-image");
+          photo.src=state.profile.avatarImage;
+          photo.alt="";
+          avatar.replaceChildren(photo);
+        }
+      }
+      line.append(avatar);
       const info = node("div");
       info.append(node("b","",member.nick));
       info.append(node("small","",member.role+(member.demo?" · fictional example":" · local profile")));
