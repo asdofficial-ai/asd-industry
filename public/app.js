@@ -264,10 +264,10 @@
       return;
     }
     const owner=state.profile;
-    const objectURL=URL.createObjectURL(file);
+    // Convert the selected file locally to a data URL permitted by our strict image CSP.
+    const reader=new FileReader();
     const image=new Image();
     image.onload=()=>{
-      URL.revokeObjectURL(objectURL);
       if (state.profile !== owner) return; // Prevent photo leaks across a reset or new demo session.
       try {
         const canvas=document.createElement("canvas");
@@ -286,10 +286,16 @@
       } catch (_) {byId("avatarStatus").textContent="This picture could not be processed. Try another PNG or JPG."; }
     };
     image.onerror=()=>{
-      URL.revokeObjectURL(objectURL);
       byId("avatarStatus").textContent="Could not read that picture. Please try a valid PNG or JPG.";
     };
-    image.src=objectURL;
+    reader.onload=()=>{
+      if (state.profile !== owner) return;
+      image.src=String(reader.result || "");
+    };
+    reader.onerror=()=>{
+      byId("avatarStatus").textContent="Could not read that file. Please try a different picture.";
+    };
+    reader.readAsDataURL(file);
   });
 
   // No verification email is sent; the UI always reflects the actual unverified demo state.
