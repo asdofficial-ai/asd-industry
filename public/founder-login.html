@@ -24,6 +24,8 @@
    <form id="founderLoginForm" hidden>
     <label>Founder email<input id="founderLoginEmail" type="email" autocomplete="username" maxlength="254" required></label>
     <label>Password<input id="founderLoginPassword" type="password" autocomplete="current-password" required minlength="16"></label>
+    <label>6-digit authenticator code<input id="founderLoginTotp" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="••••••" required></label>
+    <p class="login-note">Your Founder Account requires both your password and an authenticator-app code.</p>
     <button type="submit" id="founderLoginSubmit" class="cta primary">Sign in to Founder Command Center →</button>
     <p id="founderLoginError" role="alert" class="login-error"></p>
    </form>
