@@ -64,6 +64,7 @@
     if (to==="chat") renderChat();
     if (to==="review") renderRisks();
     if (to==="ideas") renderMatches();
+    if (to==="profile") renderBuilderProfile();
   }
   document.querySelectorAll("[data-nav]").forEach(button =>
     button.addEventListener("click", event => {
@@ -107,6 +108,173 @@
     return [...document.querySelectorAll('input[name="interests"]:checked')].map(e => e.value);
   }
   const profileForm = byId("profileForm");
+  const avatarStyles = ["ocean","mint","ember","violet","midnight"];
+  const skillCheckboxes = [...document.querySelectorAll('input[name="skills"]')];
+  const maxSkills = 8;
+  const deriveHandle = nickname => {
+    const handle = String(nickname || "").normalize("NFKD").toLowerCase()
+      .replace(/[^a-z0-9._]+/g,".").replace(/^[._]+|[._]+$/g,"").slice(0,22);
+    return handle.length >= 3 ? handle : "builder.demo";
+  };
+  function normalizeProfileExtras() {
+    const p = state.profile;
+    if (!p) return;
+    if (typeof p.handle !== "string" || !/^[a-z0-9._]{3,22}$/.test(p.handle)) p.handle=deriveHandle(p.nickname);
+    if (typeof p.bio !== "string") p.bio="";
+    if (!Array.isArray(p.skills)) p.skills=[];
+    if (!Array.isArray(p.completedProjects)) p.completedProjects=[];
+    if (!avatarStyles.includes(p.avatarStyle)) p.avatarStyle="ocean";
+    if (typeof p.avatarImage !== "string" || !p.avatarImage.startsWith("data:image/")) p.avatarImage="";
+    if (!Number.isFinite(p.ideasExplored)) p.ideasExplored=state.idea?1:0;
+  }
+  function renderBuilderProfile() {
+    normalizeProfileExtras();
+    const p = state.profile || {};
+    const name = p.nickname || "Builder";
+    byId("profileDisplayName").textContent=name;
+    byId("profileDisplayHandle").textContent="@"+(p.handle || "builder");
+    byId("profileDisplayCountry").textContent=p.country || "Country not selected";
+    byId("profileDisplayAge").textContent=p.ageGroup ? p.ageGroup+" years" : "Age group pending";
+    byId("profileDisplayBio").textContent=p.bio || "Your story starts here. Add a short introduction about what you'd like to build.";
+    const avatar = byId("profilePreviewAvatar");
+    avatar.dataset.avatarStyle=p.avatarStyle || "ocean";
+    byId("profileAvatarInitial").textContent=name.charAt(0).toUpperCase();
+    const img=byId("profilePreviewImage");
+    const hasImage=Boolean(p.avatarImage);
+    img.hidden=!hasImage;
+    if (hasImage) img.src=p.avatarImage;
+    else img.removeAttribute("src");
+    byId("profileAvatarInitial").hidden=hasImage;
+    document.querySelectorAll(".avatar-choice").forEach(button => {
+      button.setAttribute("aria-pressed",String(button.dataset.avatarStyle === (p.avatarStyle || "ocean") && !hasImage));
+    });
+    const completed=Array.isArray(p.completedProjects)?p.completedProjects:[];
+    const skills=Array.isArray(p.skills)?p.skills:[];
+    byId("profileStatsIdeas").textContent=String(Math.max(Number(p.ideasExplored)||0,state.idea?1:0));
+    byId("profileStatsCompleted").textContent=String(completed.length);
+    byId("profileStatsSkills").textContent=String(skills.length);
+    byId("profileStatsVerification").textContent="Pending";
+    function chips(targetId, values, fallback) {
+      const target=byId(targetId);
+      target.replaceChildren();
+      if (!values.length) { target.append(node("span","profile-empty-inline",fallback));return; }
+      values.forEach(value=>target.append(node("span","profile-skill-chip",value)));
+    }
+    chips("profilePreviewSkills",skills,"No skills listed yet.");
+    chips("profilePreviewInterests",Array.isArray(p.interests)?p.interests:[],"Choose interests when you start a project.");
+    const history=byId("profileProjectHistory");
+    history.replaceChildren();
+    if (!completed.length) {
+      history.append(node("p","profile-history-empty","No completed demo projects yet. Build a project and mark it complete in your workspace to see it here."));
+    } else {
+      completed.forEach((item,index) => {
+        const row=node("div","profile-project-entry");
+        row.append(node("span","profile-project-icon","✓"));
+        const details=node("div","profile-project-details");
+        details.append(node("strong","",item.title || "Untitled project"));
+        const date=item.completedAt && !Number.isNaN(Date.parse(item.completedAt))
+          ? new Date(item.completedAt).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})
+          : "In this demo";
+        details.append(node("small","",date+" · Self-marked complete · Local only"));
+        row.append(details);history.append(row);
+      });
+    }
+  }
+  function updateSkillStatus() {
+    const count=skillCheckboxes.filter(cb=>cb.checked).length;
+    byId("skillsStatus").textContent=count ? count+" of "+maxSkills+" skills selected" : "No skills selected yet.";
+  }
+  function syncProfileEditor() {
+    normalizeProfileExtras();
+    const p=state.profile || {};
+    byId("nickname").value=p.nickname || "";
+    byId("age").value=p.ageGroup || "";
+    byId("email").value=p.email || "";
+    byId("country").value=p.country || "";
+    byId("handle").value=p.handle || deriveHandle(p.nickname);
+    byId("profileBioInput").value=p.bio || "";
+    byId("profileBioCount").textContent=byId("profileBioInput").value.length+" / 180";
+    byId("role").value=p.role || "";
+    byId("availability").value=p.availability || "";
+    document.querySelectorAll('input[name="interests"]').forEach(input => {
+      input.checked=Array.isArray(p.interests) && p.interests.includes(input.value);
+    });
+    skillCheckboxes.forEach(input=>{input.checked=Array.isArray(p.skills) && p.skills.includes(input.value);});
+    updateSkillStatus();renderBuilderProfile();
+  }
+  byId("editProfileJump").addEventListener("click",()=>{
+    byId("profileForm").scrollIntoView({behavior:"smooth",block:"start"});
+    // Let mobile users reach the form without automatically opening their keyboard.
+  });
+  byId("profileBioInput").addEventListener("input",()=>{
+    byId("profileBioCount").textContent=byId("profileBioInput").value.length+" / 180";
+  });
+  skillCheckboxes.forEach(input=>input.addEventListener("change",()=>{
+    const count=skillCheckboxes.filter(cb=>cb.checked).length;
+    if(count>maxSkills) {
+      input.checked=false;
+      byId("skillsStatus").textContent="Maximum of "+maxSkills+" skills. Deselect one to add another.";
+      return;
+    }
+    updateSkillStatus();
+  }));
+  document.querySelectorAll(".avatar-choice").forEach(button=>{
+    button.addEventListener("click",()=>{
+      if (!state.profile) return;
+      state.profile.avatarStyle=button.dataset.avatarStyle;
+      state.profile.avatarImage="";
+      byId("avatarStatus").textContent="Avatar changed · saved locally in this tab.";
+      save();renderBuilderProfile();
+    });
+  });
+  byId("avatarRemove").addEventListener("click",()=>{
+    if (!state.profile) return;
+    state.profile.avatarImage="";
+    byId("avatarUpload").value="";
+    byId("avatarStatus").textContent="Picture removed · using your selected avatar instead.";
+    save();renderBuilderProfile();
+  });
+  byId("avatarChooseButton").addEventListener("click",()=>byId("avatarUpload").click());
+  byId("handle").addEventListener("blur",()=>{
+    byId("handle").value=byId("handle").value.trim().replace(/^@/,"").toLowerCase();
+  });
+  byId("avatarUpload").addEventListener("change",event=>{
+    const file=event.target.files && event.target.files[0];
+    event.target.value="";
+    if(!state.profile || !file) return;
+    if(!["image/png","image/jpeg","image/webp"].includes(file.type) || file.size>3*1024*1024) {
+      byId("avatarStatus").textContent="Use a PNG, JPG or WebP image smaller than 3 MB.";
+      return;
+    }
+    const owner=state.profile;
+    const objectURL=URL.createObjectURL(file);
+    const image=new Image();
+    image.onload=()=>{
+      URL.revokeObjectURL(objectURL);
+      if (state.profile !== owner) return; // Prevent photo leaks across a reset or new demo session.
+      try {
+        const canvas=document.createElement("canvas");
+        canvas.width=160;canvas.height=160;
+        const ctx=canvas.getContext("2d");
+        if(!ctx) throw Error("Canvas unavailable");
+        const side=Math.min(image.naturalWidth,image.naturalHeight);
+        if(!side) throw Error("Image has no dimensions");
+        const sx=(image.naturalWidth-side)/2,sy=(image.naturalHeight-side)/2;
+        ctx.drawImage(image,sx,sy,side,side,0,0,160,160);
+        const url=canvas.toDataURL("image/webp",0.72);
+        if(!url.startsWith("data:image/") || url.length>200000) throw Error("Preview too large");
+        state.profile.avatarImage=url;
+        save();renderBuilderProfile();
+        byId("avatarStatus").textContent="Picture added · compressed to 160px and saved only in this tab.";
+      } catch (_) {byId("avatarStatus").textContent="This picture could not be processed. Try another PNG or JPG."; }
+    };
+    image.onerror=()=>{
+      URL.revokeObjectURL(objectURL);
+      byId("avatarStatus").textContent="Could not read that picture. Please try a valid PNG or JPG.";
+    };
+    image.src=objectURL;
+  });
+
   // No verification email is sent; the UI always reflects the actual unverified demo state.
   function renderEmailVerification() {
     const hasEmail = Boolean(state.profile && state.profile.email);
@@ -146,20 +314,17 @@
     }
     state = {
       entryCompleted:true,
-      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,email:contact.email,country:contact.country,role:"",availability:"",interests:[]},
+      profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,email:contact.email,country:contact.country,
+        handle:deriveHandle(nick),bio:"",avatarStyle:"ocean",avatarImage:"",skills:[],completedProjects:[],ideasExplored:0,
+        role:"",availability:"",interests:[]},
       idea:null,
       project:null
     };
     save();
-    // Populate the builder profile page from the entry form.
-    byId("nickname").value = nick;
-    byId("age").value = age;
-    byId("email").value = contact.email;
-    byId("country").value = contact.country;
+    // Populate the new builder editor with the demo's local identity.
+    profileForm.reset();
+    syncProfileEditor();
     renderEmailVerification();
-    byId("role").value = "";
-    byId("availability").value = "";
-    document.querySelectorAll('input[name="interests"]').forEach(input=>{input.checked=false;});
     ideaForm.reset();
     byId("ideaStatus").textContent="";
     byId("profileStatus").textContent="Basic demo profile saved. Add interests when you're ready to build a project.";
@@ -172,6 +337,10 @@
     state={entryCompleted:false,profile:null,idea:null,project:null};
     try { sessionStorage.removeItem(STORE_KEY); } catch (_) {}
     signupForm.reset();profileForm.reset();ideaForm.reset();
+    byId("avatarUpload").value="";
+    byId("avatarStatus").textContent="Choose an avatar instead of a personal photo if you're under 18.";
+    syncProfileEditor();
+    renderEmailVerification();
     byId("chatForm").reset();
     byId("profileStatus").textContent="";
     byId("ideaStatus").textContent="";
@@ -187,51 +356,47 @@
   profileForm.addEventListener("submit", event => {
     event.preventDefault();
     if (!profileForm.reportValidity()) return;
-    const nickname = byId("nickname").value.trim();
-    const interests = selectedInterests();
-    const role=byId("role").value;
-    const availability=byId("availability").value;
-    const hasAnyProjectPreferences = Boolean(role || availability || interests.length);
-    const contact = readContactDetails("email", "country");
-    if (nickname.length < 2 || nickname.length > 24 || !["12-14","15-17","18+"].includes(byId("age").value) || !contact) {
-      byId("profileStatus").textContent = "Enter a nickname, age group, valid email and country.";
+    const nickname=byId("nickname").value.trim();
+    const handle=byId("handle").value.trim().toLowerCase();
+    const bio=byId("profileBioInput").value.trim();
+    const skills=skillCheckboxes.filter(input=>input.checked).map(input=>input.value);
+    const interests=selectedInterests();
+    const contact=readContactDetails("email","country");
+    if (!state.profile || nickname.length<2 || nickname.length>24 ||
+        !/^[a-z0-9._]{3,22}$/.test(handle) || bio.length>180 ||
+        !["12-14","15-17","18+"].includes(byId("age").value) || !contact) {
+      byId("profileStatus").textContent="Please check your nickname, username, email and country.";
       return;
     }
-    if (hasAnyProjectPreferences && (!role || !availability || !interests.length)) {
-      byId("profileStatus").textContent = "To set your project preferences, choose a role, availability and at least one interest — or leave all three blank until later.";
+    if (skills.length>maxSkills) {
+      byId("profileStatus").textContent="Choose no more than "+maxSkills+" skills.";
       return;
     }
-    state.profile = {
-      id:"ASD-DEMO-0001",
-      nickname:nickname,
+    state.profile={
+      ...state.profile,
+      nickname,
+      handle,
+      bio,
       ageGroup:byId("age").value,
       email:contact.email,
       country:contact.country,
+      skills,
       interests,
-      role,
-      availability
+      role:byId("role").value,
+      availability:byId("availability").value
     };
+    // Editing the profile must not erase locally completed projects or avatar data.
+    if (state.project && Array.isArray(state.project.members)) {
+      const me=state.project.members.find(member=>!member.demo);
+      if (me) {me.nick=nickname+" (you)";me.role=state.profile.role || "Project builder";}
+    }
     syncIdeaBuilderFromProfile();
-    // Profile changes remain local and can be used for subsequent project matches.
     save();
     renderEmailVerification();
-    byId("profileStatus").textContent = "Saved only in this browser tab — "+state.profile.id+".";
-    go("ideas");
+    renderBuilderProfile();
+    byId("profileStatus").textContent="Profile saved in this browser tab · "+state.profile.id+". Email remains unverified.";
   });
-  if (state.profile) {
-    byId("nickname").value = state.profile.nickname || "";
-    byId("age").value = state.profile.ageGroup || "";
-    byId("email").value = state.profile.email || "";
-    byId("country").value = state.profile.country || "";
-    byId("role").value = state.profile.role || "";
-    byId("availability").value = state.profile.availability || "";
-    for (const checkbox of document.querySelectorAll('input[name="interests"]')) {
-      checkbox.checked = (state.profile.interests || []).includes(checkbox.value);
-    }
-    byId("profileStatus").textContent = state.profile.email && state.profile.country
-      ? "Demo profile saved · "+state.profile.id+". Builder skills are chosen when you start a project."
-      : "Complete your email and country here to update your existing demo profile.";
-  }
+  syncProfileEditor();
   renderEmailVerification();
 
   const ideaForm = byId("ideaForm");
@@ -265,6 +430,10 @@
     if (title.length < 3 || description.length < 25) {
       byId("ideaStatus").textContent = "Please add a title and describe your idea in more detail.";
       return;
+    }
+    if (!state.idea || state.idea.title!==title || state.idea.description!==description ||
+        state.idea.topic!==byId("ideaTopic").value) {
+      state.profile.ideasExplored=(Number(state.profile.ideasExplored)||0)+1;
     }
     state.idea = {
       title, description,
@@ -332,6 +501,8 @@
         state.project = {
           title:state.idea.title,
           description:state.idea.description,
+          topic:state.idea.topic,
+          completed:false,
           members:[
             {nick:state.profile.nickname+" (you)",role:state.profile.role,demo:false},
             ...matches.map(b=>({nick:b.nick,role:b.role,demo:true}))
@@ -357,11 +528,25 @@
     if (!project) return;
     byId("workspaceProjectTitle").textContent = project.title;
     byId("workspaceProjectDescription").textContent = project.description;
+    byId("workspaceProjectBadge").textContent=project.completed ? "✓ COMPLETED · DEMO" : "● IN PROGRESS";
+    byId("workspaceProjectBadge").dataset.completed=String(Boolean(project.completed));
+    byId("completeDemoProject").textContent=project.completed ? "✓ Completed (demo)" : "✓ Mark project complete";
+    byId("completeDemoProject").disabled=Boolean(project.completed);
     const members = byId("workspaceMembers");
     members.replaceChildren();
     (project.members || []).forEach(member => {
       const line = node("div","member");
-      line.append(node("div","avatar",(member.nick || "?").charAt(0).toUpperCase()));
+      const avatar=node("div","avatar",(member.nick || "?").charAt(0).toUpperCase());
+      if (!member.demo && state.profile) {
+        avatar.dataset.avatarStyle=state.profile.avatarStyle || "ocean";
+        if (state.profile.avatarImage) {
+          const photo=node("img","member-avatar-image");
+          photo.src=state.profile.avatarImage;
+          photo.alt="";
+          avatar.replaceChildren(photo);
+        }
+      }
+      line.append(avatar);
       const info = node("div");
       info.append(node("b","",member.nick));
       info.append(node("small","",member.role+(member.demo?" · fictional example":" · local profile")));
@@ -371,6 +556,23 @@
     renderTasks();
     renderNotes();
   }
+  byId("completeDemoProject").addEventListener("click",()=>{
+    if (!state.project || state.project.completed || !state.profile) return;
+    if (!confirm("Mark this demo project as completed? It will appear in your private profile history as self-marked, not verified.")) return;
+    normalizeProfileExtras();
+    const date=new Date().toISOString();
+    state.project.completed=true;
+    state.project.completedAt=date;
+    state.profile.completedProjects.unshift({
+      title:state.project.title,
+      topic:state.project.topic || "Project",
+      completedAt:date
+    });
+    state.profile.completedProjects=state.profile.completedProjects.slice(0,20);
+    save();
+    renderWorkspace();
+    renderBuilderProfile();
+  });
   function renderTasks() {
     const project = state.project;
     if (!project) return;

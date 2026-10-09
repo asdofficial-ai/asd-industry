@@ -9,8 +9,9 @@ This is a **reconstruction from the October 8, 2026 handoff**, not the recovered
 - **Design 3** responsive dark-blue landing page, desktop and mobile navigation.
 - **Sign-up-first gateway**: asks for nickname, age group, email and country. Email and country are stored only in the current browser tab; no real account is created or email sent. Returning visitors in the same tab retain their demo session.
 - **Exit / reset** buttons clear the browser-tab session and return to the signup screen.
-- Browser-local demo profile with nickname, age group, email, country, and optional project preferences. **Email status always shows UNVERIFIED**; actual verification will be added to the profile later.
-- Skills, interests, role and availability are requested when the builder starts a project or finds sample teammates, not at sign-up.
+- **Step 2 Builder Profiles**: premium private builder card with nickname, editable @handle, country, age group, short bio, five preset avatar styles or an optional locally resized photo (PNG/JPG/WebP, max 3 MB, reduced to 160 × 160), optional skill tags, and project/idea stats. **Email always shows UNVERIFIED**; no email service is connected.
+- **Self-marked completed-project history**: click **Mark project complete** in Workspace. It appears under Profile's completed projects; these entries are self-reported, local-only and are not credentials or verified achievements.
+- Skills, interests, role, and availability can be set or updated separately in Profile, but they are prompted when starting a project—not on sign-up.
 - Idea submission and transparent keyword-based risk hints (**not** an AI assessment).
 - Illustrative compatibility-ranked matching against **fictional sample profiles**.
 - Browser-local project workspace: task list, progress and project notes.
@@ -23,7 +24,7 @@ This is a **reconstruction from the October 8, 2026 handoff**, not the recovered
 
 **Do not treat this as a live youth community.** No authentication, guardian verification, moderation, real team matching, **real signups or real-time messaging**, database, payments, ownership allocation or third-party AI is implemented.
 
-The browser stores demo data in **sessionStorage only**, isolated to the current browser tab. It is not sent to the server. Use a test/example email rather than a real personal address; avoid entering real names, personal contact details other than the optional demo email, or sensitive ideas. A visitor must not be led to believe that fictional team members are real people. Clear all session data with the Reset Demo button or by closing the tab.
+The browser stores demo data (including resized optional photos) in **sessionStorage only**, isolated to the current browser tab. It is not sent to the server. Use a test/example email and a non-identifying avatar rather than personal data or real photos of children; avoid entering real names, personal contact details, or sensitive ideas. A visitor must not be led to believe that fictional team members are real people. Clear all session data with the Reset Demo button or by closing the tab.
 
 The **30% ASD Industry / 70% team** split is merely a product proposal; the demo creates **no legal rights or financial obligations**. Future age/guardian, Nigerian data protection, safeguarding, employment and equity arrangements require qualified local legal review before any live release.
 
@@ -57,9 +58,9 @@ v0.4 protected database/data model; v0.5 verified authentication plus minor safe
 
 1. Open the Render URL in a fresh browser tab; the **Sign up to build** screen must appear *before* the homepage.
 2. Choose nickname, age group, valid demo email and country; acknowledge the demo-only notice, then **Enter ASD Industry**.
-3. You should reach the homepage. Open **Profile** to see your prefilled demo email/country and the **UNVERIFIED** email badge. No message should be sent. Try editing the country and saving.
+3. You should reach the homepage. Open **Profile** to see the private builder card, email/country and **UNVERIFIED** badge. Try a preset avatar, a username, bio, skills, optional local image and saving; the page should update without redirecting. No email is sent.
 4. Open **Find your team**, describe a project, choose your role, interests and availability, then click **Find sample teammates**. Compatibility cards must display, explicitly marked fictional.
-5. Click **Create simulated project team**. Workspace task creation, completion, deletion, and local notes should work.
+5. Click **Create simulated project team**. Workspace task creation, completion, deletion, and local notes should work. Click **Mark project complete**, then return to Profile and verify it appears in self-marked history.
 6. Open **Group chat** via the top navigation or Workspace's **Open group chat** button. Send and delete local-only messages.
 7. Open **Risk review**; rule-based checklist should reflect the idea topic. The AI assistant button links here.
 8. Click **Exit** in the header (or **Reset my demo data** in the footer), confirm, and verify the sign-up screen returns and the previous chat/project are gone.
