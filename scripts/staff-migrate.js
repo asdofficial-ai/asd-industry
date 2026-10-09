@@ -11,7 +11,7 @@ async function run(){
  const client=new Client({connectionString:url});
  await client.connect();
  try{
-  for(const migration of ["001_staff_review.sql","002_founder_operations.sql"]){
+  for(const migration of ["001_staff_review.sql","002_founder_operations.sql","003_founder_mfa.sql"]){
    await client.query(fs.readFileSync(path.join(__dirname,"../db/migrations",migration),"utf8"));
   }
   console.log("ASD Industry staff migration complete.");
