@@ -13,3 +13,16 @@
 .login-auth form .cta{font-size:12px;min-height:44px}.login-status{padding:12px 14px;border-radius:9px;background:#122942;border:1px solid #30577a;color:#b4d2ec;margin:21px 0;font-size:12px;line-height:1.7}
 .login-error{font-size:12px;color:#ffb3a9;margin:0}.login-note{font-size:11px;color:#829bbb;line-height:1.7;margin-top:24px}
 @media(max-width:900px){.founder-login-page{grid-template-columns:1fr}.login-design{padding:25px 20px}.login-presentation{margin:28px 0}.login-presentation h1{font-size:35px}.login-presentation img{margin-top:20px;max-height:245px}.login-auth{padding:40px 20px}.login-footer{display:none}}
+
+/* Google verification on Founder sign-in */
+.google-signin-card{padding:20px;margin:20px 0 14px;border:1px solid #335e88;border-radius:14px;background:linear-gradient(145deg,#112945,#0b1c31)}
+.google-signin-card h3{font-size:19px;margin:0 0 8px;letter-spacing:-.02em}
+.google-signin-card .muted{margin:0 0 16px}
+.google-signin-card .login-status{margin:12px 0 0;overflow-wrap:anywhere}
+.founder-google-button{min-height:43px;display:flex;align-items:center}
+#founderGoogleMfaForm{display:grid;gap:11px;margin-top:18px}
+#founderGoogleMfaForm label{font-size:12px;font-weight:750}
+#founderGoogleMfaForm input{width:100%;max-width:260px;font:inherit;font-size:19px;letter-spacing:.25em;background:#12253f;color:white;border:1px solid #426891;padding:12px;border-radius:9px;display:block;margin-top:7px}
+#founderPasswordOption{margin:16px 0 20px;padding:13px;border-radius:10px;border:1px solid #2b4765}
+#founderPasswordOption summary{cursor:pointer;color:#add1f4;font-size:12px;font-weight:700}
+#founderPasswordOption form{margin-top:18px}
