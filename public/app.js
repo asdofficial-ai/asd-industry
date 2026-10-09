@@ -117,10 +117,14 @@
   }
   function readContactDetails(emailId, countryId) {
     const email = byId(emailId).value.trim().toLowerCase();
-    const country = byId(countryId).value.trim().replace(/\s+/g, " ");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || country.length < 2 || country.length > 80) {
+    const countryInput = byId(countryId);
+    const country = window.ASDCountryPicker?.canonicalize(countryInput.value) || "";
+    countryInput.setCustomValidity(country ? "" : "Choose a country from the A–Z list or type its full name.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || !country) {
+      if (!country) countryInput.reportValidity();
       return null;
     }
+    countryInput.value = country;
     return {email, country};
   }
 
