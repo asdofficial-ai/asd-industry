@@ -31,7 +31,10 @@
       <form id="accountForm">
        <label>Builder nickname <input type="text" id="betaHandle" required pattern="[A-Za-z][A-Za-z0-9_]{2,23}" maxlength="24" autocomplete="nickname" placeholder="e.g. FutureBuilder"></label>
        <label>Email address <input type="email" id="betaEmail" required maxlength="254" autocomplete="email" placeholder="you@example.com"></label>
-       <label>Password <input type="password" id="betaPassword" required minlength="12" autocomplete="new-password" placeholder="12 characters or more"></label>
+       <label>Password <input type="password" id="betaPassword" required minlength="12" maxlength="256" autocomplete="new-password" placeholder="At least 12 characters" aria-describedby="passwordHelp passwordStrength"></label>
+       <p id="passwordHelp" class="password-help">Use a long, unique password or passphrase. Avoid your nickname, email, and common passwords. ASD Industry never shows it to support agents.</p>
+       <div id="passwordStrength" class="password-strength" role="status" aria-live="polite">Password strength: enter a password.</div>
+       <label>Confirm password <input type="password" id="betaConfirmPassword" required minlength="12" maxlength="256" autocomplete="new-password" placeholder="Re-enter your password"></label>
        <label>Age group <select id="betaAge" required><option value="">Select age group</option><option value="18+">18 or older — invited beta tester</option><option value="under18" disabled>Under 18 — accounts not enabled yet</option></select></label>
        <label>Private invitation code <input type="password" id="betaInvite" required autocomplete="off" placeholder="Provided to adult testers"></label>
        <div class="notice">ⓘ <span>Email verification is required before an account becomes active. This limited testing page cannot verify someone's age. Users under 18 cannot register until appropriate guardian and safety protections are implemented.</span></div>
@@ -60,6 +63,8 @@
       <button class="primary" type="submit" id="loginBtn">Log in <span>→</span></button>
       <p class="status" role="alert" id="loginFeedback"></p>
      </form>
+     <button type="button" class="linkish" id="forgotPassword">Forgot your password? Contact human support</button>
+     <p class="status" id="recoveryNotice" role="status" aria-live="polite"></p>
      <button type="button" class="linkish" id="backToSignup">← Create account</button>
     </section>
     <section id="successPanel" class="hidden" aria-labelledby="successTitle">
