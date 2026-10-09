@@ -19,7 +19,7 @@ if(!process.env.STAFF_TEST_DATABASE_URL) {
  process.env.STAFF_BACKEND_ENABLED="true";
  process.env.NODE_ENV="production";
  const app=require("../server");
- let pool, server,base,ownerId,safetyId;
+ let pool, server,base,ownerId,safetyId,founderId;
  const pass="CI-only-fake-staff-password-2026!";
  const json=(data)=>({method:"POST",headers:{"content-type":"application/json",origin},body:JSON.stringify(data)});
  const request=(path,options)=>fetch(base+"/api/staff"+path,options);
@@ -33,10 +33,10 @@ if(!process.env.STAFF_TEST_DATABASE_URL) {
   pool=new Pool({connectionString:URL});
   const t=await pool.query("SELECT current_database() AS database");
   assert.equal(t.rows[0].database,"asd_industry_staff");
-  ownerId=crypto.randomUUID();safetyId=crypto.randomUUID();
+  ownerId=crypto.randomUUID();safetyId=crypto.randomUUID();founderId=crypto.randomUUID();
   const h=await Auth.hashPassword(pass);
-  await pool.query("INSERT INTO industry_staff_accounts(id,email,password_hash,role) VALUES($1,$2,$3,'reviewer'),($4,$5,$6,'safety')",
-   [ownerId,"adult-reviewer@ci.invalid",h,safetyId,"safety-reviewer@ci.invalid",h]);
+  await pool.query("INSERT INTO industry_staff_accounts(id,email,password_hash,role) VALUES($1,$2,$3,'reviewer'),($4,$5,$6,'safety'),($7,$8,$9,'founder')",
+   [ownerId,"adult-reviewer@ci.invalid",h,safetyId,"safety-reviewer@ci.invalid",h,founderId,"founder@ci.invalid",h]);
   server=app.listen(0,"127.0.0.1");await once(server,"listening");
   base="http://127.0.0.1:"+server.address().port;
  });
@@ -57,6 +57,19 @@ if(!process.env.STAFF_TEST_DATABASE_URL) {
   r=await request("/login",json({email:"safety-reviewer@ci.invalid",password:pass}));
   assert.equal(r.status,200);const safetyCookie=cookie(r);
   assert.equal((await r.json()).staff.role,"safety");
+  r=await request("/founder/overview");assert.equal(r.status,401);
+  r=await request("/founder/overview",{headers:{cookie:reviewerCookie}});assert.equal(r.status,403);
+  r=await request("/founder/overview",{headers:{cookie:safetyCookie}});assert.equal(r.status,403);
+  r=await request("/login",json({email:"founder@ci.invalid",password:pass}));
+  assert.equal(r.status,200);const founderCookie=cookie(r);
+  assert.equal((await r.json()).staff.role,"founder");
+  r=await request("/founder/overview",{headers:{cookie:founderCookie}});
+  assert.equal(r.status,200);const snapshot=await r.json();
+  assert.equal(snapshot.mode,"founder-authenticated");
+  assert.equal(snapshot.metrics.projects,0);
+  assert.equal(snapshot.metrics.staff,3);
+  assert.equal(snapshot.staffDirectory.filter(s=>s.role==="founder").length,1);
+  assert.equal(snapshot.aiCanApprove,false);
   const idea={creatorLabel:"AdultDemo",title:"Harvest Planner",
    description:"Synthetic project for testing a local farm inventory and planning prototype with fictional participants.",
    category:"Agriculture",seats:2,roles:["Developer"],isAdultTestData:true};
@@ -101,6 +114,13 @@ if(!process.env.STAFF_TEST_DATABASE_URL) {
     (SELECT count(*)::integer FROM industry_staff_audit WHERE request_id=$1) AS events,
     (SELECT status FROM industry_review_requests WHERE id=$1) AS status`,[projectId]);
   assert.deepEqual(counts.rows[0],{decisions:1,reports:1,events:3,status:"approved"});
+  r=await request("/founder/overview",{headers:{cookie:founderCookie}});
+  assert.equal(r.status,200);
+  const updated=await r.json();
+  assert.equal(updated.metrics.projects,1);
+  assert.equal(updated.metrics.approved,1);
+  assert.equal(updated.recentAudit.length,3);
+  assert.equal(updated.latestRequests[0].title,"Harvest Planner");
   r=await request("/logout",withCookie(reviewerCookie,{}));assert.equal(r.status,200);
   r=await request("/me",{headers:{cookie:reviewerCookie}});assert.equal(r.status,401);
  });
