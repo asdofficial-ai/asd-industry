@@ -44,7 +44,7 @@ async function testProfile(width,browser){
     await page.locator("#profileBioInput").fill("Building better project ideas.");
     await page.locator('input[name="skills"][value="Coding"]').check();
     const transparentPng=Buffer.from(
-      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+nm7QAAAAASUVORK5CYII=","base64");
+      "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMMTK1jIAUwkaR6VMOohiGlAQDg6AFUhq9CZAAAAABJRU5ErkJggg==","base64");
     await page.locator("#avatarUpload").setInputFiles({name:"me.png",mimeType:"image/png",buffer:transparentPng});
     await page.waitForFunction(()=>/Picture added|could not be processed|Could not read/.test(document.querySelector("#avatarStatus").textContent),{timeout:5000});
     assert.match(await page.locator("#avatarStatus").textContent(),/Picture added/);
