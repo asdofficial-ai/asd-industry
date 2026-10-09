@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#070d16">
+<meta name="description" content="ASD Industry private founder command center — development preview.">
+<title>Founder Command Center · ASD Industry</title>
+<link rel="stylesheet" href="/founder.css"><script src="/founder.js" defer></script></head>
+<body data-founder-theme="global-blue">
+<div class="founder-app" id="founderApp">
+ <aside class="founder-sidebar" id="founderSidebar">
+  <a class="founder-brand" href="/founder.html" aria-label="ASD Industry Founder dashboard">
+   <span class="logo-symbol">A<span>✦</span></span><span><strong>ASD <em>INDUSTRY</em></strong><small>FOUNDER OPERATIONS</small></span>
+  </a>
+  <div class="sidebar-context"><span class="tiny-dot"></span> EXECUTIVE / PRIVATE CONCEPT</div>
+  <p class="side-heading">FOUNDER COMMAND</p>
+  <nav id="founderNav" class="founder-nav" aria-label="Founder console navigation">
+   <button type="button" class="nav-link is-current" data-section="overview"><span class="nav-icon">⌂</span> Overview <span class="nav-arrow">↗</span></button>
+   <button type="button" class="nav-link" data-section="projects"><span class="nav-icon">▣</span> Projects & Approvals</button>
+   <button type="button" class="nav-link" data-section="ai"><span class="nav-icon">◈</span> AI Staff Department</button>
+   <button type="button" class="nav-link" data-section="people"><span class="nav-icon">♧</span> Human Staff</button>
+   <button type="button" class="nav-link" data-section="workspaces"><span class="nav-icon">☷</span> Private Workspaces</button>
+   <button type="button" class="nav-link" data-section="analytics"><span class="nav-icon">⌁</span> Platform Intelligence</button>
+   <button type="button" class="nav-link" data-section="security"><span class="nav-icon">⛨</span> Security & Audit</button>
+   <button type="button" class="nav-link" data-section="themes"><span class="nav-icon">◉</span> Theme Studio <span class="side-pill">7</span></button>
+   <button type="button" class="nav-link" data-section="settings"><span class="nav-icon">⚙</span> Founder Settings</button>
+  </nav>
+  <div class="sidebar-footer"><div class="founder-stamp">✦</div>
+   <p>YOUR VISION.<br>YOUR INDUSTRY.<br><strong>YOUR COMMAND.</strong></p>
+   <small>Building our younger self for the future.</small>
+  </div>
+ </aside>
+ <div class="founder-body">
+  <header class="founder-topbar">
+   <div class="top-left"><button id="menuToggle" class="mobile-menu" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button><span class="top-crumb">ASD INDUSTRY <span>/</span> FOUNDER <span>/</span> <b id="sectionBreadcrumb">OVERVIEW</b></span></div>
+   <div class="top-right"><div class="environment" id="environmentLabel"><i></i> PREVIEW MODE</div><button id="quickThemeBtn" type="button" class="circle-button" title="Change founder theme" aria-label="Open theme studio">◐</button><span class="user-circle">F</span><div class="user-name"><strong>Founder</strong><small>Owner / ASD Industry</small></div></div>
+  </header>
+  <main class="founder-main">
+   <section id="founderStatus" class="status-banner" role="status" aria-live="polite"><span class="status-mark">ℹ</span><span id="statusText">Preview uses illustration-only data. Real control requires a founder-authenticated session.</span><button id="dismissStatus" type="button" aria-label="Dismiss information">×</button></section>
+   <div class="founder-title"><div><p class="eyebrow" id="sectionKicker">THE FOUNDER'S PRIVATE WORLD</p><h1 id="sectionTitle">Welcome back, <em>Founder.</em></h1><p id="sectionSub">One place for people, projects, AI staff, security and every big decision.</p></div>
+    <div class="title-buttons"><a class="cta ghost" href="/staff-console.html">Human Staff Console ↗</a><button type="button" class="cta primary" id="themesTop">Customize my dashboard <span>✦</span></button></div>
+   </div>
+   <div id="screen-overview" class="founder-screen">
+    <div class="hero-card">
+     <div class="hero-content"><span class="overline">ASD INDUSTRY / GLOBAL VISION</span>
+      <h2>Build bigger.<br><em>Lead smarter.</em></h2><p>People. Intelligence. Opportunity. A brighter tomorrow.</p>
+      <button type="button" class="cta hero-cta" data-jump="projects">Explore your projects ↗</button>
+     </div><img class="hero-art" id="heroThemeArt" src="/founder-themes/global-blue.svg" alt="Illustration of the selected Founder dashboard visual theme">
+     <span class="hero-outline">ASD</span>
+    </div>
+    <div class="metric-grid" id="founderMetrics"></div>
+    <div class="founder-layout">
+     <section class="founder-panel focus-panel"><header class="panel-header"><div><span class="panel-overline">GOVERNANCE</span><h3>Project Decision Center</h3></div><button class="text-action" data-jump="projects">Review projects →</button></header><div id="approvalPreview" class="panel-list"></div></section>
+     <section class="founder-panel"><header class="panel-header"><div><span class="panel-overline">AUTOMATION & OVERSIGHT</span><h3>AI Staff Department</h3></div><button class="text-action" data-jump="ai">View staff →</button></header><div id="aiPreview" class="panel-list"></div></section>
+     <section class="founder-panel"><header class="panel-header"><div><span class="panel-overline">THE HUMAN TEAM</span><h3>Staff & Permissions</h3></div><button class="text-action" data-jump="people">Manage →</button></header><div id="peoplePreview" class="panel-list"></div></section>
+     <section class="founder-panel"><header class="panel-header"><div><span class="panel-overline">ALWAYS IN CONTROL</span><h3>Security & Activity</h3></div><button class="text-action" data-jump="security">Open center →</button></header><div id="securityPreview" class="panel-list"></div></section>
+    </div>
+    <div class="founder-panel featured-themes"><header class="panel-header"><div><span class="panel-overline">DESIGNED FOR YOUR MOOD</span><h3>Switch the entire Founder experience</h3></div><button class="text-action" data-jump="themes">All seven themes →</button></header><div class="theme-mini-grid" id="themeMiniGrid"></div></div>
+   </div>
+   <section id="screen-projects" class="founder-screen" hidden><div class="section-billboard"><span class="overline">APPROVAL GATE</span><h2>Projects are approved by people.<br><em>Not by AI.</em></h2><p>AI specialists prepare assessments. Your authorized human reviewers make final decisions.</p></div><div class="founder-panel"><header class="panel-header"><div><span class="panel-overline">APPLICATION WORKFLOW</span><h3>Review Queue</h3></div><a href="/staff-console.html" class="text-action">Open review console ↗</a></header><div id="projectQueue" class="panel-list"></div></div></section>
+   <section id="screen-ai" class="founder-screen" hidden><div class="section-billboard"><span class="overline">SUPERVISED INTELLIGENCE</span><h2>Your AI workforce.<br><em>Human-governed.</em></h2><p>Five specialist roles in the current development department. Autonomous approvals and messaging stay disabled.</p></div><div id="aiDirectory" class="directory-grid"></div></section>
+   <section id="screen-people" class="founder-screen" hidden><div class="section-billboard"><span class="overline">PEOPLE & PERMISSIONS</span><h2>The human team.<br><em>Accountable leadership.</em></h2><p>Human reviewers retain the authority to accept, request changes or decline applications.</p></div><div class="founder-panel"><header class="panel-header"><h3>Staff directory</h3><a href="/staff-console.html" class="text-action">Staff console ↗</a></header><div id="staffDirectory" class="panel-list"></div></div></section>
+   <section id="screen-workspaces" class="founder-screen" hidden><div class="section-billboard"><span class="overline">PROJECT PRIVACY</span><h2>Private by design.<br><em>Created by founders.</em></h2><p>Team groups and workspaces are for recruited project members, only after approval. No public project chat.</p></div><div class="founder-panel"><h3>Project workspace governance</h3><div class="workspace-flow"><div><b>01</b><strong>Submit application</strong><small>Idea founder requests a team size</small></div><div><b>02</b><strong>Human approval</strong><small>AI analysis helps human reviewers</small></div><div><b>03</b><strong>Recruitment</strong><small>Founder chooses invited teammates</small></div><div><b>04</b><strong>Private workspace</strong><small>Founder creates the team group</small></div></div><p class="muted">Live workspace administration is not active. Do not share real project secrets or files through the demo.</p></div></section>
+   <section id="screen-analytics" class="founder-screen" hidden><div class="section-billboard"><span class="overline">INTELLIGENCE & GROWTH</span><h2>Know your industry.<br><em>Build the future.</em></h2><p>Operational metrics will come from authenticated backend data, never made-up earnings or users.</p></div><div class="founder-panel"><h3 id="analyticsTitle">Platform intelligence</h3><div class="metric-grid" id="analyticsMetrics"></div><p class="muted" id="analyticsFoot">Development preview: real membership, revenue and growth analytics are not connected.</p></div></section>
+   <section id="screen-security" class="founder-screen" hidden><div class="section-billboard"><span class="overline">PRIVACY & GOVERNANCE</span><h2>Trust isn't a badge.<br><em>It's how you build.</em></h2><p>Founder-only access, meaningful audit trails and youth-safe permissions must be enforced on the server.</p></div><div class="founder-panel"><header class="panel-header"><h3>Audit events</h3><span id="auditMode">Authentication required</span></header><div id="auditList" class="panel-list"></div></div></section>
+   <section id="screen-themes" class="founder-screen" hidden><div class="section-billboard"><span class="overline">FOUNDER THEME STUDIO / 07 PERSONALITIES</span><h2>One founder. Seven moods.<br><em>You choose the energy.</em></h2><p>Choose a visual design and the whole Founder Command Center changes instantly. Your selection stays on this device.</p></div><div class="theme-studio"><div id="themeGallery" class="theme-gallery"></div></div></section>
+   <section id="screen-settings" class="founder-screen" hidden><div class="section-billboard"><span class="overline">EXCLUSIVE / FOUNDER SETTINGS</span><h2>Personalize your command.<br><em>Keep control.</em></h2><p>Choose your appearance, verify your access level, and visit the authenticated human-staff console.</p></div><div class="founder-panel settings-grid"><div><h3>Theme & appearance</h3><p id="activeThemeDescription">Seven design moods are available.</p><button class="cta primary" data-jump="themes">Choose theme ↗</button></div><div><h3>Account & access</h3><p id="founderAuthStatus">Checking session…</p><button class="cta ghost" id="refreshSession">Refresh founder status ↻</button></div><div><h3>Human governance</h3><p>Founder and reviewer roles approve projects. AI agents cannot.</p><a class="cta ghost" href="/staff-console.html">Staff console ↗</a></div></div></section>
+  </main>
+  <footer class="founder-footer"><span>© ASD Industry · Founder Command Center v0.8</span><span>Seven moods. One mission. <b>Building our younger self for the future.</b></span></footer>
+ </div>
+</div>
+</body></html>
