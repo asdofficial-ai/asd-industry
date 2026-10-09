@@ -162,6 +162,12 @@
     if (hasImage) img.src=p.avatarImage;
     else img.removeAttribute("src");
     byId("profileAvatarInitial").hidden=hasImage;
+    byId("editAvatarInitial").textContent=name.charAt(0).toUpperCase();
+    byId("editAvatarInitial").hidden=hasImage;
+    const editImage=byId("editAvatarImage");
+    editImage.hidden=!hasImage;
+    if (hasImage) editImage.src=p.avatarImage;
+    else editImage.removeAttribute("src");
 
     const completed=Array.isArray(p.completedProjects)?p.completedProjects:[];
     const skills=Array.isArray(p.skills)?p.skills:[];
