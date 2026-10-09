@@ -2,7 +2,7 @@
 const test=require("node:test");
 const assert=require("node:assert/strict");
 const {normalizeAccount,normalizeProfile,hashPassword,verifyPassword,hashSession,safeCodeEqual,publicAccount}=require("../lib/account-core");
-const valid={handle:"FutureBuilder",email:"TESTER@EXAMPLE.COM",password:"long demo password! 123",ageGroup:"18+"};
+const valid={handle:"FutureBuilder",email:"TESTER@EXAMPLE.COM",password:"long demo green meadow! 123",ageGroup:"18+"};
 test("beta signup accepts an adult tester and normalizes email",()=>{
   const r=normalizeAccount(valid);assert.equal(r.email,"tester@example.com");assert.equal(r.handle,"FutureBuilder");
 });
