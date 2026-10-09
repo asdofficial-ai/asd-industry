@@ -46,3 +46,32 @@ test("The independent founder page is not the normal public member page",()=>{
  assert.match(html,/FOUNDER OPERATIONS/);
  assert.doesNotMatch(main,/founder-themes/);
 });
+
+test("Founder review and staff management controls require a verified session",()=>{
+ const html=fs.readFileSync(path.join(pub,"founder.html"),"utf8");
+ const js=fs.readFileSync(path.join(pub,"founder.js"),"utf8");
+ const api=fs.readFileSync(path.join(__dirname,"../lib/human-staff-api.js"),"utf8");
+ for(const id of ["founderReviewPanel","founderDecisionForm","founderDecisionReason","founderDecision",
+     "reviewProjectName","reviewPacket","prepareFounderPacket","submitFounderDecision"]){
+  assert.match(html,new RegExp('id="'+id+'"'));
+ }
+ assert.match(js,/function closeReview/);
+ assert.match(js,/async function openReview/);
+ assert.match(js,/async function decideReview/);
+ assert.match(js,/function setTheme\(id,\{skipSync=false\}=\{\}\)/);
+ assert.match(js,/isAuthenticatedFounder/);
+ for(const route of ['/founder/preferences','/founder/agents/:id','/founder/staff/:id']){
+  assert.ok(api.includes(route));
+ }
+ assert.match(api,/req\.staff\.role!=="founder"/);
+ assert.match(api,/r\.use\(currentStaff\)/);
+ assert.match(api,/founder\.staff\.access/);
+ assert.match(api,/founder\.agent\.policy/);
+});
+test("Account preferences and AI controls are persisted separately from user profile data",()=>{
+ const migration=fs.readFileSync(path.join(__dirname,"../db/migrations/002_founder_operations.sql"),"utf8");
+ const migrator=fs.readFileSync(path.join(__dirname,"../scripts/staff-migrate.js"),"utf8");
+ assert.match(migration,/industry_founder_preferences/);
+ assert.match(migration,/industry_ai_agent_controls/);
+ assert.match(migrator,/002_founder_operations\.sql/);
+});
