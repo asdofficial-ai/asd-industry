@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="undefined founder command center illustration"><defs>
+ <linearGradient id="back" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#06130e"/><stop offset="1" stop-color="#0b261b"/></linearGradient>
+ <linearGradient id="panel" x1="0" x2=".8" y1="0" y2="1"><stop stop-color="#0b261b"/><stop offset="1" stop-color="#06130e"/></linearGradient>
+ <radialGradient id="orb" cx=".35" cy=".3" r=".8"><stop stop-color="#50db9d" stop-opacity=".55"/><stop offset=".75" stop-color="#116241" stop-opacity=".12"/><stop offset="1" stop-color="#06130e" stop-opacity=".3"/></radialGradient>
+ <linearGradient id="peak"><stop stop-color="#50db9d" stop-opacity=".1"/><stop offset="1" stop-color="#50db9d" stop-opacity=".6"/></linearGradient>
+ <pattern id="dots" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r=".75" fill="#50db9d" opacity=".23"/></pattern>
+ </defs>
+ <rect width="1200" height="675" fill="url(#back)"/><rect x="200" y="0" width="1000" height="675" fill="url(#dots)"/>
+ <rect width="203" height="675" fill="#06130e" stroke="#50db9d55"/><rect x="0" y="0" width="1200" height="68" fill="#06130e" opacity=".95"/>
+ <path d="M203 0 V675" stroke="#50db9d55" stroke-width="2"/><path d="M203 68 H1200" stroke="#50db9d55"/>
+ <text x="24" y="40" fill="#50db9d" font-family="Arial" font-size="30" font-weight="bold" letter-spacing="3">ASD</text><text x="23" y="58" fill="#e2e9ef" font-family="Arial" font-size="10" letter-spacing="6">INDUSTRY</text>
+ <g transform="translate(24,135)"><rect x="0" y="-22" width="160" height="40" rx="7" fill="#50db9d22" stroke="#50db9d" stroke-width="1.1"/><circle cx="20" cy="-2" r="7" stroke="#50db9d" fill="none" stroke-width="2"/><text x="37" y="3" font-family="Arial, sans-serif" font-size="16" fill="#50db9d">Overview</text></g><g transform="translate(24,187)"><rect x="0" y="-22" width="160" height="40" rx="7" fill="none" stroke="transparent" stroke-width="1.1"/><circle cx="20" cy="-2" r="7" stroke="#a8bcd0" fill="none" stroke-width="2"/><text x="37" y="3" font-family="Arial, sans-serif" font-size="16" fill="#a8bcd0">AI Staff</text></g><g transform="translate(24,239)"><rect x="0" y="-22" width="160" height="40" rx="7" fill="none" stroke="transparent" stroke-width="1.1"/><circle cx="20" cy="-2" r="7" stroke="#a8bcd0" fill="none" stroke-width="2"/><text x="37" y="3" font-family="Arial, sans-serif" font-size="16" fill="#a8bcd0">Human Staff</text></g><g transform="translate(24,291)"><rect x="0" y="-22" width="160" height="40" rx="7" fill="none" stroke="transparent" stroke-width="1.1"/><circle cx="20" cy="-2" r="7" stroke="#a8bcd0" fill="none" stroke-width="2"/><text x="37" y="3" font-family="Arial, sans-serif" font-size="16" fill="#a8bcd0">Projects</text></g><g transform="translate(24,343)"><rect x="0" y="-22" width="160" height="40" rx="7" fill="none" stroke="transparent" stroke-width="1.1"/><circle cx="20" cy="-2" r="7" stroke="#a8bcd0" fill="none" stroke-width="2"/><text x="37" y="3" font-family="Arial, sans-serif" font-size="16" fill="#a8bcd0">Approvals</text></g><g transform="translate(24,395)"><rect x="0" y="-22" width="160" height="40" rx="7" fill="none" stroke="transparent" stroke-width="1.1"/><circle cx="20" cy="-2" r="7" stroke="#a8bcd0" fill="none" stroke-width="2"/><text x="37" y="3" font-family="Arial, sans-serif" font-size="16" fill="#a8bcd0">Insights</text></g><g transform="translate(24,447)"><rect x="0" y="-22" width="160" height="40" rx="7" fill="none" stroke="transparent" stroke-width="1.1"/><circle cx="20" cy="-2" r="7" stroke="#a8bcd0" fill="none" stroke-width="2"/><text x="37" y="3" font-family="Arial, sans-serif" font-size="16" fill="#a8bcd0">Security</text></g>
+ <rect x="15" y="584" width="172" height="71" rx="10" stroke="#50db9d" stroke-opacity=".4" fill="#50db9d" fill-opacity=".08"/><text x="29" y="608" fill="#50db9d" font-family="Arial" font-size="12" letter-spacing="2">FOUNDER ONLY</text><text x="29" y="630" fill="#a8bcd0" font-family="Arial" font-size="11">VISION  /  CONTROL</text><text x="29" y="648" fill="#a8bcd0" font-family="Arial" font-size="11">IMPACT  /  THE FUTURE</text>
+ <text x="225" y="41" fill="#eafff3" font-family="Arial" font-size="18" letter-spacing="2" font-weight="bold">FOUNDER COMMAND CENTER</text>
+ <rect x="837" y="19" width="214" height="31" rx="15" stroke="#50db9d55" fill="#0b261b"/><text x="857" y="39" font-family="Arial" font-size="12" fill="#a8bcd0">⌕  Search across ASD...</text>
+ <circle cx="1128" cy="34" r="17" stroke="#50db9d" fill="#50db9d" fill-opacity=".16"/><text x="1128" y="39" text-anchor="middle" font-size="16" font-family="Arial" font-weight="bold" fill="#50db9d">F</text>
+ <rect x="222" y="84" width="960" height="274" rx="16" fill="url(#panel)" stroke="#50db9d55"/><path d="M222 355 H1182" stroke="#50db9d" opacity=".2"/>
+ <g><path d="M728 355 L792 254 829 297 910 158 960 227 1049 111 1160 360 Z" fill="url(#peak)" stroke="#50db9d" stroke-width="2" opacity=".78"/><path d="M910 158 L927 195 904 187 895 207 890 181 Z M1049 111 L1073 143 1054 135 1038 161 1035 143 Z" fill="#d6f9ee" opacity=".65"/><circle cx="1049" cy="96" r="67" fill="#50db9d" opacity=".12"/></g>
+ <text x="250" y="124" font-family="Arial" font-size="13" letter-spacing="4" fill="#50db9d">VISIONARY GREEN</text>
+ <text x="249" y="176" font-family="Arial" font-size="34" font-weight="800" letter-spacing="-1" fill="#eafff3">BUILD WHAT MOVES PEOPLE</text>
+ <text x="249" y="206" font-family="Arial" font-size="13" letter-spacing="3" fill="#a8bcd0">GROWTH / PURPOSE / HUMANITY</text>
+ <path d="M251 228 H365" stroke="#50db9d" stroke-width="4"/>
+ <text x="252" y="272" font-family="Arial" font-size="15" fill="#a8bcd0">AI STAFF · HUMAN DECISIONS · PROJECTS</text>
+ <text x="252" y="296" font-family="Arial" font-size="15" fill="#a8bcd0">SECURITY · PRIVATE WORKSPACES</text>
+ <rect x="251" y="313" rx="7" width="152" height="31" fill="#50db9d"/><text x="326" y="333" fill="#ffffff" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold">FOUNDER OVERVIEW</text>
+ <g transform="translate(229,380)"><rect width="303" height="142" rx="13" fill="url(#panel)" stroke="#50db9d55"/>
+  <rect x="16" y="18" width="31" height="31" rx="8" fill="#50db9d24" stroke="#50db9d66"/>
+  <text x="31" y="39" font-size="19" fill="#50db9d" text-anchor="middle">✦</text>
+  <text x="61" y="38" fill="#a8bcd0" font-family="Arial" font-size="15" letter-spacing="1.8">AI STAFF</text>
+  <text x="20" y="96" fill="#eafff3" font-family="Arial" font-size="35" font-weight="bold">05</text>
+  <text x="20" y="120" fill="#a8bcd0" font-family="Arial" font-size="12">UNDER HUMAN REVIEW</text>
+  <path d="M186,102 Q206,78 223,85 T264,61 T288,80" fill="none" stroke="#50db9d" stroke-width="3" opacity=".8"/></g><g transform="translate(547,380)"><rect width="303" height="142" rx="13" fill="url(#panel)" stroke="#50db9d55"/>
+  <rect x="16" y="18" width="31" height="31" rx="8" fill="#50db9d24" stroke="#50db9d66"/>
+  <text x="31" y="39" font-size="19" fill="#50db9d" text-anchor="middle">✦</text>
+  <text x="61" y="38" fill="#a8bcd0" font-family="Arial" font-size="15" letter-spacing="1.8">HUMAN TEAM</text>
+  <text x="20" y="96" fill="#eafff3" font-family="Arial" font-size="35" font-weight="bold">—</text>
+  <text x="20" y="120" fill="#a8bcd0" font-family="Arial" font-size="12">RESTRICTED ACCESS</text>
+  <path d="M186,102 Q206,78 223,85 T264,61 T288,80" fill="none" stroke="#50db9d" stroke-width="3" opacity=".8"/></g><g transform="translate(865,380)"><rect width="303" height="142" rx="13" fill="url(#panel)" stroke="#50db9d55"/>
+  <rect x="16" y="18" width="31" height="31" rx="8" fill="#50db9d24" stroke="#50db9d66"/>
+  <text x="31" y="39" font-size="19" fill="#50db9d" text-anchor="middle">✦</text>
+  <text x="61" y="38" fill="#a8bcd0" font-family="Arial" font-size="15" letter-spacing="1.8">PROJECT REVIEWS</text>
+  <text x="20" y="96" fill="#eafff3" font-family="Arial" font-size="35" font-weight="bold">—</text>
+  <text x="20" y="120" fill="#a8bcd0" font-family="Arial" font-size="12">APPROVAL REQUIRED</text>
+  <path d="M186,102 Q206,78 223,85 T264,61 T288,80" fill="none" stroke="#50db9d" stroke-width="3" opacity=".8"/></g>
+ <rect x="229" y="540" width="944" height="114" rx="12" fill="url(#panel)" stroke="#50db9d55"/>
+ <text x="250" y="569" fill="#eafff3" font-family="Arial" font-size="16" font-weight="bold" letter-spacing="1.1">PLATFORM INTELLIGENCE</text>
+ <path d="M247,586 L297,572.5821804443553 L347,583.5427963202876 L397,592.9204192740015 L447,577.5940491423424 L497,565.0703548129956 L547,576.9217611565118 L597,584.4134380202103 L647,567.6715757407642 L697,556.6061894476932 L747,569.355330055962 L797,574.9583144650504 L847,557.0920833017984 L897,547.676280382333 L947,561.1746895369404 L997,564.8270949031621 L1047,546.0864224363781 L1097,538.4487232601913" fill="none" stroke="#50db9d" stroke-width="3.5"/>
+ <path d="M244 630 H1148 M244 599 H1148" fill="none" stroke="#50db9d55" stroke-dasharray="4 8" opacity=".6"/>
+ <text x="920" y="570" fill="#50db9d" font-family="Arial" font-size="13">PRIVATE   /   RESPONSIBLE   /   FOUNDER</text>
+ </svg>
