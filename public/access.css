@@ -334,3 +334,12 @@
   .workspace-completion{align-items:flex-start;max-width:100%}
   .workspace-completion-note{text-align:left}
 }
+
+/* Reuse the builder's own avatar in their local-only workspace team card. */
+.member .avatar[data-avatar-style]{color:#fff;overflow:hidden}
+.member .avatar[data-avatar-style="ocean"]{background:linear-gradient(135deg,#3aa9ee,#1553ae)}
+.member .avatar[data-avatar-style="mint"]{background:linear-gradient(135deg,#45d7ae,#0a736e)}
+.member .avatar[data-avatar-style="ember"]{background:linear-gradient(135deg,#ffc06f,#aa4452)}
+.member .avatar[data-avatar-style="violet"]{background:linear-gradient(135deg,#aa8cf4,#5c44b9)}
+.member .avatar[data-avatar-style="midnight"]{background:linear-gradient(135deg,#647993,#0a192b)}
+.member .avatar .member-avatar-image{height:100%;width:100%;object-fit:cover;display:block}
