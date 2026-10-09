@@ -63,7 +63,8 @@
  }
  function resubmit(state,project){
   if(project.stage!=="changes-requested")throw Error("Only applications needing changes can be resubmitted.");
-  project.stage="pending";project.history.push({title:"Resubmitted for review",at:new Date().toISOString()});
+  project.stage="pending";project.staffReport=null;project.humanReview=null;
+  project.history.push({title:"Resubmitted for review — prior staff packet cleared",at:new Date().toISOString()});
   notify(state,"Application resubmitted",project.title);
  }
  function recruit(state,project,candidateId,viewer){
