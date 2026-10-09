@@ -211,6 +211,13 @@
             <div class="panel-header"><h2>Profile settings</h2><span class="tag">PRIVATE · DEMO</span></div>
             <div class="profile-edit-section">
               <div class="profile-edit-head"><h3>01 <span>Your avatar</span></h3><p>Upload a photo you choose from your phone or computer. Your original stays on your device and the smaller preview is saved only in this tab.</p></div>
+              <div class="edit-photo-preview">
+                <div class="edit-photo-thumb" aria-label="Current profile picture">
+                  <span id="editAvatarInitial">A</span>
+                  <img id="editAvatarImage" alt="" hidden>
+                </div>
+                <div class="edit-photo-instructions"><strong>Your chosen picture</strong><span>JPG, PNG or WebP. The preview will be cropped to a square.</span></div>
+              </div>
               <div class="profile-avatar-upload">
                 <button id="avatarChooseButton" type="button" class="btn btn-small btn-ghost profile-upload-label">＋ Upload profile picture</button>
                 <input id="avatarUpload" class="profile-file-input" type="file" accept="image/png,image/jpeg,image/webp" tabindex="-1">
