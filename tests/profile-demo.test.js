@@ -81,6 +81,21 @@ test("Find Your Team shows available slots, role picker and local-only full-team
   assert.match(script,/renderMyDemoSquads\(\)/);
   assert.doesNotMatch(script,/\bfetch\s*\(/);
 });
+test("separate creator manager dashboard controls fictitious applications and capacity",()=>{
+  for(const id of ["view-manager","managerEmpty","managerContent","managerProjectName",
+    "managerCountPending","managerCountOpen","managerCountMembers",
+    "managerApplications","managerAvailableRoles","managerRoster",
+    "managerHistory","managerProjectStage","managerStatus"]){
+    assert.ok(ids.includes(id),"missing manager element "+id);
+  }
+  assert.match(html,/data-nav="manager"/);
+  assert.match(html,/FICTIONAL APPLICANTS/);
+  assert.match(html,/No real applicant approval/);
+  assert.match(html,/manager-dashboard\.js/);
+  assert.match(html,/manager\.css/);
+  assert.match(script,/ASDManagerDashboard\.create/);
+  assert.match(script,/ASDManagerDashboard\.render/);
+});
 test("country picker accepts 249 country/territory entries and alphabetical selection",()=>{
   const sandbox={document:{querySelectorAll:()=>[]},window:{}};
   vm.runInNewContext(picker,sandbox,{timeout:1000});
