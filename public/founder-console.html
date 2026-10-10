@@ -1,1 +1,76 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101412"><title>ASD Industry — Founder Account (Private)</title><link rel="stylesheet" href="/identity-console.css"><script defer src="/identity-console.js"></script></head><body data-console="founder"><main><header><span class="brand">✦ ASD INDUSTRY / FOUNDER</span><a href="/">Demo home</a></header><h1>Founder Command Center</h1><p>Your platform-owner account is distinct from Manager, Staff, and all AI assistants.</p><section class="notice" role="status" id="serviceStatus">Checking restricted staff-service availability…</section><section class="card" id="loginBox" hidden><h2>Restricted human login</h2><p>Staff accounts are provisioned by a trusted administrator. No public staff signup.</p><form id="loginForm"><label>Work email <input required type="email" autocomplete="username" id="email"></label><label>Staff password <input required type="password" minlength="16" autocomplete="current-password" id="password"></label><button id="loginBtn" type="submit">Secure sign in</button><p id="loginFeedback" role="alert"></p></form></section><div id="privateArea" hidden><div class="actions"><button type="button" id="logoutBtn">Sign out</button><a class="button" href="/staff-console.html">Staff review console</a></div><p id="staffBadge" class="tag" aria-live="polite">Checking verified employee status…</p><div id="privateStats" class="grid"></div><section class="card"><h2>Founder emergency preparedness</h2><div id="policyText"></div></section></div><section class="card"><h2>Identity separation</h2><div class="grid"><article><span class="tag ai">AI Project Assistant</span><p>Helps users plan and build projects. Has no staff login or owner powers.</p></article><article><span class="tag ai">AI Support Assistant</span><p>Provides help and escalation, but cannot verify identity or reset passwords.</p></article><article><span class="tag">Human Support Agent</span><p>Privately provisioned employee. Cannot read saved passwords.</p></article><article><span class="tag">Founder / Human Staff</span><p>Privileged accounts require separate roles and verified employment before public badges appear.</p></article></div></section><footer>Private adult-testing design · No live password recovery or personal emergency-information collection · No public youth accounts.</footer></main></body></html>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0a0b0c">
+<meta name="description" content="Restricted ASD Industry Founder operations.">
+<title>ASD Industry — Founder Command Center</title>
+<link rel="stylesheet" href="/founder-design.css">
+<link rel="stylesheet" href="/founder-private.css">
+<script defer src="/identity-console.js"></script>
+<script defer src="/founder-private.js"></script>
+</head>
+<body class="founder-experience founder-restricted" data-console="founder" data-theme="obsidian">
+<main class="private-shell">
+<header class="command-top">
+ <span class="private-brand"><span class="private-logo">✦</span><span>ASD <em>INDUSTRY</em><small>PRIVATE FOUNDER OPERATIONS</small></span></span>
+ <span class="private-lock-label">◇ FOUNDER ACCESS ONLY</span>
+</header>
+<section class="private-hero">
+ <span class="private-eyebrow">ASD INDUSTRY / COMMAND 001</span>
+ <h1>Your vision.<br><em>Your command.</em></h1>
+ <p>A dedicated executive environment. Your Founder account is separate from managers, staff, project users and AI agents.</p>
+</section>
+<section class="private-notice" id="serviceStatus" role="status" aria-live="polite">Checking secure Founder service availability…</section>
+<section class="private-login" id="loginBox" hidden>
+ <div><span class="private-eyebrow">AUTHENTICATED FOUNDER SESSION</span><h2>Welcome back, Founder.</h2><p>Privately provisioned Founder accounts only. This service does not accept public sign-ups or client-selected roles.</p></div>
+ <form id="loginForm" class="private-form"><label for="email">Work email<input required id="email" type="email" autocomplete="username" maxlength="254" placeholder="Verified Founder email"></label>
+ <label for="password">Strong password<input required id="password" type="password" autocomplete="current-password" minlength="16" placeholder="Enter your private password"></label>
+ <button type="submit" id="loginBtn">Secure sign-in ↗</button><p id="loginFeedback" role="alert"></p></form>
+ <p class="small-print">Privileged live access requires additional MFA and independent owner verification before activation. Never enter real credentials on the publicly hosted static design preview.</p>
+</section>
+<div id="privateArea" hidden>
+ <div class="private-heading"><div><span class="private-eyebrow">EXECUTIVE DESK / AUTHORIZED SESSION</span><h2>Founder Command Center<span class="private-accent">.</span></h2><p>The information below comes from the restricted staff API after server-side Founder authorization.</p></div><button type="button" id="logoutBtn" class="private-signout">Sign out ◇</button></div>
+ <div class="private-identity"><span id="staffBadge" class="private-verified-status">Verifying Founder identity…</span><span class="private-status-text">NO CUSTOMER ACCESS</span></div>
+ <nav id="privateNav" class="private-nav" aria-label="Private Founder tools">
+  <button type="button" class="selected" data-private-target="overview" aria-pressed="true">◫ Overview</button>
+  <button type="button" data-private-target="management" aria-pressed="false">☷ Management</button>
+  <button type="button" data-private-target="security" aria-pressed="false">◇ Security</button>
+  <button type="button" data-private-target="alternate" aria-pressed="false">✳ ALTernate</button>
+ </nav>
+ <div id="private-overview" class="private-view">
+  <div class="private-section-line"><div><span class="private-eyebrow">OPERATIONS SNAPSHOT</span><h3>Above the noise.</h3></div><span class="private-mini-label">AUTHORIZED STAFF RECORDS</span></div>
+  <div id="privateStats" class="private-metrics"></div>
+  <div class="private-panels"><article class="private-panel"><span class="private-eyebrow">CURRENT STATUS</span><h3>Your business. Your direction.</h3><p>Figures shown after authentication come from the private staff service. They are not public-customer statistics.</p></article>
+   <article class="private-panel"><span class="private-eyebrow">AI EXECUTIVE DESK</span><h3>ALTernate</h3><p>Preview a future private, source-verified briefing assistant.</p><button type="button" class="private-action" data-private-target="alternate">Open assistant ↗</button></article></div>
+ </div>
+ <div id="private-management" class="private-view" hidden><div class="private-section-line"><div><span class="private-eyebrow">PEOPLE & OVERSIGHT</span><h3>Management intelligence.</h3></div><span class="private-mini-label">NO DIRECT STAFF MESSAGES CONNECTED</span></div>
+  <article class="private-panel"><h3>Manager briefings</h3><p>This console does not currently fetch managers' messages, employee conversations or project notes. There are no real manager updates to display yet.</p>
+   <p>Later, authorized manager reports can appear here with a timestamp, named source, and audit trail. Until then, ALTernate must not claim to know what anyone said.</p></article>
+ </div>
+ <div id="private-security" class="private-view" hidden><div class="private-section-line"><div><span class="private-eyebrow">SECURITY & CONTINUITY</span><h3>Protect the founder.</h3></div><span class="private-mini-label">PRIVATE READINESS</span></div>
+  <article class="private-panel"><h3>Account safeguards</h3><div id="policyText"></div></article>
+  <article class="private-panel"><h3>Emergency readiness</h3><p>Encrypted emergency contact helpers are prepared, but emergency-profile upload/read endpoints, real password recovery and MFA are not active.</p>
+   <p>No passwords, sensitive identity records, recovery codes or bank information can be entered here.</p></article>
+ </div>
+ <div id="private-alternate" class="private-view" hidden><div class="private-section-line"><div><span class="private-eyebrow">PRIVATE EXECUTIVE ASSISTANT CONCEPT</span><h3>ALTernate<span class="private-accent">.</span></h3></div><span class="private-mini-label">SCRIPTED DEMONSTRATION</span></div>
+  <div class="private-panels"><section class="private-panel"><h3>Ask your executive assistant</h3><p>This is a scripted, offline mock conversation; no manager reports or private data are sent to a model.</p>
+   <div id="privateAltThread" class="private-thread" role="log" aria-live="polite"><p><b>ALTernate · preview</b> — I can demonstrate how I would brief you, but no team messages or AI provider are connected.</p></div>
+   <div class="private-prompts"><button type="button" data-private-ask="What did my manager say?">Manager update</button><button type="button" data-private-ask="What needs my attention?">Priorities</button><button type="button" data-private-ask="Is my account secure?">Security</button></div>
+   <form id="privateAltForm" class="private-chat-form"><label class="sr-only" for="privateAltInput">Offline ALTernate demo question</label><input id="privateAltInput" maxlength="180" autocomplete="off" placeholder="Try a demo question…"><button type="submit">Ask ↗</button></form>
+   <p class="small-print">Never submit passwords, personal identities, emergency contacts or private manager messages. No chat history is stored.</p>
+  </section><section class="private-panel"><h3>Future capabilities</h3><p>✓ Founder-role checked data access<br>◇ Manager reports with sources<br>◇ Project summaries and approvals<br>◇ Personal alerts and optional voice</p><p>Only the first item currently exists in the staff API. The rest requires reviewed access controls and data integration.</p></section></div>
+ </div>
+ <section class="private-style-studio"><div class="private-section-line"><div><span class="private-eyebrow">VISUAL PERSONALIZATION</span><h3>Your command style.</h3></div><span class="private-mini-label">7 DESIGNS · THIS DEVICE ONLY</span></div>
+  <div id="privateThemes" class="private-theme-grid" role="group" aria-label="Founder visual design">
+   <button type="button" data-private-theme="obsidian" aria-pressed="true" class="chosen"><i class="private-swatch swatch-obsidian"></i>Obsidian</button>
+   <button type="button" data-private-theme="crimson" aria-pressed="false"><i class="private-swatch swatch-crimson"></i>Crimson</button>
+   <button type="button" data-private-theme="titanium" aria-pressed="false"><i class="private-swatch swatch-titanium"></i>Titanium</button>
+   <button type="button" data-private-theme="solar" aria-pressed="false"><i class="private-swatch swatch-solar"></i>Solar</button>
+   <button type="button" data-private-theme="monarch" aria-pressed="false"><i class="private-swatch swatch-monarch"></i>Monarch</button>
+   <button type="button" data-private-theme="spectre" aria-pressed="false"><i class="private-swatch swatch-spectre"></i>Spectre</button>
+   <button type="button" data-private-theme="ivory" aria-pressed="false"><i class="private-swatch swatch-ivory"></i>Ivory</button>
+  </div><p class="small-print">Themes remain in memory only. They are not saved as account settings and never change permissions.</p>
+ </section>
+</div>
+<footer class="private-footer"><span>ASD INDUSTRY — PRIVILEGED ACCOUNT DESIGN</span><span>NO PUBLIC FOUNDER REGISTRATION · NO LIVE RECOVERY</span></footer>
+</main></body></html>
