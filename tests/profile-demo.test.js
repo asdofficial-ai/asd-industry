@@ -63,22 +63,24 @@ test("password and login controls exist but cannot accept real credentials",()=>
   assert.doesNotMatch(html,/class="avatar-choice"/);
   assert.match(html,/id="avatarUpload"/);
 });
-test("Find Your Team has fictional browsable school/project cards and local interest controls",()=>{
+test("Find Your Team shows available slots, role picker and local-only full-team closure",()=>{
   const required=["openProjectsSection","openProjectsHeading","openProjectsList",
     "projectBrowseSearch","projectBrowseCategory","openProjectsCount","openProjectsStatus",
-    "projectsScrollBack","projectsScrollForward","postProjectJump"];
-  for(const id of required) assert.ok(ids.includes(id),"missing project board element: "+id);
+    "projectsScrollBack","projectsScrollForward","postProjectJump","projectJoinDialog",
+    "projectJoinForm","projectJoinTitle","projectJoinCapacity","projectJoinStart",
+    "projectJoinRoleList","confirmProjectJoin","closeProjectJoinDialog",
+    "myDemoSquads","myDemoSquadsList"];
+  for(const id of required) assert.ok(ids.includes(id),"missing role-board element: "+id);
   assert.match(html,/School projects/);
-  assert.match(html,/All listings are fictional examples/);
-  assert.match(html,/No one receives a join request/);
-  assert.match(script,/id:"science-fair"/);
-  assert.match(script,/id:"study-guide"/);
-  assert.match(script,/sampleProjectInterests/);
-  assert.match(script,/renderOpenProjects\(\)/);
-  assert.match(script,/NOT a real join request/);
+  assert.match(html,/browser-only simulation/);
+  assert.match(script,/id": "science-fair"/);
+  assert.match(script,/role": "Project manager"/);
+  assert.match(script,/sampleProjectJoins/);
+  assert.match(script,/availableProjectSpots\(project\)===0/);
+  assert.match(script,/startedAt=new Date\(\)\.toISOString\(\)/);
+  assert.match(script,/renderMyDemoSquads\(\)/);
   assert.doesNotMatch(script,/\bfetch\s*\(/);
 });
-
 test("country picker accepts 249 country/territory entries and alphabetical selection",()=>{
   const sandbox={document:{querySelectorAll:()=>[]},window:{}};
   vm.runInNewContext(picker,sandbox,{timeout:1000});
