@@ -219,7 +219,7 @@
     {id:"SAMPLE-07", nick:"LaunchLab", role:"Business strategy", interests:["Business","Finance","Apps"], availability:"weekends"},
     {id:"SAMPLE-08", nick:"BrightBridge", role:"Sales", interests:["Education","Marketing","Business"], availability:"evenings"}
   ];
-  const views = ["home", "profile", "profile-edit", "ideas", "workspace", "manager", "chat", "review"];
+  const views = ["home", "profile", "profile-edit", "ideas", "workspace", "manager", "squad-chat", "chat", "review"];
   const byId = id => document.getElementById(id);
   const node = (tag, className, text) => {
     const item = document.createElement(tag);
@@ -235,7 +235,7 @@
         if (result && typeof result === "object") return result;
       }
     } catch (_) { /* storage disabled: in-memory only */ }
-    return {entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[],sampleProjectJoins:{}};
+    return {entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[],sampleProjectJoins:{},sampleSquadChatMessages:{},squadChatActiveId:null};
   }
   let state = loadState();
   const save = () => {
@@ -273,6 +273,8 @@
     if (!state.entryCompleted || !state.profile) { showGate(); return; }
     showSite();
     if (!views.includes(to)) to = "home";
+    // A squad room may only open after this tab has joined that specific sample squad.
+    if (to==="squad-chat" && !activeSquadChatProject()) to="ideas";
     for (const v of views) byId("view-"+v).classList.toggle("hidden", v !== to);
     for (const button of document.querySelectorAll(".nav-button")) {
       button.classList.toggle("active", button.dataset.nav === to);
@@ -282,6 +284,7 @@
     if (to==="workspace") renderWorkspace();
     if (to==="manager") window.ASDManagerDashboard.render(state,save,renderWorkspace);
     if (to==="chat") renderChat();
+    if (to==="squad-chat") renderSquadChat();
     if (to==="review") renderRisks();
     if (to==="ideas") { renderMatches(); renderOpenProjects(); }
     if (to==="profile") renderBuilderProfile();
@@ -660,6 +663,17 @@
   function totalProjectSpots(project) {
     return project.positions.reduce((sum,position)=>sum+position.capacity,0);
   }
+  function activeSquadChatProject() {
+    return openProjectExamples.find(project=>project.id===state.squadChatActiveId && projectMembership(project)) || null;
+  }
+  function openSquadChat(project) {
+    if (!state.entryCompleted || !state.profile || !projectMembership(project)) return;
+    state.squadChatActiveId=project.id;
+    save();
+    if (joinDialog.open) joinDialog.close();
+    byId("squadChatMessage").value="";
+    go("squad-chat");
+  }
   function renderMyDemoSquads() {
     const joined=openProjectExamples.filter(project=>projectMembership(project));
     const section=byId("myDemoSquads"),target=byId("myDemoSquadsList");
@@ -672,10 +686,16 @@
       const summary=node("div","my-demo-squad-summary");
       summary.append(node("strong","",project.title));
       summary.append(node("small","",membership.role+" · "+(full?"Team full · started (demo)":"Recruiting · "+availableProjectSpots(project)+" spots left")));
-      const button=node("button","btn btn-small btn-ghost","View details →");
-      button.type="button";
-      button.addEventListener("click",()=>openProjectDetails(project));
-      entry.append(summary,button);
+      const actions=node("div","my-demo-squad-actions");
+      const chat=node("button","btn btn-small btn-accent my-demo-chat-open","💬 Open Squad Chat →");
+      chat.type="button";
+      chat.setAttribute("aria-label","Open "+project.title+" squad chat preview");
+      chat.addEventListener("click",()=>openSquadChat(project));
+      const details=node("button","btn btn-small btn-ghost","View roles →");
+      details.type="button";
+      details.addEventListener("click",()=>openProjectDetails(project));
+      actions.append(chat,details);
+      entry.append(summary,actions);
       target.append(entry);
     });
   }
@@ -728,6 +748,10 @@
     byId("projectJoinMessage").textContent=message || (membership
       ? "Your chosen role: "+membership.role+". This is a browser-only demo membership."
       : "Select one of the available positions to preview joining this squad.");
+    const chatShortcut=byId("joinedSquadChatShortcut");
+    chatShortcut.hidden=!membership;
+    chatShortcut.disabled=!membership;
+    chatShortcut.textContent=membership?"💬 Open "+project.title+" Squad Chat →":"💬 Open Squad Chat →";
   }
   function openProjectDetails(project) {
     renderProjectDetails(project);
@@ -822,6 +846,9 @@
     byId("openProjectsStatus").textContent=receipt;
     renderProjectDetails(project,receipt);
   });
+  byId("joinedSquadChatShortcut").addEventListener("click",()=>{
+    if (selectedProject) openSquadChat(selectedProject);
+  });
   byId("closeProjectJoinDialog").addEventListener("click",()=>joinDialog.close());
   byId("cancelProjectJoin").addEventListener("click",()=>joinDialog.close());
   joinDialog.addEventListener("close",()=>{selectedProject=null;});
@@ -846,6 +873,74 @@
     browseProjectsList.scrollBy({left:Math.max(240,browseProjectsList.clientWidth*.82),behavior:"smooth"});
   });
   renderOpenProjects();
+
+  // Private per-project demonstration rooms — completely separate from the creator's Group chat.
+  // Message buckets belong to this one tab, and never transmit to fictional squad members.
+  function squadChatBuckets() {
+    if (!state.sampleSquadChatMessages || typeof state.sampleSquadChatMessages!=="object" ||
+        Array.isArray(state.sampleSquadChatMessages)) state.sampleSquadChatMessages={};
+    return state.sampleSquadChatMessages;
+  }
+  function renderSquadChat() {
+    const project=activeSquadChatProject();
+    if (!project) return; // go() already redirects unauthorized direct navigation.
+    const membership=projectMembership(project);
+    const full=availableProjectSpots(project)===0;
+    byId("squadChatProjectIcon").textContent=project.icon;
+    byId("squadChatProjectName").textContent=project.title;
+    byId("squadChatYourRole").textContent="Joined as "+membership.role+" · fictional squad";
+    byId("squadChatProjectStage").textContent=full?"✓ TEAM FULL · STARTED (DEMO)":"● RECRUITING · DEMO";
+    byId("squadChatProjectStage").classList.toggle("started",full);
+    const bucket=squadChatBuckets()[project.id];
+    const messages=Array.isArray(bucket)?bucket.slice(-60):[];
+    const panel=byId("squadChatMessages");
+    panel.replaceChildren();
+    if (!messages.length) {
+      panel.append(node("p","squad-chat-empty","No messages yet. Write a private practice message to see how this squad chat could work."));
+    } else {
+      messages.forEach((message,index)=>{
+        if (!message || typeof message.text!=="string") return;
+        const row=node("div","squad-chat-message-row");
+        const bubble=node("div","squad-chat-bubble");
+        const header=node("div","squad-chat-message-head");
+        header.append(node("strong","","You · demo"));
+        const remove=node("button","squad-chat-delete","Delete");
+        remove.type="button";
+        remove.setAttribute("aria-label","Delete your squad message "+(index+1));
+        remove.addEventListener("click",()=>{
+          const stored=squadChatBuckets()[project.id];
+          if (!Array.isArray(stored)) return;
+          stored.splice(stored.length-messages.length+index,1);
+          save();renderSquadChat();
+        });
+        header.append(remove);
+        const text=node("p","",message.text);
+        const timestamp=node("small","",typeof message.sent==="string"?message.sent:"This demo");
+        bubble.append(header,text,timestamp);
+        row.append(bubble);panel.append(row);
+      });
+    }
+    panel.scrollTop=panel.scrollHeight;
+  }
+  byId("squadChatBack").addEventListener("click",()=>{
+    go("ideas");
+    byId("myDemoSquads").scrollIntoView({behavior:"smooth",block:"center"});
+  });
+  byId("squadChatForm").addEventListener("submit",event=>{
+    event.preventDefault();
+    const project=activeSquadChatProject();
+    if (!project || !state.profile) {go("ideas");return;}
+    const input=byId("squadChatMessage");
+    const value=input.value.trim();
+    if (!value || value.length>500) return;
+    const buckets=squadChatBuckets();
+    if (!Array.isArray(buckets[project.id])) buckets[project.id]=[];
+    // Cap storage; keep rooms distinct. No network request or fictional replies.
+    buckets[project.id].push({text:value,sent:new Date().toLocaleString()});
+    if(buckets[project.id].length>60) buckets[project.id]=buckets[project.id].slice(-60);
+    input.value="";
+    save();renderSquadChat();input.focus();
+  });
 
   const ideaForm = byId("ideaForm");
   const projectInterestInputs = [...document.querySelectorAll('input[name="ideaInterests"]')];

@@ -29,8 +29,10 @@ test("builder profile has editable identity, avatars, skills, and completed proj
 });
 
 test("demo profile save preserves optional data and doesn't redirect to ideas",()=>{
-  const handler=script.slice(script.indexOf('profileForm.addEventListener("submit"'),
-    script.indexOf('const ideaForm = byId("ideaForm")'));
+  const profileStart=script.indexOf('profileForm.addEventListener("submit"');
+  const profileEnd=script.indexOf('\n  syncProfileEditor();',profileStart);
+  assert.ok(profileStart>=0 && profileEnd>profileStart,"profile save handler must be locatable");
+  const handler=script.slice(profileStart,profileEnd);
   assert.match(handler,/\.\.\.state\.profile/,"save should preserve project history and avatar");
   assert.match(handler,/renderBuilderProfile\(\)/,"save updates profile preview");
   assert.doesNotMatch(handler,/go\("ideas"\)/,"saving profile must stay on profile");
@@ -95,6 +97,21 @@ test("separate creator manager dashboard controls fictitious applications and ca
   assert.match(html,/manager\.css/);
   assert.match(script,/ASDManagerDashboard\.create/);
   assert.match(script,/ASDManagerDashboard\.render/);
+});
+test("joined squads expose separate private chat only to existing demo members",()=>{
+  for(const id of ["view-squad-chat","squadChatTitle","squadChatMessages","squadChatForm",
+    "squadChatMessage","squadChatBack","squadChatProjectName","squadChatYourRole",
+    "joinedSquadChatShortcut","myDemoSquadsList"]){
+    assert.ok(ids.includes(id),"missing squad chat UI: "+id);
+  }
+  assert.match(html,/one room for each project you've joined/i);
+  assert.match(html,/no fictional teammates receive or reply/i);
+  assert.match(script,/activeSquadChatProject\(\)/);
+  assert.match(script,/projectMembership\(project\)/);
+  assert.match(script,/sampleSquadChatMessages/);
+  assert.match(script,/buckets\[project\.id\]\.push/);
+  assert.match(html,/squad-chat\.css/);
+  assert.doesNotMatch(script,/\bfetch\s*\(/);
 });
 test("country picker accepts 249 country/territory entries and alphabetical selection",()=>{
   const sandbox={document:{querySelectorAll:()=>[]},window:{}};
