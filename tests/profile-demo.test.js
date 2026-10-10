@@ -96,6 +96,21 @@ test("separate creator manager dashboard controls fictitious applications and ca
   assert.match(script,/ASDManagerDashboard\.create/);
   assert.match(script,/ASDManagerDashboard\.render/);
 });
+test("joined squads expose separate private chat only to existing demo members",()=>{
+  for(const id of ["view-squad-chat","squadChatTitle","squadChatMessages","squadChatForm",
+    "squadChatMessage","squadChatBack","squadChatProjectName","squadChatYourRole",
+    "joinedSquadChatShortcut","myDemoSquadsList"]){
+    assert.ok(ids.includes(id),"missing squad chat UI: "+id);
+  }
+  assert.match(html,/one room for each project you've joined/i);
+  assert.match(html,/no fictional teammates receive or reply/i);
+  assert.match(script,/activeSquadChatProject\(\)/);
+  assert.match(script,/projectMembership\(project\)/);
+  assert.match(script,/sampleSquadChatMessages/);
+  assert.match(script,/buckets\[project\.id\]\.push/);
+  assert.match(html,/squad-chat\.css/);
+  assert.doesNotMatch(script,/\bfetch\s*\(/);
+});
 test("country picker accepts 249 country/territory entries and alphabetical selection",()=>{
   const sandbox={document:{querySelectorAll:()=>[]},window:{}};
   vm.runInNewContext(picker,sandbox,{timeout:1000});
