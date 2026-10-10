@@ -1,0 +1,124 @@
+/* ASD Industry — Creator's Project Manager; private fictional workflow only. */
+.manager-page-heading{padding-bottom:18px}
+.manager-shell{max-width:1440px;padding:4px 4.9% 80px;margin:0 auto;min-width:0}
+.manager-empty{max-width:720px;margin:16px auto;padding:45px 32px;text-align:center;
+  background:linear-gradient(130deg,#17314d,#0b1c2d);border:1px solid #305779}
+.manager-empty-mark{font-size:42px;color:#89c5ff}
+.manager-empty h2{font-size:clamp(23px,3vw,32px);letter-spacing:-.045em;margin:14px 0}
+.manager-empty p{color:#b0c5d8;line-height:1.75;font-size:13px}
+.manager-empty .btn{margin-top:16px}
+.manager-banner{border-radius:17px;border:1px solid #386897;
+  display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap;
+  padding:27px 29px;background:radial-gradient(circle at 93% 10%,#2d71b63d,transparent 41%),
+  linear-gradient(135deg,#153956,#0d2439)}
+.manager-banner .kicker{color:#89c6ff;font-size:10px;margin:0}
+.manager-banner h2{font-size:clamp(24px,3.5vw,39px);letter-spacing:-.06em;margin:11px 0 6px}
+.manager-banner p:not(.kicker){color:#aecce1;font-size:13px;line-height:1.6;max-width:650px;margin:0}
+.manager-stage{background:#2e4c26;color:#c5f4bb;border:1px solid #4a8658;padding:10px 13px;
+  font-weight:900;font-size:10px;border-radius:100px;letter-spacing:.07em}
+.manager-stage.started{background:#13473a;border-color:#2c9378;color:#bdf5d9}
+.manager-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:17px 0}
+.manager-stat{border:1px solid #31516e;border-radius:12px;padding:18px;
+  background:linear-gradient(140deg,#142b44,#0f2135);min-width:0}
+.manager-stat span{font-size:11px;color:#a1bad0;display:block;line-height:1.5}
+.manager-stat strong{display:block;color:#f5faff;font-size:clamp(17px,2.4vw,27px);
+  letter-spacing:-.04em;line-height:1.3;margin-top:9px;overflow-wrap:anywhere}
+.manager-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(265px,.86fr);gap:15px;align-items:start}
+.manager-grid>.panel,.manager-side>.panel,.manager-roster-panel{background:linear-gradient(155deg,#122b43,#0b1d2e)}
+.manager-grid .panel-header,.manager-roster-panel .panel-header{flex-wrap:wrap}
+.manager-grid .panel-header h2,.manager-roster-panel h2{font-size:19px}
+.manager-description{font-size:12px;color:#a6bed4;line-height:1.7;margin:0 0 18px}
+.manager-side{display:grid;gap:15px}
+.manager-applications{display:grid;gap:12px}
+.manager-applicant{background:#132c43;border:1px solid #355978;border-radius:12px;padding:16px;min-width:0}
+.manager-applicant-head{display:flex;align-items:center;gap:12px}
+.manager-applicant-avatar,.manager-member-avatar{display:grid;place-items:center;flex:0 0 40px;
+  width:40px;height:40px;border:1px solid #548bc1;border-radius:11px;
+  color:#c6e4ff;background:#204569;font-size:15px;font-weight:900}
+.manager-applicant-about{min-width:0;flex:1}
+.manager-applicant-about strong{display:block;color:#f1f8ff;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.manager-applicant-about small{display:block;color:#a9c1d7;font-size:11px;line-height:1.5;margin-top:3px}
+.manager-application-badge{font-size:9px;line-height:1.5;font-weight:900;letter-spacing:.045em;
+  padding:6px 8px;border:1px solid #7c7147;border-radius:100px;background:#474127;color:#fae3b8}
+.manager-application-badge.approved{border-color:#3c906f;background:#164a39;color:#bff3d7}
+.manager-application-badge.rejected{border-color:#8d535d;background:#4c2931;color:#ffd3d4}
+.manager-applicant-skills{color:#b6cbda;font-size:11px;line-height:1.6;margin:12px 0 17px}
+.manager-applicant-controls{display:grid;grid-template-columns:minmax(135px,1fr) auto auto;align-items:end;gap:9px}
+.manager-role-label{display:grid;gap:5px;min-width:0;color:#aad4f3;font-size:10px;font-weight:850}
+.manager-role-select,.manager-member-role{display:block;width:100%;min-width:0;
+  height:42px;padding:8px 11px;font-size:12px;color:#e4effe;border:1px solid #416483;
+  background:#1a3752;border-radius:8px;cursor:pointer}
+.manager-applicant-controls .btn{height:42px;white-space:nowrap;justify-content:center}
+.manager-applicant-outcome{font-size:12px;line-height:1.55;color:#b4dcce;margin:0 0 7px}
+.manager-positions{display:grid;gap:10px}
+.manager-position{display:flex;justify-content:space-between;gap:12px;
+  padding:12px 11px;background:#1b3a4c;border:1px solid #42766b;border-radius:9px;
+  font-size:12px;color:#dceff3}
+.manager-position strong{color:#b2f1cf;font-size:11px;white-space:nowrap}
+.manager-position.filled{background:#263444;border-color:#4c5b6e}
+.manager-position.filled strong{color:#c0c9d7}
+.manager-history{display:grid;gap:10px}
+.manager-activity-row{border-bottom:1px solid #2d4a66;padding:5px 0 11px}
+.manager-activity-row strong{display:block;color:#d9e9f7;font-size:11px;font-weight:700;line-height:1.65}
+.manager-activity-row small{color:#91acc7;font-size:10px;line-height:1.5;display:block;margin-top:5px}
+.manager-empty-text{color:#a9bfd2;line-height:1.6;font-size:12px}
+.manager-roster-panel{margin-top:15px}
+.manager-roster{display:grid;gap:10px}
+.manager-member{display:flex;align-items:center;gap:12px;min-width:0;
+  padding:13px;border:1px solid #355675;background:#142d43;border-radius:10px;flex-wrap:wrap}
+.manager-member-info{flex:1 1 140px;min-width:0}
+.manager-member-info strong{display:block;color:#eef8ff;font-size:13px;overflow-wrap:anywhere}
+.manager-member-info small{display:block;color:#acc4d6;font-size:11px;line-height:1.5;margin-top:5px}
+.manager-owner{background:#1b3b45;border-color:#4c796f}
+.manager-owner .manager-member-avatar{color:#bdf4e0;background:#245247;border-color:#419a83}
+.manager-owner-tag{font-size:10px;font-weight:900;color:#b5f7de;border:1px solid #4a9678;
+  border-radius:50px;padding:8px 12px}
+.manager-member-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.manager-member-role{min-width:140px;max-width:230px}
+.manager-feedback{font-size:12px;color:#afe9d4;line-height:1.5;margin:17px 0}
+.manager-feedback:empty{display:none}
+.manager-safety-note{font-size:11px;color:#9ebad0;line-height:1.7;
+  padding:13px 16px;border:1px solid #285078;border-radius:10px;background:#0d2940}
+@media(max-width:1000px){
+  .manager-grid{grid-template-columns:1fr}
+  .manager-side{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .manager-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:660px){
+  .manager-shell{padding:0 4% 65px}
+  .manager-banner{padding:20px;gap:11px;border-radius:14px}
+  .manager-stats{gap:9px;margin:12px 0}
+  .manager-stat{padding:14px}
+  .manager-stat span{font-size:10px}
+  .manager-stat strong{font-size:20px}
+  .manager-grid{gap:12px}
+  .manager-grid>.panel,.manager-side>.panel,.manager-roster-panel{padding:17px}
+  .manager-side{grid-template-columns:1fr;gap:12px}
+  .manager-applicant{padding:13px}
+  .manager-applicant-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .manager-role-label{grid-column:1/-1}
+  .manager-applicant-controls .btn{width:100%}
+  .manager-applicant-head{gap:8px;flex-wrap:wrap}
+  .manager-member-actions{flex:1 1 100%;width:100%}
+  .manager-member-role{max-width:none;flex:1 1 130px}
+}
+@media(max-width:360px){
+  .manager-stat{padding:11px}
+  .manager-stat strong{font-size:17px}
+  .manager-application-badge{margin-left:48px}
+}
+
+/* Fit the new Manager navigation without causing horizontal desktop overflow. */
+@media(min-width:851px) and (max-width:1390px){
+  .header-inner{gap:10px;padding-left:2%;padding-right:2%}
+  .top-nav{gap:2px;min-width:0}
+  .top-nav .nav-button{font-size:10px;padding:9px 7px}
+  .header-actions{gap:8px;flex-shrink:0}
+  .header-actions .header-cta{padding:9px 11px;gap:6px}
+  .nav-live{display:none}
+}
+@media(min-width:851px) and (max-width:1100px){
+  .header-actions .header-cta{display:none}
+  .brand-type{font-size:14px}
+  .top-nav .nav-button{padding:8px 5px}
+}

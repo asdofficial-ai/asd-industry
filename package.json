@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check public/app.js && node --check public/country-picker.js && node --test tests/profile-demo.test.js",
+    "check": "node --check server.js && node --check public/manager-dashboard.js && node --check public/app.js && node --check public/country-picker.js && node --test tests/profile-demo.test.js",
     "test": "node --test tests/profile-demo.test.js"
   },
   "dependencies": {

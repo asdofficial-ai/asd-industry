@@ -11,7 +11,9 @@
   <link rel="stylesheet" href="/mobile-home.css">
   <link rel="stylesheet" href="/profile-account.css">
   <link rel="stylesheet" href="/project-board.css">
+  <link rel="stylesheet" href="/manager.css">
   <script src="/country-picker.js" defer></script>
+  <script src="/manager-dashboard.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -98,7 +100,7 @@
         <button type="button" class="nav-button active" data-nav="home">Home</button>
         <button type="button" class="nav-button" data-nav="profile">Profile</button>
         <button type="button" class="nav-button" data-nav="ideas">Find your team</button>
-        <button type="button" class="nav-button" data-nav="workspace">Workspace</button><button type="button" class="nav-button" data-nav="chat">Group chat</button><button type="button" class="nav-button nav-review" data-nav="review">Risk review</button>
+        <button type="button" class="nav-button" data-nav="workspace">Workspace</button><button type="button" class="nav-button" data-nav="manager">Manager</button><button type="button" class="nav-button" data-nav="chat">Group chat</button><button type="button" class="nav-button nav-review" data-nav="review">Risk review</button>
       </nav>
       <div class="header-actions"><span class="nav-live" title="Browser-local demo, no live community"><span></span> DEMO</span><button type="button" class="btn btn-small btn-accent header-cta" data-nav="ideas">Start building <span aria-hidden="true">↗</span></button><button type="button" class="btn btn-small btn-ghost header-exit" id="signOut" title="Leave the demo and return to the sign-up screen">Log out ↗</button><button type="button" class="menu-toggle" id="mobileMenuToggle" aria-label="Open navigation" aria-controls="primaryNavigation" aria-expanded="false"><span></span><span></span><span></span></button></div>
     </div>
@@ -435,7 +437,7 @@
     </section>
     <section class="view hidden" id="view-workspace" data-view="workspace" aria-labelledby="workspaceTitle">
       <div class="page-heading"><p class="kicker">03 / THE BUILD SPACE</p><h1 id="workspaceTitle">Your project <em>workspace.</em></h1><p>A focused place to turn an idea into tasks and progress. Teammates shown in this demo are fictional.</p></div>
-      <div class="workspace-toolbar"><span class="workspace-toolbar-title">PROJECT OVERVIEW <small>·  DEMO ONLY</small></span><div class="workspace-toolbar-actions"><button type="button" class="btn btn-small btn-ghost" data-nav="chat">☰ Group chat →</button><button type="button" class="btn btn-small btn-accent" data-nav="ideas">+ New project idea</button></div></div><div id="workspaceEmpty" class="panel empty-state"><div class="empty-icon"><span>＋</span></div><h2>No project yet</h2><p>Create your demo profile and submit a project idea to start a simulated team.</p><button class="btn btn-accent" type="button" data-nav="ideas">Go to ideas →</button><button class="btn btn-ghost" type="button" data-nav="profile">Create demo profile</button></div>
+      <div class="workspace-toolbar"><span class="workspace-toolbar-title">PROJECT OVERVIEW <small>·  DEMO ONLY</small></span><div class="workspace-toolbar-actions"><button type="button" class="btn btn-small btn-ghost" data-nav="manager">♛ Manage team →</button><button type="button" class="btn btn-small btn-ghost" data-nav="chat">☰ Group chat →</button><button type="button" class="btn btn-small btn-accent" data-nav="ideas">+ New project idea</button></div></div><div id="workspaceEmpty" class="panel empty-state"><div class="empty-icon"><span>＋</span></div><h2>No project yet</h2><p>Create your demo profile and submit a project idea to start a simulated team.</p><button class="btn btn-accent" type="button" data-nav="ideas">Go to ideas →</button><button class="btn btn-ghost" type="button" data-nav="profile">Create demo profile</button></div>
       <div id="workspaceContent" class="hidden">
         <div class="workspace-summary"><div><span class="kicker">CURRENT PROJECT · DEMO</span><h2 id="workspaceProjectTitle"></h2><p id="workspaceProjectDescription"></p></div><div class="workspace-completion"><span id="workspaceProjectBadge" class="project-badge">● IN PROGRESS</span><button type="button" id="completeDemoProject" class="btn btn-small btn-outline-light">✓ Mark project complete</button><span class="workspace-completion-note">Self-marked · demo only</span></div></div>
         <div class="team-chat-jump"><div><span>✧ TEAM DISCUSSION</span><p>Your dedicated project chat is available in demo mode. Only messages you write in this browser appear.</p></div><button class="btn btn-accent" type="button" data-nav="chat">Open group chat →</button></div>
@@ -444,6 +446,59 @@
           <section class="panel"><div class="panel-header"><h2>Task board</h2><span class="tag" id="taskCount">0 TASKS</span></div><form id="taskForm" class="inline-form"><input id="newTask" maxlength="110" aria-label="New task" placeholder="Add the next step..." required><button class="btn btn-accent btn-small" type="submit">Add</button></form><div id="tasksList" class="task-list"></div></section>
           <section class="panel"><div class="panel-header"><h2>Project decisions & notes</h2><span class="tag">LOCAL ONLY</span></div><form id="noteForm"><label class="sr-only" for="newNote">New project note</label><textarea id="newNote" rows="3" maxlength="350" placeholder="Write a decision or progress update..." required></textarea><button type="submit" class="btn btn-dark">Save note →</button></form><div id="notesList" class="notes-list"></div></section>
           <section class="panel ai-card"><div class="ai-icon">✳</div><p class="kicker">ASD AI · FUTURE FEATURE</p><h2>Project assistant</h2><p>Planned: recap team progress, help organize work and highlight risks. No AI model is connected in this demo.</p><button class="btn btn-outline-light" data-nav="review" type="button">Try project review →</button></section>
+        </div>
+      </div>
+    </section>
+
+    <section class="view hidden" id="view-manager" data-view="manager" aria-labelledby="managerTitle">
+      <div class="page-heading manager-page-heading">
+        <p class="kicker">04 / PROJECT LEADERSHIP</p>
+        <h1 id="managerTitle">Your project. <em>Your team.</em></h1>
+        <p>Review sample applications, choose who fills each open position, and organize your squad—all inside your private demo workspace.</p>
+      </div>
+      <div class="manager-shell">
+        <div id="managerEmpty" class="panel manager-empty">
+          <span class="manager-empty-mark" aria-hidden="true">♛</span>
+          <h2>Every great team starts with an idea.</h2>
+          <p>Start by describing a project and creating your sample workspace. You'll then see fictional applications and can practice managing a team here.</p>
+          <button type="button" class="btn btn-accent" data-nav="ideas">＋ Start a project →</button>
+        </div>
+        <div id="managerContent" class="hidden">
+          <div class="manager-banner">
+            <div><p class="kicker">CREATOR CONTROL CENTER · DEMO ONLY</p><h2 id="managerProjectName">My project</h2><p id="managerProjectSummary">Manage your project's fictional recruiting process.</p></div>
+            <span id="managerProjectStage" class="manager-stage">RECRUITING</span>
+          </div>
+          <div class="manager-stats" aria-label="Project team status">
+            <div class="manager-stat"><span>Applications waiting</span><strong id="managerCountPending">0</strong></div>
+            <div class="manager-stat"><span>Team members</span><strong id="managerCountMembers">1 / 4</strong></div>
+            <div class="manager-stat"><span>Open positions</span><strong id="managerCountOpen">3</strong></div>
+            <div class="manager-stat"><span>Project kickoff</span><strong id="managerStartSummary">After team fills</strong></div>
+          </div>
+          <div class="manager-grid">
+            <section class="panel manager-inbox-panel" aria-labelledby="managerInboxTitle">
+              <div class="panel-header"><h2 id="managerInboxTitle">Applications</h2><span class="tag">FICTIONAL APPLICANTS</span></div>
+              <p class="manager-description">Choose an available role before approving. These are example profiles, not real people requesting access.</p>
+              <div id="managerApplications" class="manager-applications" aria-live="polite"></div>
+            </section>
+            <aside class="manager-side">
+              <section class="panel" aria-labelledby="managerRolesTitle">
+                <div class="panel-header"><h2 id="managerRolesTitle">Positions</h2><span class="tag">CAPACITY</span></div>
+                <p class="manager-description">Each position has one place in this demo. Filled positions are unavailable until a member is removed or reassigned.</p>
+                <div id="managerAvailableRoles" class="manager-positions"></div>
+              </section>
+              <section class="panel" aria-labelledby="managerActivityTitle">
+                <div class="panel-header"><h2 id="managerActivityTitle">Activity</h2><span class="tag">PRIVATE HISTORY</span></div>
+                <div id="managerHistory" class="manager-history"></div>
+              </section>
+            </aside>
+          </div>
+          <section class="panel manager-roster-panel" aria-labelledby="managerRosterTitle">
+            <div class="panel-header"><h2 id="managerRosterTitle">Squad roster</h2><span class="tag">LOCAL DEMO TEAM</span></div>
+            <p class="manager-description">Reassign sample teammates or remove them from your team. The creator's place cannot be removed.</p>
+            <div id="managerRoster" class="manager-roster"></div>
+          </section>
+          <p id="managerStatus" role="status" aria-live="polite" class="manager-feedback"></p>
+          <p class="manager-safety-note">ⓘ Nothing on this page is sent to other people. There is no real applicant approval, background recruitment, messaging or account verification. Full-team start is simulated in this browser only.</p>
         </div>
       </div>
     </section>
