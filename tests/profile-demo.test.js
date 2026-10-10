@@ -29,8 +29,10 @@ test("builder profile has editable identity, avatars, skills, and completed proj
 });
 
 test("demo profile save preserves optional data and doesn't redirect to ideas",()=>{
-  const handler=script.slice(script.indexOf('profileForm.addEventListener("submit"'),
-    script.indexOf('const ideaForm = byId("ideaForm")'));
+  const profileStart=script.indexOf('profileForm.addEventListener("submit"');
+  const profileEnd=script.indexOf('\n  syncProfileEditor();',profileStart);
+  assert.ok(profileStart>=0 && profileEnd>profileStart,"profile save handler must be locatable");
+  const handler=script.slice(profileStart,profileEnd);
   assert.match(handler,/\.\.\.state\.profile/,"save should preserve project history and avatar");
   assert.match(handler,/renderBuilderProfile\(\)/,"save updates profile preview");
   assert.doesNotMatch(handler,/go\("ideas"\)/,"saving profile must stay on profile");
