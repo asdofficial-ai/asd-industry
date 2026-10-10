@@ -24,3 +24,11 @@ test("manager-only department selection and audited escalation policy",()=>{
  assert.equal(Ops.validateEscalationReview({decision:"resume",note:"Reopen this fictional ticket after review."}).decision,"resume");
  assert.throws(()=>Ops.validateEscalationReview({decision:"approve_password",note:"A test note with enough characters."}),/decision/);
 });
+
+test("reply drafts are synthetic only and cannot contain secrets or delivery flags",()=>{
+ assert.equal(Ops.validateReplyDraft({draft:"Hello fictional visitor, try the sample instructions.",syntheticAdultTest:true}).startsWith("Hello"),true);
+ assert.throws(()=>Ops.validateReplyDraft({draft:"Hello fictional visitor, try the sample instructions."}),/fictional/);
+ assert.throws(()=>Ops.validateReplyDraft({draft:"Hello fictional visitor, try the sample instructions.",syntheticAdultTest:true,send:true}),/Restricted/);
+ assert.throws(()=>Ops.validateReplyDraft({draft:"Please send your password in a message.",syntheticAdultTest:true}),/Sensitive/);
+ assert.throws(()=>Ops.validateReplyDraft({draft:"Too short.",syntheticAdultTest:true}),/12/);
+});
