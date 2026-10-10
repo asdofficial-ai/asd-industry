@@ -112,3 +112,85 @@
   .open-projects-nav{margin-left:auto}
   .open-projects-list{grid-auto-columns:minmax(230px,91%)}
 }
+
+/* Open-position counts and expected sample kickoff on each recruiting card. */
+.open-project-vacancies{
+  margin:0 0 13px;padding:9px 11px;border:1px solid #397258;border-radius:8px;
+  background:#133a34;color:#a8efd0;font-size:11px;font-weight:900;line-height:1.4
+}
+.open-project-estimate{font-size:11px;line-height:1.5;color:#add3f2;margin:0 0 13px}
+.open-projects-disclaimer{margin-top:18px}
+.my-demo-squads{
+  margin-top:17px;padding:16px 18px;border:1px solid #376858;border-radius:12px;
+  background:linear-gradient(130deg,#12372e,#102938)
+}
+.my-demo-squads[hidden]{display:none!important}
+.my-demo-squads-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.my-demo-squads-header h3{margin:0;font-size:17px;letter-spacing:-.04em}
+.my-demo-squads>p{margin:9px 0 15px;color:#b5d1d6;font-size:11px;line-height:1.6}
+.my-demo-squads-list{display:grid;gap:9px}
+.my-demo-squad{
+  display:flex;justify-content:space-between;align-items:center;gap:13px;flex-wrap:wrap;
+  padding:12px 13px;border:1px solid #3b676c;background:#173640;border-radius:10px
+}
+.my-demo-squad-summary{min-width:0;flex:1 1 175px}
+.my-demo-squad-summary strong{display:block;font-size:13px;color:#effbff}
+.my-demo-squad-summary small{display:block;margin-top:5px;font-size:11px;color:#a7dad6;line-height:1.55}
+/* Modal explains available positions without navigating away or claiming real membership. */
+.project-join-dialog{
+  box-sizing:border-box;width:min(590px,calc(100vw - 28px));max-height:min(88dvh,780px);
+  margin:auto;padding:0;border:1px solid #477294;border-radius:18px;
+  color:#e9f5ff;background:linear-gradient(145deg,#142c43,#091927);
+  box-shadow:0 25px 85px #000b;overflow-y:auto;overscroll-behavior:contain
+}
+.project-join-dialog::backdrop{background:#020913cf;backdrop-filter:blur(4px)}
+.project-join-dialog-inner{padding:25px;min-width:0}
+.project-join-dialog-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.project-join-close{flex:0 0 40px;width:40px;height:40px;display:grid;place-items:center;
+  color:#d9edff;background:#1e3a56;border:1px solid #42688b;border-radius:9px;
+  font-size:16px;cursor:pointer}
+.project-join-close:hover{background:#294d70}
+.project-join-dialog h2{font-size:clamp(25px,5vw,32px);line-height:1.2;letter-spacing:-.055em;margin:16px 0 9px}
+.project-join-summary{font-size:13px;line-height:1.65;color:#bacde0;margin:0 0 16px}
+.project-join-facts{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.project-join-facts>div{border:1px solid #37536f;border-radius:10px;padding:12px;
+  background:#172f47;min-width:0}
+.project-join-facts small{display:block;font-size:9px;color:#98b9d5;letter-spacing:.08em;font-weight:900}
+.project-join-facts strong{display:block;font-size:13px;line-height:1.5;margin-top:6px;color:#eaf7ff}
+.project-join-rule{font-size:11px;line-height:1.7;color:#a5c1da;margin:12px 0 18px}
+.project-role-fieldset{border:0;padding:0;margin:0;min-width:0}
+.project-role-fieldset legend{font-size:16px;font-weight:900;color:#f4f9ff;letter-spacing:-.035em}
+.project-role-fieldset>p{font-size:11px;color:#a7bfd5;line-height:1.55;margin:6px 0 12px}
+.project-role-fieldset b{color:#eff6ff}
+.project-join-role-list{display:grid;gap:9px}
+.project-role-option{display:flex;align-items:center;gap:11px;
+  border:1px solid #3c617e;border-radius:10px;background:#152e47;padding:12px;
+  cursor:pointer;min-width:0;transition:background .15s,border-color .15s}
+.project-role-option:hover:not(.role-filled){background:#214667;border-color:#6e9bcc}
+.project-role-option:has(input:checked){border-color:#83c4ff;background:#214766}
+.project-role-option input{width:18px;height:18px;accent-color:#5fa9f5;flex:0 0 18px}
+.project-role-name{flex:1 1 auto;min-width:0;font-size:12px;font-weight:800;color:#edf7ff;overflow-wrap:anywhere}
+.project-role-vacancy{font-size:10px;line-height:1.4;padding:6px 8px;
+  border-radius:100px;color:#b2f5d8;background:#183f37;border:1px solid #3d765f;white-space:nowrap}
+.project-role-option.role-filled{opacity:.72;cursor:not-allowed}
+.project-role-option.role-filled .project-role-vacancy{background:#3d2e29;color:#e5b6ac;border-color:#886456}
+.project-join-message{color:#b6e7d1;font-size:11px;line-height:1.7;min-height:18px;margin:14px 0}
+.project-join-actions{display:flex;gap:10px}
+.project-join-actions .btn{flex:1 1 0;min-height:44px;justify-content:center;min-width:0}
+.project-join-actions button:disabled{opacity:.56;cursor:not-allowed}
+.project-join-privacy{margin:16px 0 0;border-top:1px solid #35516a;
+  padding-top:12px;color:#a8bfd1;font-size:10px;line-height:1.7}
+.project-join-close:focus-visible,.project-role-option:focus-within{outline:2px solid #98cfff;outline-offset:2px}
+@media(max-width:480px){
+  .project-join-dialog{width:calc(100vw - 20px);max-height:89dvh;border-radius:14px}
+  .project-join-dialog-inner{padding:18px 15px}
+  .project-join-facts{gap:8px}
+  .project-join-facts>div{padding:10px}
+  .project-join-facts strong{font-size:12px}
+  .project-role-option{padding:11px 10px}
+  .my-demo-squads{padding:14px}
+}
+@media(max-width:340px){
+  .project-join-actions{flex-direction:column}
+  .project-join-actions .btn{flex:1 1 auto;width:100%}
+}
