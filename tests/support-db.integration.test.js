@@ -105,6 +105,17 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.equal(assigned.status,200);
    assert.equal((await call(path+"/"+id,"GET",undefined,a)).status,404);
    assert.equal((await call(path+"/"+id,"GET",undefined,b)).status,200);
+   assert.equal((await call(path+"/"+id+"/draft","GET",undefined,a)).status,404);
+   const initial=await call(path+"/"+id+"/draft","GET",undefined,b);
+   assert.equal(initial.status,200);
+   assert.equal((await initial.json()).data,null);
+   const responseDraft="Hello fictional visitor, please review the simulated tutorial instructions.";
+   assert.equal((await call(path+"/"+id+"/draft","PATCH",{draft:responseDraft},b)).status,400);
+   const draftSaved=await call(path+"/"+id+"/draft","PATCH",{draft:responseDraft,syntheticAdultTest:true},b);
+   assert.equal(draftSaved.status,200);
+   assert.equal((await draftSaved.json()).outboundSent,false);
+   const readDraft=await call(path+"/"+id+"/draft","GET",undefined,b);
+   assert.equal((await readDraft.json()).data.body,responseDraft);
    assert.equal((await call(path+"/"+id+"/status","POST",{status:"escalated"},b)).status,400);
    assert.equal((await call(path+"/"+id+"/status","POST",{
     status:"escalated",category:"technical",reason:"This sample case needs independent manager analysis."
