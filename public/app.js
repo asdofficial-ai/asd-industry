@@ -219,7 +219,7 @@
     {id:"SAMPLE-07", nick:"LaunchLab", role:"Business strategy", interests:["Business","Finance","Apps"], availability:"weekends"},
     {id:"SAMPLE-08", nick:"BrightBridge", role:"Sales", interests:["Education","Marketing","Business"], availability:"evenings"}
   ];
-  const views = ["home", "profile", "profile-edit", "ideas", "workspace", "chat", "review"];
+  const views = ["home", "profile", "profile-edit", "ideas", "workspace", "manager", "chat", "review"];
   const byId = id => document.getElementById(id);
   const node = (tag, className, text) => {
     const item = document.createElement(tag);
@@ -280,6 +280,7 @@
     if (location.hash !== "#"+to) history.replaceState(null,"","#"+to);
     window.scrollTo({top:0,behavior:"auto"});
     if (to==="workspace") renderWorkspace();
+    if (to==="manager") window.ASDManagerDashboard.render(state,save,renderWorkspace);
     if (to==="chat") renderChat();
     if (to==="review") renderRisks();
     if (to==="ideas") { renderMatches(); renderOpenProjects(); }
@@ -952,9 +953,9 @@
           topic:state.idea.topic,
           completed:false,
           members:[
-            {nick:state.profile.nickname+" (you)",role:state.profile.role,demo:false},
-            ...matches.map(b=>({nick:b.nick,role:b.role,demo:true}))
+            {nick:state.profile.nickname+" (you)",role:state.profile.role || "Project creator",demo:false}
           ],
+          manager:window.ASDManagerDashboard.create(matches,state.idea.neededRole),
           tasks:[
             {text:"Agree on the problem we're solving",done:false},
             {text:"Describe a small first prototype",done:false}
