@@ -89,6 +89,11 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    const agentList=await call(path,"GET",undefined,a);
    assert.equal(agentList.status,200);
    assert.ok((await agentList.json()).data.some(c=>c.id===id));
+   assert.equal((await call(path+"/"+id+"/claim","POST",{},a)).status,409);
+   const activeAgent=await call("/support/profile","PATCH",{
+    displayName:"Example Agent One",avatarPreset:"orbit",availability:"available"
+   },a);
+   assert.equal(activeAgent.status,200);
    assert.equal((await call(path+"/"+id+"/claim","POST",{},a)).status,200);
    assert.equal((await call(path+"/"+id+"/claim","POST",{},b)).status,409);
    assert.equal((await call(path+"/"+id,"GET",undefined,a)).status,200);
