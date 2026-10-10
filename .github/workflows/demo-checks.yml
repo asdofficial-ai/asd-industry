@@ -31,3 +31,5 @@ jobs:
         run: node tests/project-board.e2e.cjs
       - name: Test creator approval, role assignment and squad management
         run: node tests/manager-dashboard.e2e.cjs
+      - name: Test joined-squad chat access and isolated private messages
+        run: node tests/squad-chat.e2e.cjs
