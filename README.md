@@ -15,6 +15,7 @@ This is a **reconstruction from the October 8, 2026 handoff**, not the recovered
 - Skills, interests, role, and availability can be set or updated separately in Profile, but they are prompted when starting a project—not on sign-up.
 - Idea submission and transparent keyword-based risk hints (**not** an AI assessment).
 - Illustrative compatibility-ranked matching against **fictional sample profiles**.
+- **Explore projects looking for teammates** on **Find Your Team**: horizontally scrollable cards covering fictional school, technology, creative and community projects. Search by name/skill, filter by project type, and tap **I'm interested** to save/remove an interest in the browser tab. **No real joining, hiring, invitations or notifications** occur. Your own submitted idea can also appear as a clearly labeled **private draft**, visible only to you.
 - Browser-local project workspace: task list, progress and project notes.
 - **Group chat demonstration**: visible via navigation or Workspace → Open group chat, with send/delete features. Only the visitor can see messages: fictional teammates never receive, read, or reply.
 - Proposed 3–6 hour wait/fallback concept shown as UI, **not** an active background service.
@@ -60,7 +61,7 @@ v0.4 protected database/data model; v0.5 verified authentication plus minor safe
 1. Open the Render URL in a fresh browser tab; the **Sign up to build** screen must appear *before* the homepage.
 2. Choose nickname, age group, valid demo email and country; acknowledge the demo-only notice, then **Enter ASD Industry**.
 3. The initial gateway offers Sign up and Log in. Log in and all password fields are disabled, clearly marked coming soon; no credentials should be collected. Use Sign up to enter the local demo. Open **Profile**: the editor must not be visible. Click **Edit profile** to navigate to the dedicated editor. Upload a picture or leave initials, update username, bio, country and skills, then save to return to Profile. Email remains UNVERIFIED.
-4. Open **Find your team**, describe a project, choose your role, interests and availability, then click **Find sample teammates**. Compatibility cards must display, explicitly marked fictional.
+4. Open **Find your team**: first browse the horizontally scrolling sample project cards, filter to **School projects**, search by name or skill, save an interest (it must explicitly say it is not a real join request), reload and verify the interest persists locally; remove it. Then use **I need teammates** to reach the idea form. Describe a project, choose your role, interests and availability, then click **Find sample teammates**. A private draft card must appear and the fictional match cards must remain available.
 5. Click **Create simulated project team**. Workspace task creation, completion, deletion, and local notes should work. Click **Mark project complete**, then return to Profile and verify it appears in self-marked history.
 6. Open **Group chat** via the top navigation or Workspace's **Open group chat** button. Send and delete local-only messages.
 7. Open **Risk review**; rule-based checklist should reflect the idea topic. The AI assistant button links here.
