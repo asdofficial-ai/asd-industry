@@ -68,3 +68,12 @@ The future recovery flow:
 - `/verified-team.html` — opt-in public badge directory shell
 
 Email sending, identity-recovery proof verification, operational AI chat, and founder emergency-data uploads remain future work.
+
+## Founder UI design follow-up — October 10, 2026
+- **Customer privacy:** Removed the public Founder login link **and Founder-account card** from `public/identity-hub.html`. Only a verified Founder session can see the Founder link in the restricted staff console. Obscuring a URL is not authorization; the API's Founder role check remains mandatory.
+- **Seven interactive visual directions:** `Obsidian Gold`, `Royal Crimson`, `Titanium`, `Solar Forge`, `Monarch`, `Spectre`, and `Ivory Noir`. The complete **fictional design lab** is `/founder-design-lab.html`. The **private real API shell** is `/founder-console.html`.
+- **Private Founder page:** Responsive mobile layout, restricted login shell, live overview cards only after server-side authenticated Founder authorization, Management and Security tabs, theme switcher (this-page memory only), and ALTernate demonstration.
+- **ALTernate:** On the private page and design lab, the scripted example does NOT call models, read real manager messages, or store chat history. The UI explicitly says when reports and trusted sources are not connected. No fake manager statements are represented as truth.
+- **Automated regression checks:** `tests/founder-ui.test.js` validates missing public Founder links/cards, role-gated private panel markup, referenced assets, seven style controls and network-free scripted assistant. Included in GitHub Actions.
+- **Deployment separation:** A separate public **static visual review** may serve the fictional lab; it has no actual staff API. The existing real human staff service stays disabled. The real Founder account has not been provisioned, and emergency information is not uploaded.
+- **Next gates:** independently verify Founder ownership, staff MFA/passkeys and restricted staff database access before activating the real Founder login; connect any manager reports only through auditable server-side permission checks.
