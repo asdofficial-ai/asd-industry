@@ -25,12 +25,15 @@
  function showError(message){$("workspaceError").hidden=false;tell("workspaceError",message);}
  function clearError(){$("workspaceError").hidden=true;tell("workspaceError","");}
  function showTab(page){
-  if(!["dashboard","cases","create","guidelines"].includes(page)||$("supportWorkspace").hidden)return;
+  if(!["dashboard","cases","create","guidelines","profile","team"].includes(page)||$("supportWorkspace").hidden)return;
+  if(page==="team"&&role!=="manager")return;
   for(const section of document.querySelectorAll(".workspace-page"))section.hidden=section.id!=="page-"+page;
   for(const b of document.querySelectorAll("[data-page]")){
    const selected=b.dataset.page===page;
    if(b.closest(".support-tabs")){b.classList.toggle("selected",selected);b.setAttribute("aria-pressed",String(selected));}
   }
+  if(page==="team")loadManager().catch(err=>showError(err.message));
+  if(page==="profile")loadProfile().catch(err=>showError(err.message));
  }
  function showStats(data){
   const box=$("supportStats");box.replaceChildren();
@@ -78,7 +81,7 @@
  const nextStatuses={
   open:["in_progress","escalated"],in_progress:["waiting_on_customer","escalated","resolved"],
   waiting_on_customer:["in_progress","escalated","resolved"],
-  escalated:["in_progress","resolved"],resolved:["in_progress","closed"],closed:[]
+  escalated:[],resolved:["in_progress","closed"],closed:[]
  };
  async function action(fn){
   clearError();
@@ -109,15 +112,31 @@
     if(allowed.length){
      const form=e("form",undefined,"internal-form");
      const select=selectStatus(form,allowed);
-     const save=button("Update status",()=>action(()=>post("/support/cases/"+id+"/status",{status:select.value})));
-     form.append(save);controls.append(form);
+     const categoryLabel=e("label","Escalation category (required when escalating)");
+     const category=e("select");category.setAttribute("aria-label","Escalation category");
+     for(const value of ["technical","policy","safety","account_access","other"]){const opt=e("option",value.replaceAll("_"," "));opt.value=value;category.append(opt);}
+     categoryLabel.append(category);
+     const reasonLabel=e("label","Why does this need a manager?");
+     const reason=e("textarea");reason.rows=2;reason.minLength=12;reason.maxLength=500;reason.placeholder="Explain the fictional support issue needing independent review";
+     reasonLabel.append(reason);
+     const fields=e("div");fields.append(categoryLabel,reasonLabel);
+     fields.hidden=select.value!=="escalated";
+     select.addEventListener("change",()=>{fields.hidden=select.value!=="escalated";});
+     const save=button("Update status",()=>action(()=>{
+      if(select.value==="escalated"){
+       if(reason.value.trim().length<12){showError("Give a fictional escalation reason of at least 12 characters.");return Promise.resolve();}
+       return post("/support/cases/"+id+"/status",{status:"escalated",category:category.value,reason:reason.value});
+      }
+      return post("/support/cases/"+id+"/status",{status:select.value});
+     }));
+     form.append(fields,save);controls.append(form);
     }
     if(role==="manager"){
      if(!agents.length){const response=await api("/support/agents");agents=response.data||[];}
      if(agents.length){
-      const form=e("div",undefined,"internal-form"),label=e("label","Assign to employee ID");
+      const form=e("div",undefined,"internal-form"),label=e("label","Assign to available team member");
       const select=e("select");select.setAttribute("aria-label","Choose verified support agent");
-      for(const a of agents){const opt=e("option",a.id);opt.value=a.id;select.append(opt);}
+      for(const a of agents){const opt=e("option",a.display_name+" · "+a.department+" · "+a.availability);opt.value=a.id;select.append(opt);}
       label.append(select);form.append(label,
        button("Assign agent",()=>action(()=>post("/support/cases/"+id+"/assign",{agentId:select.value}))));
       controls.append(form);
@@ -146,6 +165,57 @@
    panel.append(events);
   }catch(err){showError(err.message);}
  }
+
+ async function loadProfile(){
+  const response=await api("/support/profile"),p=response.data;
+  $("profileDisplayName").value=p.display_name;
+  $("profileAvatar").value=p.avatar_preset;
+  $("profileAvailability").value=p.availability;
+  tell("profileDepartment","Department: "+p.department.replaceAll("_"," ")+" (only Managers assign departments)");
+  tell("profileBadgeStatus",response.verifiedPublicBadge?"Administrator-verified employee badge":"Private staff account · badge verification pending");
+ }
+ async function loadManager(){
+  if(role!=="manager")return;
+  const [people,escalations]=await Promise.all([api("/support/team"),api("/support/escalations")]);
+  const team=$("managerTeam");team.replaceChildren();
+  if(!people.data.length)team.append(e("p","No human support agent accounts have been provisioned yet.","fine"));
+  for(const person of people.data){
+   const card=e("article",undefined,"team-card");
+   const heading=e("div",undefined,"team-header");
+   const avatar=e("span",person.avatar_preset==="compass"?"✥":person.avatar_preset==="shield"?"◇":person.avatar_preset==="spark"?"✦":"◎","team-avatar");
+   const copy=e("div");copy.append(e("strong",person.display_name),e("p",person.department.replaceAll("_"," ")+" · "+person.availability+" · "+person.active_cases+" active cases","fine"));
+   heading.append(avatar,copy);card.append(heading);
+   const row=e("div",undefined,"manager-row"),select=e("select");
+   select.setAttribute("aria-label","Change department for "+person.display_name);
+   for(const item of ["general","technical","projects","trust_safety"]){
+    const opt=e("option",item.replaceAll("_"," "));opt.value=item;if(item===person.department)opt.selected=true;select.append(opt);
+   }
+   row.append(select,button("Assign department",()=>action(async()=>{
+    await api("/support/team/"+person.staff_id+"/department",{method:"PATCH",body:JSON.stringify({department:select.value})});
+    await loadManager();
+   })));
+   card.append(row);team.append(card);
+  }
+  const box=$("managerEscalations");box.replaceChildren();
+  if(!escalations.data.length)box.append(e("p","No pending internal escalations.","fine"));
+  for(const item of escalations.data){
+   const card=e("article",undefined,"team-card");
+   card.append(e("strong",item.subject),e("p",item.category+" · "+item.priority+" priority","fine"),e("p",item.reason));
+   const form=e("form",undefined,"internal-form");
+   const label=e("label","Independent manager review note");
+   const input=e("textarea");input.rows=2;input.minLength=12;input.maxLength=500;input.required=true;input.placeholder="Give a clear fictional reason for your review";
+   label.append(input);form.append(label);
+   const actions=e("div",undefined,"case-actions");
+   for(const [caption,decision] of [["Return to progress","resume"],["Resolve case","resolve"]]){
+    actions.append(button(caption,()=>action(async()=>{
+     if(!input.reportValidity())return;
+     await post("/support/cases/"+item.case_id+"/escalation-review",{decision,note:input.value});
+     await loadManager();
+    })));
+   }
+   form.append(actions);card.append(form);box.append(card);
+  }
+ }
  async function start(){
   try{
    const status=await api("/status");enabled=!!status.enabled;
@@ -163,7 +233,8 @@
   $("supportLogin").hidden=true;$("supportWorkspace").hidden=false;role=person.role;
   tell("agentIdentity",person.role==="manager"?"Manager · Human staff":person.badge?.verified?"Verified Human Support Agent":"Support Agent · Private account");
   tell("serviceStatus","Private human support session active. Synthetic adult-only cases; public messaging and recovery disabled.");
-  await refresh();showTab("dashboard");
+  $("managerTab").hidden=role!=="manager";
+  await loadProfile();await refresh();showTab("dashboard");
  }
  $("supportLoginForm").addEventListener("submit",async event=>{
   event.preventDefault();$("agentLoginBtn").disabled=true;tell("loginFeedback","");
@@ -185,6 +256,19 @@
   if(nav&& !$("supportWorkspace").hidden)showTab(nav.dataset.page);
  });
  $("refreshCases").addEventListener("click",refresh);
+ $("agentProfileForm").addEventListener("submit",async event=>{
+  event.preventDefault();if(!$("agentProfileForm").reportValidity())return;
+  $("saveProfile").disabled=true;tell("profileFeedback","");
+  try{
+   const values={displayName:$("profileDisplayName").value,avatarPreset:$("profileAvatar").value,
+    availability:$("profileAvailability").value};
+   const result=await api("/support/profile",{method:"PATCH",body:JSON.stringify(values)});
+   tell("profileFeedback","Private staff profile updated; role and verification remain unchanged.");
+   tell("agentIdentity",result.data.display_name+" · "+role);
+   agents=[];await loadProfile();await refresh();
+  }catch(err){tell("profileFeedback",err.message);}
+  finally{$("saveProfile").disabled=false;}
+ });
  $("supportCaseForm").addEventListener("submit",async event=>{
   event.preventDefault();
   if(!$("supportCaseForm").reportValidity())return;
