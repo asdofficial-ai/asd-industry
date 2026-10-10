@@ -1,7 +1,7 @@
 name: ASD Industry multi-page project workflow checks
 on:
   push:
-    branches: [feature/v0.5-multipage-private-projects, feature/v0.6-ai-staff-human-review, feature/v0.7-human-staff-backend, feature/v0.8-role-separation-recovery-20261009]
+    branches: [feature/v0.5-multipage-private-projects, feature/v0.6-ai-staff-human-review, feature/v0.7-human-staff-backend, feature/v0.8-role-separation-recovery-20261009, feature/v0.9-human-support-workspace-20261010]
   pull_request:
     branches: [main]
 permissions:
@@ -23,13 +23,14 @@ jobs:
       - run: node --check lib/ai-staff-runner.js
       - run: node --check public/staff-console.js
       - run: node --check lib/human-staff-api.js
+      - run: node --check lib/support-case-core.js && node --check lib/support-case-api.js && node --check public/support-workspace.js && node --check public/support-lab.js && node --check lib/support-operations-core.js && node --check lib/support-operations-api.js
       - run: node --check lib/staff-auth-core.js
       - run: node --check lib/identity-roles.js && node --check lib/founder-emergency.js && node --check public/identity-console.js && node --check public/verified-team.js
       - run: node --check public/founder-design.js && node --check public/founder-private.js
       - run: node --check scripts/staff-migrate.js
       - run: node --check scripts/staff-provision.js
       - run: node --check public/app.js
-      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/identity-roles.test.js tests/founder-ui.test.js
+      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/identity-roles.test.js tests/founder-ui.test.js tests/support-case-core.test.js tests/support-operations-core.test.js
 
   postgres-integration:
     runs-on: ubuntu-latest
@@ -57,4 +58,4 @@ jobs:
           node-version: '22'
       - run: npm install --no-audit --no-fund
       - run: node scripts/staff-migrate.js
-      - run: node --test tests/staff-db.integration.test.js tests/identity-db.integration.test.js
+      - run: node --test tests/staff-db.integration.test.js tests/identity-db.integration.test.js tests/support-db.integration.test.js

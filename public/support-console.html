@@ -1,1 +1,64 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101412"><title>ASD Industry — Human Support (Private)</title><link rel="stylesheet" href="/identity-console.css"><script defer src="/identity-console.js"></script></head><body data-console="support"><main><header><span class="brand">✦ ASD INDUSTRY / HUMAN SUPPORT</span><a href="/">Demo home</a></header><h1>Human Support Desk</h1><p>Only verified human support agents can use this service; automated AI helpers are separately labeled.</p><section class="notice" role="status" id="serviceStatus">Checking restricted staff-service availability…</section><section class="card" id="loginBox" hidden><h2>Restricted human login</h2><p>Staff accounts are provisioned by a trusted administrator. No public staff signup.</p><form id="loginForm"><label>Work email <input required type="email" autocomplete="username" id="email"></label><label>Staff password <input required type="password" minlength="16" autocomplete="current-password" id="password"></label><button id="loginBtn" type="submit">Secure sign in</button><p id="loginFeedback" role="alert"></p></form></section><div id="privateArea" hidden><div class="actions"><button type="button" id="logoutBtn">Sign out</button><a class="button" href="/staff-console.html">Staff review console</a></div><p id="staffBadge" class="tag" aria-live="polite">Checking verified employee status…</p><div id="privateStats" class="grid"></div><section class="card"><h2>Secure account-recovery rules</h2><div id="policyText"></div></section></div><section class="card"><h2>Identity separation</h2><div class="grid"><article><span class="tag ai">AI Project Assistant</span><p>Helps users plan and build projects. Has no staff login or owner powers.</p></article><article><span class="tag ai">AI Support Assistant</span><p>Provides help and escalation, but cannot verify identity or reset passwords.</p></article><article><span class="tag">Human Support Agent</span><p>Privately provisioned employee. Cannot read saved passwords.</p></article><article><span class="tag">Founder / Human Staff</span><p>Privileged accounts require separate roles and verified employment before public badges appear.</p></article></div></section><footer>Private adult-testing design · No live password recovery or personal emergency-information collection · No public youth accounts.</footer></main></body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1112">
+<meta name="description" content="Restricted ASD Industry human customer-support operations">
+<title>ASD Industry — Human Support Workspace</title>
+<link rel="stylesheet" href="/support-workspace.css">
+<script defer src="/support-workspace.js"></script>
+</head><body class="support-app">
+<div class="support-shell">
+<header class="support-header"><div class="support-brand"><span class="support-mark">✦</span><span>ASD INDUSTRY<small>HUMAN SUPPORT / STAFF ONLY</small></span></div><span class="secure-pill">◇ RESTRICTED WORKSPACE</span></header>
+<main>
+<section class="hero"><div><span class="eyebrow">SUPPORT OPERATIONS / PRIVATE BETA</span><h1>Help people.<br><em>Build trust.</em></h1><p>Give every support request a clear owner, a next step and an auditable resolution.</p></div><div class="hero-orbit" aria-hidden="true"><span>◎</span><small>HUMAN<br>FIRST</small></div></section>
+<div id="serviceStatus" class="banner" role="status" aria-live="polite">Checking if restricted human support is available…</div>
+<section id="supportLogin" class="support-card login-panel" hidden>
+ <div><span class="eyebrow">EMPLOYEE ACCOUNT</span><h2>Welcome back, Agent.</h2><p>Only privately provisioned human Support and Manager accounts can sign in. AI helpers do not use this login.</p><p class="fine">Privileged access and all real customer cases remain disabled until security and staff onboarding are reviewed.</p></div>
+ <form id="supportLoginForm"><label for="agentEmail">Employee email</label><input required type="email" id="agentEmail" autocomplete="username" maxlength="254" placeholder="staff@your-company.example">
+ <label for="agentPassword">Strong password</label><input required minlength="16" type="password" id="agentPassword" autocomplete="current-password" placeholder="Private staff password">
+ <button class="primary" id="agentLoginBtn" type="submit">Sign in securely ↗</button><p id="loginFeedback" role="alert"></p></form>
+</section>
+<div id="supportWorkspace" hidden>
+ <div class="workspace-top"><div><span class="eyebrow">SERVICE COMMAND CENTER</span><h2>Your support desk<span class="accent-dot">.</span></h2><p>Test cases only. No real messages or account recovery actions.</p></div><div class="workspace-actions"><span class="staff-identity" id="agentIdentity">Human Support Agent</span><button class="secondary" id="agentLogout" type="button">Sign out</button></div></div>
+ <nav class="support-tabs" aria-label="Agent workspace"><button data-page="dashboard" class="selected" aria-pressed="true">◫ Overview</button><button data-page="cases" aria-pressed="false">☷ Cases</button><button data-page="create" aria-pressed="false">＋ New test case</button><button data-page="profile" aria-pressed="false">◎ My Profile</button><button data-page="team" id="managerTab" aria-pressed="false" hidden>♜ Team & Escalations</button><button data-page="guidelines" aria-pressed="false">◇ Guidelines</button></nav>
+ <div id="workspaceError" class="banner error" role="alert" hidden></div>
+ <section id="page-dashboard" class="workspace-page">
+  <h3>Today at a glance</h3><p class="fine">Counts reflect only cases the current human role is allowed to access.</p>
+  <div class="stats" id="supportStats"></div><div class="content-grid"><article class="support-card"><span class="eyebrow">AGENT PRIORITIES</span><h3>Handle with care.</h3><p>Claim unassigned work, record internal progress, escalate sensitive questions, and never request a customer's password.</p><button class="soft-button" data-page="cases">Review the queue →</button></article><article class="support-card"><span class="eyebrow">ACCOUNT RECOVERY</span><h3>Verification before reset.</h3><p>Password-reset authorizations are not available yet. Staff cannot retrieve old passwords or view identity evidence.</p><span class="small-status">RECOVERY NOT ENABLED</span></article></div>
+ </section>
+ <section id="page-cases" class="workspace-page" hidden>
+  <div class="section-top"><div><h3>Support case queue</h3><p class="fine">Assigned staff see their cases and unclaimed work. Managers see authorized team work.</p></div><button id="refreshCases" type="button" class="secondary">Refresh ↻</button></div>
+  <div class="cases-layout"><div id="supportCases" class="case-list" aria-label="Accessible support cases"><p>Loading cases…</p></div><article id="caseDetail" class="support-card detail-panel"><h3>Select a case</h3><p class="fine">Choose a fictional support case to inspect authorized details, notes and available actions.</p></article></div>
+ </section>
+ <section id="page-create" class="workspace-page" hidden><h3>Create a test case</h3><p class="fine">Synthetic adult-only examples, not real customer inquiries. Do not enter personal contacts, identity numbers or passwords.</p>
+  <form class="support-card create-form" id="supportCaseForm">
+   <label for="caseSubject">Case subject</label><input id="caseSubject" required minlength="5" maxlength="120" placeholder="Sample login problem">
+   <label for="caseAlias">Fictional requester nickname</label><input id="caseAlias" required minlength="3" maxlength="40" placeholder="SampleBuilder">
+   <div class="form-grid"><label for="caseCategory">Category<select id="caseCategory"><option value="general">General question</option><option value="account_access">Account access</option><option value="technical">Technical issue</option><option value="project_help">Project assistance</option><option value="safety_report">Safety report</option></select></label><label for="casePriority">Priority<select id="casePriority"><option value="normal">Normal</option><option value="high">High</option><option value="low">Low</option></select></label></div>
+   <label for="caseDescription">Synthetic description</label><textarea id="caseDescription" required minlength="15" maxlength="900" rows="4" placeholder="Describe a fictional issue for staff training."></textarea>
+   <label class="check"><input type="checkbox" id="caseSynthetic" required><span>I confirm this is fictional adult-test data, with no real customer or minor details.</span></label>
+   <button class="primary" type="submit" id="createCaseBtn">Create training case →</button><p id="caseFormFeedback" role="status"></p>
+  </form>
+ </section>
+ <section id="page-profile" class="workspace-page" hidden>
+  <div class="section-top"><div><span class="eyebrow">EMPLOYEE IDENTITY</span><h3>Your professional profile</h3><p class="fine">Choose how your colleagues identify you inside the staff system. Official employment verification is controlled by trusted administrators, not by this form.</p></div><span class="secure-pill">PRIVATE STAFF PROFILE</span></div>
+  <div class="content-grid"><form class="support-card create-form" id="agentProfileForm">
+   <label for="profileDisplayName">Professional display name</label><input id="profileDisplayName" required minlength="2" maxlength="60" placeholder="e.g. Support Team Member">
+   <label for="profileAvatar">Avatar style (illustrated, not a real identity photo)</label><select id="profileAvatar"><option value="orbit">Orbit ◉</option><option value="shield">Shield ◇</option><option value="spark">Spark ✦</option><option value="compass">Compass ✥</option></select>
+   <label for="profileAvailability">Availability</label><select id="profileAvailability"><option value="offline">Offline — no new assignments</option><option value="available">Available — accept cases</option><option value="busy">Busy — limited assignments</option><option value="away">Away — no new assignments</option></select>
+   <p class="fine" id="profileDepartment">Department: General Support (assigned by Manager)</p>
+   <button type="submit" class="primary" id="saveProfile">Save staff profile →</button><p id="profileFeedback" role="status" class="fine"></p>
+  </form><article class="support-card"><span class="eyebrow">TRUST IS EARNED</span><h3>Official ASD employee badge</h3>
+   <p id="profileBadgeStatus" class="small-status">Not administrator-verified</p>
+   <p>An official ASD Industry employee badge is granted after identity and employment verification, and public listing needs your consent.</p>
+   <p class="fine">Staff cannot edit their job role, employee verification, or badge status. This page never asks for identity documents or recovery secrets.</p>
+   <span class="secure-pill">ROLE ENFORCED BY SERVER</span></article></div>
+ </section>
+ <section id="page-team" class="workspace-page" hidden><span class="eyebrow">MANAGER OPERATIONS</span><h3>Team & escalation oversight</h3>
+  <p class="fine">Only human Managers may assign departments, oversee authorized cases, and review escalations raised by another employee.</p>
+  <div class="content-grid"><article class="support-card"><h3>Support team</h3><div id="managerTeam" class="case-list"></div></article>
+   <article class="support-card"><h3>Escalations awaiting review</h3><div id="managerEscalations" class="case-list"></div></article></div>
+ </section>
+ <section id="page-guidelines" class="workspace-page" hidden><h3>Human support standards</h3><div class="content-grid"><article class="support-card"><h3>Identity protection</h3><p>Never ask for a password, verification code, NIN/BVN, recovery phrase, or document through support chat. Account recovery needs an approved protected process.</p></article><article class="support-card"><h3>Know your limits</h3><p>You can work assigned cases and add internal notes. A Manager assigns agents and closes cases. Project approval is a separate human reviewer job.</p></article><article class="support-card"><h3>AI ≠ employee</h3><p>AI support assistants can help answer questions but cannot sign in as human agents, approve requests or receive employee badges.</p></article><article class="support-card"><h3>Visible badges</h3><p>Only verified, enabled, opted-in employees can appear in the official employee directory. Logging in does not automatically grant a public badge.</p></article></div></section>
+</div>
+</main><footer>ASD INDUSTRY / HUMAN SUPPORT · PRIVATE STAFF TESTING ONLY · NO PUBLIC CUSTOMER TICKETS OR LIVE PASSWORD RESET</footer>
+</div></body></html>
