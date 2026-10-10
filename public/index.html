@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/profile-account.css">
   <link rel="stylesheet" href="/project-board.css">
   <link rel="stylesheet" href="/manager.css">
+  <link rel="stylesheet" href="/squad-chat.css">
   <script src="/country-picker.js" defer></script>
   <script src="/manager-dashboard.js" defer></script>
   <script src="/app.js" defer></script>
@@ -374,7 +375,8 @@
               <button class="btn btn-accent" id="confirmProjectJoin" type="submit">Join demo squad →</button>
             </div>
           </form>
-          <p class="project-join-privacy">No real registration, invitation, recruiting, messaging or confirmed start date. This is a fictional example.</p>
+          <button type="button" id="joinedSquadChatShortcut" class="btn btn-accent joined-squad-chat-shortcut" hidden>💬 Open Squad Chat →</button>
+          <p class="project-join-privacy">No real registration, invitation, recruiting, messaging or confirmed start date. This is a fictional example. Any squad chat is private to this browser tab.</p>
         </div>
       </dialog>
       <div class="content-grid">
@@ -499,6 +501,46 @@
           </section>
           <p id="managerStatus" role="status" aria-live="polite" class="manager-feedback"></p>
           <p class="manager-safety-note">ⓘ Nothing on this page is sent to other people. There is no real applicant approval, background recruitment, messaging or account verification. Full-team start is simulated in this browser only.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="view hidden" id="view-squad-chat" data-view="squad-chat" aria-labelledby="squadChatTitle">
+      <div class="page-heading squad-chat-heading">
+        <p class="kicker">YOUR DEMO SQUADS / DISCUSSION</p>
+        <h1 id="squadChatTitle">Squad <em>chat.</em></h1>
+        <p>One room for each project you've joined. This is a <strong>private chat preview</strong>: only you can see messages you write, and no fictional teammates receive or reply to them.</p>
+      </div>
+      <div class="squad-chat-layout">
+        <div class="squad-chat-toolbar">
+          <button type="button" id="squadChatBack" class="btn btn-ghost">← Back to my squads</button>
+          <span class="squad-chat-privacy-badge">🔒 ONLY THIS BROWSER TAB</span>
+        </div>
+        <div class="squad-chat-shell">
+          <div class="squad-chat-room-top">
+            <span class="squad-chat-project-icon" id="squadChatProjectIcon" aria-hidden="true">SC</span>
+            <div class="squad-chat-room-heading">
+              <p class="kicker">PROJECT DISCUSSION · DEMO</p>
+              <h2 id="squadChatProjectName">Project squad</h2>
+              <p id="squadChatYourRole">Your position</p>
+            </div>
+            <span id="squadChatProjectStage" class="squad-chat-stage">RECRUITING</span>
+          </div>
+          <div class="squad-chat-security" role="note">
+            <strong>👋 Your private practice chat</strong>
+            <p>Messages stay on this device in your current browser tab. There are no live squad members here yet. Do not share passwords, phone numbers, addresses or other personal details.</p>
+          </div>
+          <div id="squadChatMessages" class="squad-chat-messages" role="log" aria-label="Private demo squad messages" aria-live="polite" aria-relevant="additions text">
+            <p class="squad-chat-empty">No messages yet. Write a note to preview how this squad's conversation could work.</p>
+          </div>
+          <form id="squadChatForm" class="squad-chat-compose">
+            <label for="squadChatMessage" class="sr-only">Write a private practice message</label>
+            <textarea id="squadChatMessage" rows="2" maxlength="500" placeholder="Write a squad message… (only you can see it)" required></textarea>
+            <div class="squad-chat-compose-bottom">
+              <span>Demo only · no real messages are sent · 500 characters max.</span>
+              <button type="submit" class="btn btn-accent" id="squadChatSend">Send demo message ↗</button>
+            </div>
+          </form>
         </div>
       </div>
     </section>
