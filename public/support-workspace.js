@@ -153,6 +153,21 @@
      await action(()=>post("/support/cases/"+id+"/note",{note:textarea.value,internalOnly:true}));
     }));
     panel.append(noteForm);
+    const saved=await api("/support/cases/"+id+"/draft");
+    const responseSection=e("div",undefined,"internal-form");
+    const draftLabel=e("label","Saved example reply — never delivered to a customer");
+    const draft=e("textarea");draft.rows=3;draft.minLength=12;draft.maxLength=900;draft.required=true;
+    draft.placeholder="Draft an example customer response for future training only; do not use real personal information";
+    draft.value=saved.data?.body||"";
+    draftLabel.append(draft);
+    const draftButton=button("Save private reply draft",async()=>{
+     if(!draft.reportValidity())return;
+     await action(async()=>{
+      await api("/support/cases/"+id+"/draft",{method:"PATCH",body:JSON.stringify({draft:draft.value,syntheticAdultTest:true})});
+     });
+    });
+    responseSection.append(draftLabel,draftButton,e("p","Saved locally to the isolated test database. There is no Send button or outbound messaging service.","fine"));
+    panel.append(responseSection);
    }
    const events=e("div",undefined,"case-events");events.append(e("h3","Audit trail"));
    for(const v of data.events||[]){
