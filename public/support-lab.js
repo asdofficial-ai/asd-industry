@@ -62,6 +62,20 @@
     c.notes.push(note.value.slice(0,200));render();
   });
   detail.append(form);
+  const draftForm=elt("form",undefined,"internal-form");
+  const draftLabel=elt("label","Example response draft · not sent");
+  const draft=elt("textarea");draft.rows=3;draft.minLength=12;draft.maxLength=500;draft.required=true;
+  draft.value=c.draft||"";
+  draft.placeholder="Write a fictional response. This demo cannot send messages.";
+  draftLabel.append(draft);
+  const draftSubmit=elt("button","Save fictional draft","soft-button");draftSubmit.type="submit";
+  draftForm.append(draftLabel,draftSubmit,elt("p","No customer messaging, network request or storage is connected.","fine"));
+  draftForm.addEventListener("submit",event=>{
+   event.preventDefault();if(!draft.reportValidity())return;
+   if(/password|secret|@|\\d{7,}/i.test(draft.value)){draft.value="";return;}
+   c.draft=draft.value.slice(0,500);render();
+  });
+  detail.append(draftForm);
   const events=elt("div",undefined,"case-events");events.append(elt("h3","Example internal notes"));
   if(!c.notes.length)events.append(elt("p","No fictional notes yet.","fine"));
   for(const line of c.notes){events.append(elt("p",line,"case-event"));}
