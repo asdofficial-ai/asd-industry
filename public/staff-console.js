@@ -6,9 +6,9 @@
  let staff=null,items=[],selected=null,backendEnabled=false;
  function status(text){$("staffAvailability").textContent=text}
  function feedback(text){const el=$("loginFeedback");el.textContent=text}
- function showLogin(){staff=null;$("staffIdentity").textContent="Not signed in";$("logoutBtn").hidden=true;
+ function showLogin(){staff=null;$("staffIdentity").textContent="Not signed in";$("logoutBtn").hidden=true;$("founderNav").hidden=true;
   $("staffConsole").hidden=true;$("supportReferral").hidden=true;$("loginView").hidden=!backendEnabled;}
- function showStaff(user){staff=user;$("loginView").hidden=true;$("staffConsole").hidden=user.role==="support";$("supportReferral").hidden=user.role!=="support";$("logoutBtn").hidden=false;
+ function showStaff(user){staff=user;$("loginView").hidden=true;$("founderNav").hidden=user.role!=="founder";$("staffConsole").hidden=user.role==="support";$("supportReferral").hidden=user.role!=="support";$("logoutBtn").hidden=false;
   $("staffIdentity").textContent=user.email+" · "+user.role+(user.badge?.verified?" · VERIFIED HUMAN STAFF":" · PRIVATE ACCOUNT (NO PUBLIC BADGE)");
   $("staffTestIntake").hidden=!["founder","reviewer"].includes(user.role);}
  async function api(path,options={}){
