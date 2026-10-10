@@ -48,3 +48,29 @@ The Founder account, project reviewers, safety personnel, community builders and
 
 ## Next development milestone
 Add an audited **support case escalation and two-person review workflow**, improved staff assignment search (non-sensitive display name instead of raw ID), abuse controls, human-agent status/availability, customer-facing request creation only after safely verified account signup and privacy readiness, and official in-app secure customer communication. Recovery authorization must be a separate audited workflow with identity checks, one-time reset tokens and session invalidation — never old-password disclosure.
+
+## October 10 hardening sprint — near-feature-complete private beta
+The private Human Support workspace now includes these additional **implemented, non-public** pieces:
+- **Agent identity cards and availability**: `/support/profile` (GET/PATCH) with display name, one of four safe preset illustrated avatars and status `available | busy | away | offline`. Role, badge verification, and department are **never self-editable**. Availability defaults to offline; non-manager agents must set Available or Busy before claiming new work. No photo or identity-document uploads.
+- **Manager team roster**: `GET /support/team` and `PATCH /support/team/:id/department`, with a safe list of enabled employee IDs, names, workloads, status and assigned department. Only a real staff-session Manager can assign a support department; audits record profile and department changes. Manager assignment to a case requires an enabled Support-role recipient currently Available/Busy.
+- **Explained escalations**: An agent/manager cannot escalate without selecting a category and writing a substantial fictional reason. The case enters `escalated`, and only a different authorized Manager can review it using `GET /support/escalations` and `POST /support/cases/:id/escalation-review` with a review note. Standard status edits and reassignment cannot bypass review. An escalation cannot be self-reviewed.
+- **Saved draft replies, not sent**: `GET /support/cases/:id/draft` and `PATCH /support/cases/:id/draft` save a synthetic training response for the authenticated author only. Drafts require explicit synthetic-test confirmation, strict text screening and case ownership; they have **no customer send path** and are read-only when the case is closed. Audited `reply_drafted` events contain no draft body. The staff UI clearly labels these as never delivered.
+- **UI and demo**: Real staff UI adds My Profile (display name, avatar, availability, badge explanation), Manager Team & Escalations, legible assignment labels, two-person escalation forms and unsent response drafts. The separate mobile **fictional preview** adds simulated profile, staff/manager role views and response-draft interactions, with no network calls or stored credentials.
+- **Migrations** `004_support_profiles_escalations.sql` and `005_support_reply_drafts.sql` extend the isolated staff database only; all use the existing explicit admin migration script. No existing ASD Industry public data or production database has been modified.
+- **Tests**: Core and disposable PostgreSQL integration coverage includes forged role/badge fields, offline claim denial, manager-only department assignment, refusal to assign unavailable staff, ownership-sensitive drafts, attempted escalation bypass, manager independent review, and read-only closed cases.
+
+### Private beta vs. launch readiness
+We can describe the **staff-workflow prototype as mostly implemented**, but a numerical statement like "90% production ready" would be misleading. The highest-risk launch work remains: independent business/identity verification and staff onboarding, MFA/passkeys, approved and safe real customer intake, customer-facing secure messaging with consent/retention controls, real age/guardian safeguards if applicable, audited password reset and proof handling, distributed abuse controls, observability/backups, penetration/security/privacy review, and coordinated production roll-out.
+
+**Do not** set `STAFF_BACKEND_ENABLED=true` on the public Render demo, deploy customer-facing ticket endpoints, provision actual human employees, publish credentials, or merge this draft PR into `main` until these gates are passed.
+
+### Final handoff checklist
+- [x] Distinct Human Support and Manager sessions; AI and reviewers cannot enter human support
+- [x] Staff case intake for **synthetic adult-only** training, claim, assignment, review and close
+- [x] Human team profiles, availability, department routing and official badge separation
+- [x] Escalation, different-Manager oversight and append-only operational records
+- [x] Private response drafts with no outbound delivery
+- [x] Mobile UI, fictional mobile preview and PostgreSQL integration tests
+- [ ] Verified employee onboarding, secure staff MFA, account recovery
+- [ ] Real customer identity/session integration, safe customer submission and messaging
+- [ ] Legal/privacy/age review, operational security verification and release acceptance
