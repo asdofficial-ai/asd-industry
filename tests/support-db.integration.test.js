@@ -44,6 +44,25 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.equal((await call(path,"GET",undefined,reviewer)).status,403);
    assert.equal((await call("/support/dashboard","GET",undefined,reviewer)).status,403);
    assert.equal((await call("/support/agents","GET",undefined,a)).status,403);
+   assert.equal((await call("/support/team","GET",undefined,a)).status,403);
+   assert.equal((await call("/support/escalations","GET",undefined,reviewer)).status,403);
+   const profile=await call("/support/profile","PATCH",{
+    displayName:"Test Support Agent",avatarPreset:"compass",availability:"available"
+   },b);
+   assert.equal(profile.status,200);
+   assert.equal((await profile.json()).data.availability,"available");
+   assert.equal((await call("/support/profile","PATCH",{
+    displayName:"Verified Founder",avatarPreset:"shield",availability:"available"
+   },b)).status,400);
+   assert.equal((await call("/support/profile","PATCH",{
+    displayName:"Test Support Agent",avatarPreset:"shield",availability:"available",role:"manager"
+   },b)).status,400);
+   assert.equal((await call("/support/team/"+ids[1]+"/department","PATCH",{department:"technical"},a)).status,403);
+   assert.equal((await call("/support/team/"+ids[1]+"/department","PATCH",{department:"technical"},manager)).status,200);
+   assert.equal((await call("/support/team/"+ids[3]+"/department","PATCH",{department:"technical"},manager)).status,404);
+   const team=await call("/support/team","GET",undefined,manager);
+   assert.equal(team.status,200);
+   assert.ok((await team.json()).data.some(x=>x.staff_id===ids[1]&&x.department==="technical"));
    const badOrigin=await call(path,"POST",{
     subject:"Fictional training inquiry",requesterAlias:"ExampleAdult",
     description:"A made up problem for training the human support team.",
@@ -86,8 +105,22 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.equal(assigned.status,200);
    assert.equal((await call(path+"/"+id,"GET",undefined,a)).status,404);
    assert.equal((await call(path+"/"+id,"GET",undefined,b)).status,200);
-   assert.equal((await call(path+"/"+id+"/status","POST",{status:"escalated"},b)).status,200);
-   assert.equal((await call(path+"/"+id+"/status","POST",{status:"resolved"},manager)).status,200);
+   assert.equal((await call(path+"/"+id+"/status","POST",{status:"escalated"},b)).status,400);
+   assert.equal((await call(path+"/"+id+"/status","POST",{
+    status:"escalated",category:"technical",reason:"This sample case needs independent manager analysis."
+   },b)).status,200);
+   assert.equal((await call(path+"/"+id+"/status","POST",{status:"resolved"},manager)).status,409);
+   assert.equal((await call("/support/escalations","GET",undefined,b)).status,403);
+   const escalationQueue=await call("/support/escalations","GET",undefined,manager);
+   assert.equal(escalationQueue.status,200);
+   assert.ok((await escalationQueue.json()).data.some(x=>x.case_id===id));
+   assert.equal((await call(path+"/"+id+"/escalation-review","POST",{decision:"resolve",note:"Approve the synthetic tutorial resolution for this sample."},b)).status,403);
+   const reviewed=await call(path+"/"+id+"/escalation-review","POST",{
+    decision:"resolve",note:"Reviewed the synthetic issue; the example resolution is appropriate."
+   },manager);
+   assert.equal(reviewed.status,200);
+   assert.equal((await reviewed.json()).customerMessageSent,false);
+   assert.equal((await call(path+"/"+id+"/escalation-review","POST",{decision:"resolve",note:"Cannot approve again."},manager)).status,409);
    assert.equal((await call(path+"/"+id+"/status","POST",{status:"closed"},b)).status,403);
    assert.equal((await call(path+"/"+id+"/status","POST",{status:"closed"},manager)).status,200);
    assert.equal((await call(path+"/"+id+"/note","POST",{internalOnly:true,note:"Attempt after closure."},b)).status,409);
@@ -98,6 +131,10 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.ok(body.events.some(e=>e.event_type==="claimed"));
    assert.ok(body.events.some(e=>e.event_type==="assigned"));
    assert.ok(body.events.some(e=>e.event_type==="status_changed"));
+   assert.ok(body.events.some(e=>e.event_type==="escalated"));
+   assert.ok(body.events.some(e=>e.event_type==="escalation_reviewed"));
+   const auditTeam=await pool.query("SELECT COUNT(*)::int AS count FROM industry_support_team_audit WHERE target_id=$1",[ids[1]]);
+   assert.ok(auditTeam.rows[0].count>=2);
    const audits=await pool.query("SELECT COUNT(*)::int AS count FROM industry_support_case_events WHERE case_id=$1",[id]);
    assert.ok(audits.rows[0].count>=6);
    assert.equal((await call("/founder/overview","GET",undefined,a)).status,403);
