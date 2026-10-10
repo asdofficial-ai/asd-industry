@@ -46,6 +46,7 @@ test("executive assistant is labeled offline, does not fabricate manager updates
 test("public customer identity directory does not link to Founder login",()=>{
  const hub=read("identity-hub.html");
  assert.doesNotMatch(hub,/href="\/founder-console\.html"/);
+ assert.doesNotMatch(hub,/Founder Command Center/);
  const staff=read("staff-console.html"),staffScript=read("staff-console.js");
  assert.match(staff,/id="founderNav" hidden/);
  assert.match(staffScript,/user\.role!=="founder"/);
