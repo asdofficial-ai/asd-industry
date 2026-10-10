@@ -121,6 +121,7 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
     status:"escalated",category:"technical",reason:"This sample case needs independent manager analysis."
    },b)).status,200);
    assert.equal((await call(path+"/"+id+"/status","POST",{status:"resolved"},manager)).status,409);
+   assert.equal((await call(path+"/"+id+"/assign","POST",{agentId:ids[0]},manager)).status,409);
    assert.equal((await call("/support/escalations","GET",undefined,b)).status,403);
    const escalationQueue=await call("/support/escalations","GET",undefined,manager);
    assert.equal(escalationQueue.status,200);
