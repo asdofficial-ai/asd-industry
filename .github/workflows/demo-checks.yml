@@ -27,3 +27,5 @@ jobs:
         run: node tests/mobile-layout.e2e.cjs
       - name: Test account shell and separated profile flow
         run: node tests/profile-flows.e2e.cjs
+      - name: Test scrollable project browse, filters and saved interests
+        run: node tests/project-board.e2e.cjs

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/access.css">
   <link rel="stylesheet" href="/mobile-home.css">
   <link rel="stylesheet" href="/profile-account.css">
+  <link rel="stylesheet" href="/project-board.css">
   <script src="/country-picker.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
@@ -303,7 +304,41 @@
       </div>
     </section>
     <section class="view hidden" id="view-ideas" data-view="ideas" aria-labelledby="ideaTitle">
-      <div class="page-heading"><p class="kicker">02 / FROM SPARK TO PROJECT</p><h1 id="ideaTitle">Find your <em>people.</em></h1><p>Describe something you want to build. We'll show an illustrative skills-based match with fictional sample builders.</p></div>
+      <div class="page-heading"><p class="kicker">02 / FIND YOUR TEAM</p><h1 id="ideaTitle">Find your <em>people.</em></h1><p>Browse projects looking for contributors, or share your own idea to discover sample teammates. All project listings and joins are examples in this preview.</p></div>
+      <section class="open-projects-section" id="openProjectsSection" aria-labelledby="openProjectsHeading">
+        <div class="open-projects-header">
+          <div>
+            <p class="kicker">EXPLORE / BUILD WITH OTHERS</p>
+            <h2 id="openProjectsHeading">Projects looking for <em>teammates.</em></h2>
+            <p>School, technology and community ideas where people could contribute their skills. <strong>All listings are fictional examples.</strong></p>
+          </div>
+          <button type="button" id="postProjectJump" class="btn btn-accent project-post-cta">＋ I need teammates</button>
+        </div>
+        <div class="open-projects-tools">
+          <label class="open-project-search-label" for="projectBrowseSearch">
+            <span class="sr-only">Search open projects</span>
+            <input type="search" id="projectBrowseSearch" maxlength="60" placeholder="⌕ Search projects or skills…" autocomplete="off">
+          </label>
+          <label for="projectBrowseCategory" class="open-project-filter-label">
+            <span class="sr-only">Filter project type</span>
+            <select id="projectBrowseCategory">
+              <option value="all">All projects</option>
+              <option value="school">School projects</option>
+              <option value="technology">Technology</option>
+              <option value="community">Community</option>
+              <option value="creative">Creative</option>
+            </select>
+          </label>
+          <span class="open-projects-count" id="openProjectsCount" aria-live="polite">Browse sample projects</span>
+          <div class="open-projects-nav" aria-label="Scroll project cards">
+            <button type="button" id="projectsScrollBack" class="open-project-scroll-button" aria-label="Scroll projects left">←</button>
+            <button type="button" id="projectsScrollForward" class="open-project-scroll-button" aria-label="Scroll projects right">→</button>
+          </div>
+        </div>
+        <div id="openProjectsList" class="open-projects-list" aria-label="Scrollable example projects looking for members" tabindex="0"></div>
+        <p class="open-projects-disclaimer">ⓘ Choosing <strong>I'm interested</strong> only bookmarks a fictional project in this browser tab. No one receives a join request and no team is formed.</p>
+        <p id="openProjectsStatus" class="open-projects-status" role="status" aria-live="polite"></p>
+      </section>
       <div class="content-grid">
         <form class="panel form-panel" id="ideaForm">
           <div class="panel-header"><h2>Your project idea</h2><span class="tag">SANDBOX MATCHING</span></div>

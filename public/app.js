@@ -3,6 +3,30 @@
 "use strict";
 (() => {
   const STORE_KEY = "asd-industry-v03-demo-session";
+  // These sample projects are fictional; no actual people or school listings are implied.
+  const openProjectExamples = [
+    {id:"study-guide",title:"StudyCircle",category:"school",label:"School project",
+      summary:"A simple revision hub where classmates can share practice questions and study plans.",
+      roles:["Developer","Content writer"],topic:"Education",time:"Weekends",stage:"Idea stage",icon:"SC"},
+    {id:"science-fair",title:"Science Fair Planner",category:"school",label:"School project",
+      summary:"Help students organize science exhibitions, experiments and project milestones.",
+      roles:["Designer","Researcher"],topic:"Education",time:"Flexible",stage:"Planning",icon:"SF"},
+    {id:"agrolink",title:"FarmLink",category:"technology",label:"Technology",
+      summary:"A prototype that helps local growers share available produce and find nearby buyers.",
+      roles:["Developer","Marketing"],topic:"Agriculture",time:"Evenings",stage:"Prototype",icon:"FL"},
+    {id:"cleanup",title:"Clean Streets Club",category:"community",label:"Community",
+      summary:"An idea for planning neighborhood cleanups and sharing useful recycling tips.",
+      roles:["Project planner","Designer"],topic:"Community",time:"Weekends",stage:"Idea stage",icon:"CS"},
+    {id:"creator-lab",title:"CreatorLab",category:"creative",label:"Creative",
+      summary:"A collaborative collection of short educational videos made with simple editing tools.",
+      roles:["Video editor","Content writer"],topic:"Content",time:"Flexible",stage:"Planning",icon:"CL"},
+    {id:"coding-buddy",title:"CodeBuddy",category:"technology",label:"Technology",
+      summary:"A beginner-friendly space for practicing coding exercises and tracking progress.",
+      roles:["Developer","UI/UX designer"],topic:"Apps",time:"Flexible",stage:"Prototype",icon:"CB"},
+    {id:"community-map",title:"Local Events Map",category:"community",label:"Community",
+      summary:"A community project concept for discovering public workshops, games and events.",
+      roles:["Researcher","Developer"],topic:"Websites",time:"Evenings",stage:"Idea stage",icon:"LM"}
+  ];
   const builders = [
     {id:"SAMPLE-01", nick:"CodeSprout", role:"Developer", interests:["Agriculture","Websites","Apps"], availability:"weekends"},
     {id:"SAMPLE-02", nick:"NovaDesign", role:"Designer", interests:["Apps","Design","Education"], availability:"evenings"},
@@ -29,7 +53,7 @@
         if (result && typeof result === "object") return result;
       }
     } catch (_) { /* storage disabled: in-memory only */ }
-    return {entryCompleted:false,profile:null,idea:null,project:null};
+    return {entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[]};
   }
   let state = loadState();
   const save = () => {
@@ -76,7 +100,7 @@
     if (to==="workspace") renderWorkspace();
     if (to==="chat") renderChat();
     if (to==="review") renderRisks();
-    if (to==="ideas") renderMatches();
+    if (to==="ideas") { renderMatches(); renderOpenProjects(); }
     if (to==="profile") renderBuilderProfile();
     if (to==="profile-edit") syncProfileEditor();
   }
@@ -341,7 +365,8 @@
         handle:deriveHandle(nick),bio:"",avatarStyle:"neutral",avatarImage:"",skills:[],completedProjects:[],ideasExplored:0,
         role:"",availability:"",interests:[]},
       idea:null,
-      project:null
+      project:null,
+      sampleProjectInterests:[]
     };
     save();
     // Populate the new builder editor with the demo's local identity.
@@ -357,7 +382,7 @@
     go("home");
   });
   function leaveDemo() {
-    state={entryCompleted:false,profile:null,idea:null,project:null};
+    state={entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[]};
     try { sessionStorage.removeItem(STORE_KEY); } catch (_) {}
     signupForm.reset();profileForm.reset();ideaForm.reset();
     byId("avatarUpload").value="";
@@ -430,6 +455,111 @@
   syncProfileEditor();
   renderEmailVerification();
 
+  // Browse fictional opportunities to collaborate. Bookmarking does not contact anyone.
+  function savedProjectInterests() {
+    if (!Array.isArray(state.sampleProjectInterests)) state.sampleProjectInterests=[];
+    state.sampleProjectInterests=state.sampleProjectInterests.filter(id=>openProjectExamples.some(item=>item.id===id));
+    return state.sampleProjectInterests;
+  }
+  const browseProjectsList=byId("openProjectsList");
+  const browseSearch=byId("projectBrowseSearch");
+  const browseCategory=byId("projectBrowseCategory");
+  function renderOpenProjects() {
+    const term=browseSearch.value.trim().toLowerCase();
+    const category=browseCategory.value;
+    const items=openProjectExamples.filter(project=>{
+      if(category!=="all" && project.category!==category) return false;
+      const keywords=[project.title,project.label,project.summary,project.topic,...project.roles].join(" ").toLowerCase();
+      return keywords.includes(term);
+    });
+    browseProjectsList.replaceChildren();
+    byId("openProjectsCount").textContent=items.length+" example project"+(items.length===1?"":"s");
+    const interested=savedProjectInterests();
+    if (!items.length) {
+      const empty=node("div","open-projects-empty");
+      empty.append(node("b","","No projects match that search."));
+      empty.append(node("p","","Try another keyword or choose All projects."));
+      browseProjectsList.append(empty);
+      return;
+    }
+    // Your own idea remains visible only in your local browser, never published to others.
+    if (state.idea && (category==="all" || category==="technology" || category==="school" || category==="community" || category==="creative")) {
+      const ownTitle=String(state.idea.title || "Your idea");
+      const ownDescription=String(state.idea.description || "");
+      if(category==="all" && (!term || (ownTitle+" "+ownDescription).toLowerCase().includes(term))) {
+        const ownCard=node("article","open-project-card own-project-card");
+        const ownHead=node("div","open-project-card-top");
+        ownHead.append(node("span","open-project-tag local","YOUR PRIVATE DRAFT"));
+        ownHead.append(node("span","open-project-stage","ONLY YOU SEE THIS"));
+        ownCard.append(ownHead,node("h3","open-project-title",ownTitle));
+        ownCard.append(node("p","open-project-description",ownDescription));
+        ownCard.append(node("p","open-project-needs","Looking for: "+(state.idea.neededRole || "teammates")));
+        const review=node("button","btn btn-accent open-project-interest","Preview sample matches →");
+        review.type="button";
+        review.addEventListener("click",()=>byId("matchingPanel").scrollIntoView({behavior:"smooth",block:"center"}));
+        ownCard.append(node("p","open-project-card-note","Not a public listing. Others cannot discover this draft."),review);
+        browseProjectsList.append(ownCard);
+      }
+    }
+    items.forEach(project=>{
+      const card=node("article","open-project-card");
+      card.dataset.projectId=project.id;
+      const header=node("div","open-project-card-top");
+      header.append(node("span","open-project-tag",project.label));
+      header.append(node("span","open-project-stage",project.stage));
+      card.append(header);
+      const titleRow=node("div","open-project-title-row");
+      titleRow.append(node("span","open-project-monogram",project.icon),node("h3","open-project-title",project.title));
+      card.append(titleRow,node("p","open-project-description",project.summary));
+      card.append(node("p","open-project-needs-label","HELP WANTED · EXAMPLE"));
+      const roles=node("div","open-project-role-tags");
+      project.roles.forEach(role=>roles.append(node("span","open-project-role",role)));
+      card.append(roles);
+      const footer=node("div","open-project-info");
+      footer.append(node("span","",project.topic),node("span","","·"),node("span","",project.time));
+      card.append(footer);
+      const selected=interested.includes(project.id);
+      const button=node("button","open-project-interest"+(selected?" interested":""),selected?"✓ Interest saved":"I'm interested →");
+      button.type="button";
+      button.setAttribute("aria-pressed",String(selected));
+      button.setAttribute("aria-label",(selected?"Remove interest in ":"Save interest in ")+project.title+" example project");
+      button.addEventListener("click",()=>{
+        const current=savedProjectInterests();
+        if (current.includes(project.id)) {
+          state.sampleProjectInterests=current.filter(id=>id!==project.id);
+          byId("openProjectsStatus").textContent="Removed "+project.title+" from your private example interests. No one was contacted.";
+        } else {
+          state.sampleProjectInterests=[...current,project.id];
+          byId("openProjectsStatus").textContent="Interest saved in "+project.title+" · demo only. This is NOT a real join request.";
+        }
+        save();
+        renderOpenProjects();
+      });
+      card.append(button,node("p","open-project-card-note","Fictional sample · No real join requests"));
+      browseProjectsList.append(card);
+    });
+  }
+  browseSearch.addEventListener("input",()=>{
+    byId("openProjectsStatus").textContent="";
+    renderOpenProjects();
+    browseProjectsList.scrollLeft=0;
+  });
+  browseCategory.addEventListener("change",()=>{
+    byId("openProjectsStatus").textContent="";
+    renderOpenProjects();
+    browseProjectsList.scrollLeft=0;
+  });
+  byId("postProjectJump").addEventListener("click",()=>{
+    byId("ideaForm").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  byId("projectsScrollBack").addEventListener("click",()=>{
+    browseProjectsList.scrollBy({left:-Math.max(240,browseProjectsList.clientWidth*.82),behavior:"smooth"});
+  });
+  byId("projectsScrollForward").addEventListener("click",()=>{
+    browseProjectsList.scrollBy({left:Math.max(240,browseProjectsList.clientWidth*.82),behavior:"smooth"});
+  });
+  renderOpenProjects();
+
   const ideaForm = byId("ideaForm");
   const projectInterestInputs = [...document.querySelectorAll('input[name="ideaInterests"]')];
   function syncIdeaBuilderFromProfile() {
@@ -482,6 +612,7 @@
     save();
     byId("ideaStatus").textContent = "Idea saved locally. Matches below are fictional examples, not real people.";
     renderMatches();
+    renderOpenProjects();
     renderRisks();
   });
   if (state.idea) {
