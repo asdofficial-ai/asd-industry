@@ -90,7 +90,7 @@ test("separate creator manager dashboard controls fictitious applications and ca
   }
   assert.match(html,/data-nav="manager"/);
   assert.match(html,/FICTIONAL APPLICANTS/);
-  assert.match(html,/No real applicant approval/);
+  assert.match(html,/no real applicant approval/i);
   assert.match(html,/manager-dashboard\.js/);
   assert.match(html,/manager\.css/);
   assert.match(script,/ASDManagerDashboard\.create/);
