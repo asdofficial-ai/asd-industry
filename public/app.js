@@ -638,38 +638,117 @@
   syncProfileEditor();
   renderEmailVerification();
 
-  // Browse fictional opportunities to collaborate. Bookmarking does not contact anyone.
-  function savedProjectInterests() {
-    if (!Array.isArray(state.sampleProjectInterests)) state.sampleProjectInterests=[];
-    state.sampleProjectInterests=state.sampleProjectInterests.filter(id=>openProjectExamples.some(item=>item.id===id));
-    return state.sampleProjectInterests;
+  // Project memberships below exist only in sessionStorage. No network or real user joins.
+  function demoJoins() {
+    if (!state.sampleProjectJoins || typeof state.sampleProjectJoins!=="object" ||
+        Array.isArray(state.sampleProjectJoins)) state.sampleProjectJoins={};
+    return state.sampleProjectJoins;
+  }
+  function projectMembership(project) {
+    const join=demoJoins()[project.id];
+    return join && project.positions.some(p=>p.role===join.role) ? join : null;
+  }
+  function remainingPositionSpots(project,position) {
+    const membership=projectMembership(project);
+    return Math.max(0,position.capacity-position.filled-
+      (membership && membership.role===position.role ? 1 : 0));
+  }
+  function availableProjectSpots(project) {
+    return project.positions.reduce((sum,position)=>sum+remainingPositionSpots(project,position),0);
+  }
+  function totalProjectSpots(project) {
+    return project.positions.reduce((sum,position)=>sum+position.capacity,0);
+  }
+  function renderMyDemoSquads() {
+    const joined=openProjectExamples.filter(project=>projectMembership(project));
+    const section=byId("myDemoSquads"),target=byId("myDemoSquadsList");
+    section.hidden=joined.length===0;
+    target.replaceChildren();
+    joined.forEach(project=>{
+      const membership=projectMembership(project);
+      const full=availableProjectSpots(project)===0;
+      const entry=node("article","my-demo-squad");
+      const summary=node("div","my-demo-squad-summary");
+      summary.append(node("strong","",project.title));
+      summary.append(node("small","",membership.role+" · "+(full?"Team full · started (demo)":"Recruiting · "+availableProjectSpots(project)+" spots left")));
+      const button=node("button","btn btn-small btn-ghost","View details →");
+      button.type="button";
+      button.addEventListener("click",()=>openProjectDetails(project));
+      entry.append(summary,button);
+      target.append(entry);
+    });
   }
   const browseProjectsList=byId("openProjectsList");
   const browseSearch=byId("projectBrowseSearch");
   const browseCategory=byId("projectBrowseCategory");
+  const joinDialog=byId("projectJoinDialog");
+  let selectedProject=null;
+  function renderProjectDetails(project,message="") {
+    selectedProject=project;
+    const spots=availableProjectSpots(project),total=totalProjectSpots(project);
+    const membership=projectMembership(project);
+    const full=spots===0;
+    byId("projectJoinTitle").textContent=project.title;
+    byId("projectJoinExplanation").textContent=project.summary;
+    byId("projectJoinCapacity").textContent=spots+" of "+total+" spots open";
+    byId("projectJoinStart").textContent=full
+      ? "Started · demo only"
+      : "About "+project.estimateDays+" days (estimate)";
+    byId("projectJoinRule").textContent=full
+      ? "All demo roles are filled. This sample squad is marked as started and is no longer in the open-project list."
+      : "Illustrative estimate only. This sample project automatically starts once every position fills in this browser tab.";
+    const roleList=byId("projectJoinRoleList");
+    roleList.replaceChildren();
+    project.positions.forEach((position,index)=>{
+      const available=remainingPositionSpots(project,position);
+      const chosen=Boolean(membership && membership.role===position.role);
+      const label=node("label","project-role-option"+(available===0?" role-filled":""));
+      const input=document.createElement("input");
+      input.type="radio";
+      input.name="projectJoinRole";
+      input.value=position.role;
+      input.id="joinRoleOption"+index;
+      input.disabled=available===0 || Boolean(membership);
+      input.checked=chosen;
+      input.addEventListener("change",()=>{
+        byId("confirmProjectJoin").disabled=false;
+        byId("projectJoinMessage").textContent="";
+      });
+      const text=node("span","project-role-name",position.role);
+      const vacancy=node("span","project-role-vacancy",
+        chosen?"Your role · demo":(available===0?"Filled":available+" available"));
+      label.append(input,text,vacancy);
+      roleList.append(label);
+    });
+    const action=byId("confirmProjectJoin");
+    action.textContent=membership?"✓ Already in this demo squad":full?"Squad is full · demo":"Join demo squad →";
+    action.disabled=Boolean(membership)||full;
+    if(!membership && !full) action.disabled=true; // Select an open role first.
+    byId("projectJoinMessage").textContent=message || (membership
+      ? "Your chosen role: "+membership.role+". This is a browser-only demo membership."
+      : "Select one of the available positions to preview joining this squad.");
+  }
+  function openProjectDetails(project) {
+    renderProjectDetails(project);
+    if (!joinDialog.open) joinDialog.showModal();
+  }
   function renderOpenProjects() {
-    const term=browseSearch.value.trim().toLowerCase();
-    const category=browseCategory.value;
+    renderMyDemoSquads();
+    const term=browseSearch.value.trim().toLowerCase(),category=browseCategory.value;
     const items=openProjectExamples.filter(project=>{
-      if(category!=="all" && project.category!==category) return false;
-      const keywords=[project.title,project.label,project.summary,project.topic,...project.roles].join(" ").toLowerCase();
-      return keywords.includes(term);
+      if (availableProjectSpots(project)===0) return false; // Automatically hide full teams.
+      if (category!=="all" && project.category!==category) return false;
+      const words=[project.title,project.label,project.summary,project.topic,
+        ...project.positions.map(position=>position.role)].join(" ").toLowerCase();
+      return words.includes(term);
     });
     browseProjectsList.replaceChildren();
-    byId("openProjectsCount").textContent=items.length+" example project"+(items.length===1?"":"s");
-    const interested=savedProjectInterests();
-    if (!items.length) {
-      const empty=node("div","open-projects-empty");
-      empty.append(node("b","","No projects match that search."));
-      empty.append(node("p","","Try another keyword or choose All projects."));
-      browseProjectsList.append(empty);
-      return;
-    }
-    // Your own idea remains visible only in your local browser, never published to others.
-    if (state.idea && (category==="all" || category==="technology" || category==="school" || category==="community" || category==="creative")) {
+    byId("openProjectsCount").textContent=items.length+" open example project"+(items.length===1?"":"s");
+    // Your own idea stays a private draft. It is never an active public recruiting post.
+    if (state.idea && category==="all") {
       const ownTitle=String(state.idea.title || "Your idea");
       const ownDescription=String(state.idea.description || "");
-      if(category==="all" && (!term || (ownTitle+" "+ownDescription).toLowerCase().includes(term))) {
+      if(!term || (ownTitle+" "+ownDescription).toLowerCase().includes(term)) {
         const ownCard=node("article","open-project-card own-project-card");
         const ownHead=node("div","open-project-card-top");
         ownHead.append(node("span","open-project-tag local","YOUR PRIVATE DRAFT"));
@@ -694,34 +773,58 @@
       const titleRow=node("div","open-project-title-row");
       titleRow.append(node("span","open-project-monogram",project.icon),node("h3","open-project-title",project.title));
       card.append(titleRow,node("p","open-project-description",project.summary));
-      card.append(node("p","open-project-needs-label","HELP WANTED · EXAMPLE"));
+      const spots=availableProjectSpots(project);
+      card.append(node("p","open-project-vacancies",spots+" of "+totalProjectSpots(project)+" positions available"));
+      card.append(node("p","open-project-needs-label","POSITIONS OPEN · EXAMPLE"));
       const roles=node("div","open-project-role-tags");
-      project.roles.forEach(role=>roles.append(node("span","open-project-role",role)));
+      project.positions.filter(position=>remainingPositionSpots(project,position)>0).forEach(position=>{
+        roles.append(node("span","open-project-role",position.role+" · "+remainingPositionSpots(project,position)+" open"));
+      });
       card.append(roles);
       const footer=node("div","open-project-info");
       footer.append(node("span","",project.topic),node("span","","·"),node("span","",project.time));
       card.append(footer);
-      const selected=interested.includes(project.id);
-      const button=node("button","open-project-interest"+(selected?" interested":""),selected?"✓ Interest saved":"I'm interested →");
+      card.append(node("p","open-project-estimate","Expected start: ~"+project.estimateDays+" days · when squad fills"));
+      const membership=projectMembership(project);
+      const button=node("button","open-project-interest",membership?"✓ View my position →":"View roles & join →");
       button.type="button";
-      button.setAttribute("aria-pressed",String(selected));
-      button.setAttribute("aria-label",(selected?"Remove interest in ":"Save interest in ")+project.title+" example project");
-      button.addEventListener("click",()=>{
-        const current=savedProjectInterests();
-        if (current.includes(project.id)) {
-          state.sampleProjectInterests=current.filter(id=>id!==project.id);
-          byId("openProjectsStatus").textContent="Removed "+project.title+" from your private example interests. No one was contacted.";
-        } else {
-          state.sampleProjectInterests=[...current,project.id];
-          byId("openProjectsStatus").textContent="Interest saved in "+project.title+" · demo only. This is NOT a real join request.";
-        }
-        save();
-        renderOpenProjects();
-      });
-      card.append(button,node("p","open-project-card-note","Fictional sample · No real join requests"));
+      button.setAttribute("aria-label","View available roles and join the "+project.title+" fictional project");
+      button.addEventListener("click",()=>openProjectDetails(project));
+      card.append(button,node("p","open-project-card-note","Fictional sample · Not a real team"));
       browseProjectsList.append(card);
     });
+    if (!browseProjectsList.children.length) {
+      const empty=node("div","open-projects-empty");
+      empty.append(node("b","","No open projects match right now."));
+      empty.append(node("p","","Try another keyword or category. Full example squads are removed from this open list."));
+      browseProjectsList.append(empty);
+    }
   }
+  byId("projectJoinForm").addEventListener("submit",event=>{
+    event.preventDefault();
+    const project=selectedProject;
+    if (!project || !state.profile || projectMembership(project) || availableProjectSpots(project)===0) return;
+    const choice=byId("projectJoinRoleList").querySelector('input[name="projectJoinRole"]:checked');
+    const position=project.positions.find(p=>choice && p.role===choice.value);
+    if (!position || remainingPositionSpots(project,position)<=0) {
+      byId("projectJoinMessage").textContent="Choose an available position before joining.";
+      return;
+    }
+    demoJoins()[project.id]={role:position.role,joinedAt:new Date().toISOString()};
+    const started=availableProjectSpots(project)===0;
+    if (started) demoJoins()[project.id].startedAt=new Date().toISOString();
+    save();
+    renderOpenProjects();
+    const receipt=started
+      ? "Joined as "+position.role+". The sample squad is now FULL and automatically STARTED! It has left the open-project list. Find it under Your demo squads."
+      : "Joined as "+position.role+" (demo only). "+availableProjectSpots(project)+" positions remain. No real person was contacted.";
+    byId("openProjectsStatus").textContent=receipt;
+    renderProjectDetails(project,receipt);
+  });
+  byId("closeProjectJoinDialog").addEventListener("click",()=>joinDialog.close());
+  byId("cancelProjectJoin").addEventListener("click",()=>joinDialog.close());
+  joinDialog.addEventListener("close",()=>{selectedProject=null;});
+  joinDialog.addEventListener("click",event=>{if(event.target===joinDialog)joinDialog.close();});
   browseSearch.addEventListener("input",()=>{
     byId("openProjectsStatus").textContent="";
     renderOpenProjects();
