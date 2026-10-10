@@ -72,7 +72,7 @@
   draftForm.append(draftLabel,draftSubmit,elt("p","No customer messaging, network request or storage is connected.","fine"));
   draftForm.addEventListener("submit",event=>{
    event.preventDefault();if(!draft.reportValidity())return;
-   if(/password|secret|@|\\d{7,}/i.test(draft.value)){draft.value="";return;}
+   if(/password|secret|@|\d{7,}/i.test(draft.value)){draft.value="";return;}
    c.draft=draft.value.slice(0,500);render();
   });
   detail.append(draftForm);
