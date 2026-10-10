@@ -5,27 +5,209 @@
   const STORE_KEY = "asd-industry-v03-demo-session";
   // These sample projects are fictional; no actual people or school listings are implied.
   const openProjectExamples = [
-    {id:"study-guide",title:"StudyCircle",category:"school",label:"School project",
-      summary:"A simple revision hub where classmates can share practice questions and study plans.",
-      roles:["Developer","Content writer"],topic:"Education",time:"Weekends",stage:"Idea stage",icon:"SC"},
-    {id:"science-fair",title:"Science Fair Planner",category:"school",label:"School project",
-      summary:"Help students organize science exhibitions, experiments and project milestones.",
-      roles:["Designer","Researcher"],topic:"Education",time:"Flexible",stage:"Planning",icon:"SF"},
-    {id:"agrolink",title:"FarmLink",category:"technology",label:"Technology",
-      summary:"A prototype that helps local growers share available produce and find nearby buyers.",
-      roles:["Developer","Marketing"],topic:"Agriculture",time:"Evenings",stage:"Prototype",icon:"FL"},
-    {id:"cleanup",title:"Clean Streets Club",category:"community",label:"Community",
-      summary:"An idea for planning neighborhood cleanups and sharing useful recycling tips.",
-      roles:["Project planner","Designer"],topic:"Community",time:"Weekends",stage:"Idea stage",icon:"CS"},
-    {id:"creator-lab",title:"CreatorLab",category:"creative",label:"Creative",
-      summary:"A collaborative collection of short educational videos made with simple editing tools.",
-      roles:["Video editor","Content writer"],topic:"Content",time:"Flexible",stage:"Planning",icon:"CL"},
-    {id:"coding-buddy",title:"CodeBuddy",category:"technology",label:"Technology",
-      summary:"A beginner-friendly space for practicing coding exercises and tracking progress.",
-      roles:["Developer","UI/UX designer"],topic:"Apps",time:"Flexible",stage:"Prototype",icon:"CB"},
-    {id:"community-map",title:"Local Events Map",category:"community",label:"Community",
-      summary:"A community project concept for discovering public workshops, games and events.",
-      roles:["Researcher","Developer"],topic:"Websites",time:"Evenings",stage:"Idea stage",icon:"LM"}
+    {
+      "id": "study-guide",
+      "title": "StudyCircle",
+      "category": "school",
+      "label": "School project",
+      "summary": "A simple revision hub where classmates can share practice questions and study plans.",
+      "topic": "Education",
+      "time": "Weekends",
+      "stage": "Idea stage",
+      "icon": "SC",
+      "estimateDays": 10,
+      "positions": [
+        {
+          "role": "Project manager",
+          "capacity": 1,
+          "filled": 0
+        },
+        {
+          "role": "Developer",
+          "capacity": 2,
+          "filled": 1
+        },
+        {
+          "role": "Content writer",
+          "capacity": 1,
+          "filled": 0
+        }
+      ]
+    },
+    {
+      "id": "science-fair",
+      "title": "Science Fair Planner",
+      "category": "school",
+      "label": "School project",
+      "summary": "Help students organize science exhibitions, experiments and project milestones.",
+      "topic": "Education",
+      "time": "Flexible",
+      "stage": "Planning",
+      "icon": "SF",
+      "estimateDays": 6,
+      "positions": [
+        {
+          "role": "Project manager",
+          "capacity": 1,
+          "filled": 1
+        },
+        {
+          "role": "Designer",
+          "capacity": 1,
+          "filled": 1
+        },
+        {
+          "role": "Researcher",
+          "capacity": 1,
+          "filled": 0
+        }
+      ]
+    },
+    {
+      "id": "agrolink",
+      "title": "FarmLink",
+      "category": "technology",
+      "label": "Technology",
+      "summary": "A prototype that helps local growers share available produce and find nearby buyers.",
+      "topic": "Agriculture",
+      "time": "Evenings",
+      "stage": "Prototype",
+      "icon": "FL",
+      "estimateDays": 14,
+      "positions": [
+        {
+          "role": "Project manager",
+          "capacity": 1,
+          "filled": 1
+        },
+        {
+          "role": "Developer",
+          "capacity": 2,
+          "filled": 1
+        },
+        {
+          "role": "Marketing",
+          "capacity": 1,
+          "filled": 0
+        }
+      ]
+    },
+    {
+      "id": "cleanup",
+      "title": "Clean Streets Club",
+      "category": "community",
+      "label": "Community",
+      "summary": "An idea for planning neighborhood cleanups and sharing useful recycling tips.",
+      "topic": "Community",
+      "time": "Weekends",
+      "stage": "Idea stage",
+      "icon": "CS",
+      "estimateDays": 8,
+      "positions": [
+        {
+          "role": "Team manager",
+          "capacity": 1,
+          "filled": 0
+        },
+        {
+          "role": "Designer",
+          "capacity": 1,
+          "filled": 0
+        },
+        {
+          "role": "Community coordinator",
+          "capacity": 2,
+          "filled": 1
+        }
+      ]
+    },
+    {
+      "id": "creator-lab",
+      "title": "CreatorLab",
+      "category": "creative",
+      "label": "Creative",
+      "summary": "A collaborative collection of short educational videos made with simple editing tools.",
+      "topic": "Content",
+      "time": "Flexible",
+      "stage": "Planning",
+      "icon": "CL",
+      "estimateDays": 12,
+      "positions": [
+        {
+          "role": "Project manager",
+          "capacity": 1,
+          "filled": 0
+        },
+        {
+          "role": "Video editor",
+          "capacity": 1,
+          "filled": 0
+        },
+        {
+          "role": "Content writer",
+          "capacity": 2,
+          "filled": 1
+        }
+      ]
+    },
+    {
+      "id": "coding-buddy",
+      "title": "CodeBuddy",
+      "category": "technology",
+      "label": "Technology",
+      "summary": "A beginner-friendly space for practicing coding exercises and tracking progress.",
+      "topic": "Apps",
+      "time": "Flexible",
+      "stage": "Prototype",
+      "icon": "CB",
+      "estimateDays": 9,
+      "positions": [
+        {
+          "role": "Project manager",
+          "capacity": 1,
+          "filled": 1
+        },
+        {
+          "role": "Developer",
+          "capacity": 2,
+          "filled": 1
+        },
+        {
+          "role": "UI/UX designer",
+          "capacity": 1,
+          "filled": 0
+        }
+      ]
+    },
+    {
+      "id": "community-map",
+      "title": "Local Events Map",
+      "category": "community",
+      "label": "Community",
+      "summary": "A community project concept for discovering public workshops, games and events.",
+      "topic": "Websites",
+      "time": "Evenings",
+      "stage": "Idea stage",
+      "icon": "LM",
+      "estimateDays": 15,
+      "positions": [
+        {
+          "role": "Product manager",
+          "capacity": 1,
+          "filled": 0
+        },
+        {
+          "role": "Researcher",
+          "capacity": 1,
+          "filled": 0
+        },
+        {
+          "role": "Developer",
+          "capacity": 1,
+          "filled": 1
+        }
+      ]
+    }
   ];
   const builders = [
     {id:"SAMPLE-01", nick:"CodeSprout", role:"Developer", interests:["Agriculture","Websites","Apps"], availability:"weekends"},
@@ -53,7 +235,7 @@
         if (result && typeof result === "object") return result;
       }
     } catch (_) { /* storage disabled: in-memory only */ }
-    return {entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[]};
+    return {entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[],sampleProjectJoins:{}};
   }
   let state = loadState();
   const save = () => {
@@ -366,7 +548,8 @@
         role:"",availability:"",interests:[]},
       idea:null,
       project:null,
-      sampleProjectInterests:[]
+      sampleProjectInterests:[],
+      sampleProjectJoins:{}
     };
     save();
     // Populate the new builder editor with the demo's local identity.
@@ -382,7 +565,7 @@
     go("home");
   });
   function leaveDemo() {
-    state={entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[]};
+    state={entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[],sampleProjectJoins:{}};
     try { sessionStorage.removeItem(STORE_KEY); } catch (_) {}
     signupForm.reset();profileForm.reset();ideaForm.reset();
     byId("avatarUpload").value="";
