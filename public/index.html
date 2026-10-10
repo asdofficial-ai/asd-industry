@@ -336,9 +336,45 @@
           </div>
         </div>
         <div id="openProjectsList" class="open-projects-list" aria-label="Scrollable example projects looking for members" tabindex="0"></div>
-        <p class="open-projects-disclaimer">ⓘ Choosing <strong>I'm interested</strong> only bookmarks a fictional project in this browser tab. No one receives a join request and no team is formed.</p>
+        <section id="myDemoSquads" class="my-demo-squads" aria-labelledby="myDemoSquadsHeading" hidden>
+          <div class="my-demo-squads-header">
+            <h3 id="myDemoSquadsHeading">Your demo squads</h3>
+            <span class="open-project-tag local">PRIVATE TO THIS TAB</span>
+          </div>
+          <p>Teams you've joined in this simulation. Full teams no longer appear in the open-project carousel.</p>
+          <div id="myDemoSquadsList" class="my-demo-squads-list"></div>
+        </section>
+        <p class="open-projects-disclaimer">ⓘ Tap <strong>View roles &amp; join</strong> to check vacancies and the expected start. Joining is a <strong>browser-only simulation</strong>—no real people are contacted or added to a team. A full simulated squad automatically closes and leaves this open-project list.</p>
         <p id="openProjectsStatus" class="open-projects-status" role="status" aria-live="polite"></p>
       </section>
+      <dialog id="projectJoinDialog" class="project-join-dialog" aria-labelledby="projectJoinTitle" aria-describedby="projectJoinExplanation">
+        <div class="project-join-dialog-inner">
+          <div class="project-join-dialog-head">
+            <span class="open-project-tag">SAMPLE PROJECT · DEMO ONLY</span>
+            <button type="button" class="project-join-close" id="closeProjectJoinDialog" aria-label="Close project details">✕</button>
+          </div>
+          <h2 id="projectJoinTitle">Project details</h2>
+          <p id="projectJoinExplanation" class="project-join-summary"></p>
+          <div class="project-join-facts">
+            <div><small>OPEN SPOTS</small><strong id="projectJoinCapacity"></strong></div>
+            <div><small>EXPECTED KICKOFF</small><strong id="projectJoinStart"></strong></div>
+          </div>
+          <p id="projectJoinRule" class="project-join-rule">Example timeline. The project starts automatically once the last team role is filled in this browser demo.</p>
+          <form id="projectJoinForm">
+            <fieldset class="project-role-fieldset">
+              <legend>Choose a position</legend>
+              <p>Available positions are selectable. Full positions are marked <b>Filled</b>.</p>
+              <div id="projectJoinRoleList" class="project-join-role-list"></div>
+            </fieldset>
+            <p id="projectJoinMessage" class="project-join-message" role="status" aria-live="polite"></p>
+            <div class="project-join-actions">
+              <button type="button" class="btn btn-ghost" id="cancelProjectJoin">Close</button>
+              <button class="btn btn-accent" id="confirmProjectJoin" type="submit">Join demo squad →</button>
+            </div>
+          </form>
+          <p class="project-join-privacy">No real registration, invitation, recruiting, messaging or confirmed start date. This is a fictional example.</p>
+        </div>
+      </dialog>
       <div class="content-grid">
         <form class="panel form-panel" id="ideaForm">
           <div class="panel-header"><h2>Your project idea</h2><span class="tag">SANDBOX MATCHING</span></div>
