@@ -25,10 +25,11 @@ jobs:
       - run: node --check lib/human-staff-api.js
       - run: node --check lib/staff-auth-core.js
       - run: node --check lib/identity-roles.js && node --check lib/founder-emergency.js && node --check public/identity-console.js && node --check public/verified-team.js
+      - run: node --check public/founder-design.js && node --check public/founder-private.js
       - run: node --check scripts/staff-migrate.js
       - run: node --check scripts/staff-provision.js
       - run: node --check public/app.js
-      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/identity-roles.test.js
+      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/identity-roles.test.js tests/founder-ui.test.js
 
   postgres-integration:
     runs-on: ubuntu-latest
