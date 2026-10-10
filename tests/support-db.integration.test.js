@@ -135,6 +135,9 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.equal((await call(path+"/"+id+"/status","POST",{status:"closed"},b)).status,403);
    assert.equal((await call(path+"/"+id+"/status","POST",{status:"closed"},manager)).status,200);
    assert.equal((await call(path+"/"+id+"/note","POST",{internalOnly:true,note:"Attempt after closure."},b)).status,409);
+   assert.equal((await call(path+"/"+id+"/draft","PATCH",{
+    draft:"Another fictional training response must be blocked after closure.",syntheticAdultTest:true
+   },b)).status,409);
    const detail=await call(path+"/"+id,"GET",undefined,manager);
    const body=await detail.json();
    assert.equal(body.outboundSent,false);
@@ -144,6 +147,7 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.ok(body.events.some(e=>e.event_type==="status_changed"));
    assert.ok(body.events.some(e=>e.event_type==="escalated"));
    assert.ok(body.events.some(e=>e.event_type==="escalation_reviewed"));
+   assert.ok(body.events.some(e=>e.event_type==="reply_drafted"));
    const auditTeam=await pool.query("SELECT COUNT(*)::int AS count FROM industry_support_team_audit WHERE target_id=$1",[ids[1]]);
    assert.ok(auditTeam.rows[0].count>=2);
    const audits=await pool.query("SELECT COUNT(*)::int AS count FROM industry_support_case_events WHERE case_id=$1",[id]);
