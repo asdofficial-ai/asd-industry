@@ -14,6 +14,7 @@ async function run(){
   await client.query(fs.readFileSync(path.join(__dirname,"../db/migrations/001_staff_review.sql"),"utf8"));
   await client.query(fs.readFileSync(path.join(__dirname,"../db/migrations/002_identity_separation.sql"),"utf8"));
   await client.query(fs.readFileSync(path.join(__dirname,"../db/migrations/003_human_support_cases.sql"),"utf8"));
+  await client.query(fs.readFileSync(path.join(__dirname,"../db/migrations/004_support_profiles_escalations.sql"),"utf8"));
   console.log("ASD Industry staff migration complete.");
  }finally{await client.end();}
 }
