@@ -45,6 +45,13 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    },mgr);
    assert.equal(created.status,201);
    const cid=(await created.json()).data.id;
+   const invalidCase=await call("/support/cases","POST",{
+    subject:"Second fictional training sample",requesterAlias:"ImaginaryGuest",
+    description:"Another imaginary adult case for testing invalid training inputs.",
+    category:"general",priority:"low",syntheticAdultTest:true
+   },mgr);
+   assert.equal(invalidCase.status,201);
+   const validationPath="/support/cases/"+(await invalidCase.json()).data.id+"/training-thread";
    const path="/support/cases/"+cid+"/training-thread";
    assert.equal((await call(path)).status,401);
    assert.equal((await call(path,"GET",undefined,reviewer)).status,403);
@@ -55,10 +62,10 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    let initial=await thread.json();
    assert.deepEqual(initial.data,[]);assert.equal(initial.outboundDelivery,false);assert.equal(initial.customerAuthenticated,false);
    const question={speaker:"customer_simulated",body:"Hello, where are the sample project onboarding instructions?",requestId:crypto.randomUUID(),syntheticAdultTest:true};
-   assert.equal((await call(path,"POST",question,mgr,"https://other.example")).status,403);
-   assert.equal((await call(path,"POST",{...question,sendToEmail:true},mgr)).status,400);
-   assert.equal((await call(path,"POST",{...question,body:"Call 12345678900"},mgr)).status,400);
-   assert.equal((await call(path,"POST",{...question,speaker:"real_customer"},mgr)).status,400);
+   assert.equal((await call(validationPath,"POST",question,mgr,"https://other.example")).status,403);
+   assert.equal((await call(validationPath,"POST",{...question,sendToEmail:true},mgr)).status,400);
+   assert.equal((await call(validationPath,"POST",{...question,body:"Call 12345678900"},mgr)).status,400);
+   assert.equal((await call(validationPath,"POST",{...question,speaker:"real_customer"},mgr)).status,400);
    const sent=await call(path,"POST",question,mgr);
    assert.equal(sent.status,201);
    const first=await sent.json();
