@@ -20,19 +20,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 8
         },
         {
           "role": "Developer",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 10
         },
         {
           "role": "Content writer",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 6
         }
-      ]
+      ],
+      "aim": "Help students practice consistently and prepare for school assessments.",
+      "outcome": "Build a study schedule, shared question bank and revision reminders.",
+      "helpNeeded": "Create educational material, write accessible guides, and build a simple prototype.",
+      "projectedMonthlyProfit": null
     },
     {
       "id": "science-fair",
@@ -49,19 +56,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": null
         },
         {
           "role": "Designer",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": null
         },
         {
           "role": "Researcher",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         }
-      ]
+      ],
+      "aim": "Make it easier for learners to coordinate school science presentations.",
+      "outcome": "Build a planning checklist and experiment showcase for a mock science fair.",
+      "helpNeeded": "Plan the showcase, research safe demonstrations, and design the presentation.",
+      "projectedMonthlyProfit": null
     },
     {
       "id": "agrolink",
@@ -78,19 +92,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 10
         },
         {
           "role": "Developer",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 12
         },
         {
           "role": "Marketing",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 7
         }
-      ]
+      ],
+      "aim": "Help nearby farmers share available produce and reach interested local buyers.",
+      "outcome": "Prototype listings, availability updates and a simple produce discovery page.",
+      "helpNeeded": "Organize research, create a usable prototype and explain the concept to farmers.",
+      "projectedMonthlyProfit": 250000
     },
     {
       "id": "cleanup",
@@ -107,19 +128,26 @@
         {
           "role": "Team manager",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         },
         {
           "role": "Designer",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         },
         {
           "role": "Community coordinator",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": null
         }
-      ]
+      ],
+      "aim": "Make local neighborhoods cleaner through volunteer collaboration.",
+      "outcome": "Plan a cleanup calendar and a recycling awareness campaign.",
+      "helpNeeded": "Coordinate volunteer activities, design posters and explain safe cleanup steps.",
+      "projectedMonthlyProfit": null
     },
     {
       "id": "creator-lab",
@@ -136,19 +164,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 10
         },
         {
           "role": "Video editor",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 13
         },
         {
           "role": "Content writer",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 7
         }
-      ]
+      ],
+      "aim": "Help people make useful short learning videos together.",
+      "outcome": "Produce a series of short educational tutorials with clear editing standards.",
+      "helpNeeded": "Plan topics, write scripts and edit practice videos.",
+      "projectedMonthlyProfit": 90000
     },
     {
       "id": "coding-buddy",
@@ -165,19 +200,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 8
         },
         {
           "role": "Developer",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 12
         },
         {
           "role": "UI/UX designer",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 8
         }
-      ]
+      ],
+      "aim": "Help beginners build coding confidence with practical exercises.",
+      "outcome": "Prototype coding challenges, progress tracking and peer-learning guides.",
+      "helpNeeded": "Create exercises, build a simple app and improve interface accessibility.",
+      "projectedMonthlyProfit": 120000
     },
     {
       "id": "community-map",
@@ -194,19 +236,26 @@
         {
           "role": "Product manager",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         },
         {
           "role": "Researcher",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         },
         {
           "role": "Developer",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": null
         }
-      ]
+      ],
+      "aim": "Make public community events easier to discover.",
+      "outcome": "Prototype a map and directory of freely listed workshops and events.",
+      "helpNeeded": "Verify public event details, research locations and build the directory.",
+      "projectedMonthlyProfit": null
     }
   ];
   const builders = [
@@ -674,6 +723,68 @@
     byId("squadChatMessage").value="";
     go("squad-chat");
   }
+  function money(value) {
+    return "₦"+Number(value).toLocaleString("en-NG",{maximumFractionDigits:0});
+  }
+  function displayShare(value) {
+    return Number(value).toLocaleString("en-NG",{maximumFractionDigits:2})+"%";
+  }
+  function proposedRoleShare(project,position) {
+    const value=position.profitSharePct;
+    return value!==null && value!==undefined && value!=="" &&
+      Number.isFinite(Number(value)) && Number(value)>=0 && Number(value)<=100
+      ? Number(value) : null;
+  }
+  function projectProfitDescription(project) {
+    const offers=project.positions.map(p=>({role:p.role,capacity:p.capacity,share:proposedRoleShare(project,p)}));
+    const hasOffers=offers.some(p=>p.share!==null);
+    if (!hasOffers) return "No net-profit share has been proposed for this example project. Do not assume joining means paid work or ownership.";
+    const total=offers.reduce((n,p)=>n+(p.share||0)*p.capacity,0);
+    const creator=Math.max(0,100-total);
+    const breakdown=offers.map(p=>p.role+": "+(p.share===null?"not proposed":displayShare(p.share)+" per person")).join(" · ");
+    const projection=Number(project.projectedMonthlyProfit);
+    const estimate=Number.isFinite(projection)&&projection>0
+      ?" Fictional monthly net-profit scenario: "+money(projection)+". This is a hypothetical calculation, not a forecast."
+      :" No monthly profit amount has been estimated.";
+    return "Creator's example proposal (ONLY if net profit is earned): "+breakdown+
+      ". Suggested creator remainder: "+displayShare(creator)+"."+estimate+
+      " No guaranteed launch, profit, income, payout or contractual rights.";
+  }
+  function applyProjectBrief(project) {
+    byId("joinProjectAim").textContent=project.aim || project.summary || project.description || "Aim not provided.";
+    byId("joinProjectOutcome").textContent=project.outcome || "Outcome not specified yet.";
+    byId("joinProjectHelp").textContent=project.helpNeeded || "Responsibilities are not yet specified.";
+    byId("joinProjectProfit").textContent=projectProfitDescription(project);
+  }
+  function previewPrivateIdea() {
+    if (!state.idea) return;
+    const idea=state.idea,manager=state.project?.manager;
+    const roles=Array.isArray(manager?.positions)&&manager.positions.length
+      ? manager.positions
+      : [idea.neededRole,"Designer","Research"].filter((v,i,a)=>v&&a.indexOf(v)===i);
+    const proposed=idea.memberSharePct===null||idea.memberSharePct===undefined
+      ? null:Number(idea.memberSharePct);
+    const project={
+      title:idea.title,summary:idea.description,description:idea.description,
+      aim:state.project?.aim||idea.aim,outcome:state.project?.outcome||idea.outcome,
+      helpNeeded:state.project?.helpNeeded||idea.helpNeeded,
+      projectedMonthlyProfit:state.project?.projectedMonthlyProfit??idea.projectedMonthlyProfit,
+      positions:roles.map(role=>({role,capacity:1,profitSharePct:
+        manager && manager.positionShares && Object.hasOwn(manager.positionShares,role)
+          ? manager.positionShares[role] : proposed}))
+    };
+    selectedProject=null; // Private listing previews never allow joining.
+    byId("projectJoinTitle").textContent=project.title+" · private preview";
+    byId("projectJoinExplanation").textContent=project.summary;
+    applyProjectBrief(project);
+    byId("projectJoinCapacity").textContent="NOT PUBLISHED";
+    byId("projectJoinStart").textContent="Not scheduled";
+    byId("projectJoinRule").textContent="Only you can view this project draft. No real users can browse or apply to it yet.";
+    byId("projectJoinForm").hidden=true;
+    byId("joinedSquadChatShortcut").hidden=true;
+    if (!joinDialog.open) joinDialog.showModal();
+  }
+  document.addEventListener("asd-preview-project-brief",previewPrivateIdea);
   function renderMyDemoSquads() {
     const joined=openProjectExamples.filter(project=>projectMembership(project));
     const section=byId("myDemoSquads"),target=byId("myDemoSquadsList");
@@ -711,6 +822,8 @@
     const full=spots===0;
     byId("projectJoinTitle").textContent=project.title;
     byId("projectJoinExplanation").textContent=project.summary;
+    byId("projectJoinForm").hidden=false;
+    applyProjectBrief(project);
     byId("projectJoinCapacity").textContent=spots+" of "+total+" spots open";
     byId("projectJoinStart").textContent=full
       ? "Started · demo only"
@@ -739,6 +852,12 @@
       const vacancy=node("span","project-role-vacancy",
         chosen?"Your role · demo":(available===0?"Filled":available+" available"));
       label.append(input,text,vacancy);
+      const share=proposedRoleShare(project,position);
+      const profitTag=node("span","project-role-profit",
+        share===null?"Profit share: not proposed":"If profitable: "+displayShare(share)+" net profit / person");
+      if(share!==null && Number(project.projectedMonthlyProfit)>0)
+        profitTag.textContent+=" · hypothetical "+money(project.projectedMonthlyProfit*share/100)+"/month";
+      label.append(profitTag);
       roleList.append(label);
     });
     const action=byId("confirmProjectJoin");
@@ -781,10 +900,10 @@
         ownCard.append(ownHead,node("h3","open-project-title",ownTitle));
         ownCard.append(node("p","open-project-description",ownDescription));
         ownCard.append(node("p","open-project-needs","Looking for: "+(state.idea.neededRole || "teammates")));
-        const review=node("button","btn btn-accent open-project-interest","Preview sample matches →");
-        review.type="button";
-        review.addEventListener("click",()=>byId("matchingPanel").scrollIntoView({behavior:"smooth",block:"center"}));
-        ownCard.append(node("p","open-project-card-note","Not a public listing. Others cannot discover this draft."),review);
+        const preview=node("button","btn btn-accent open-project-interest","Preview my project description →");
+        preview.type="button";
+        preview.addEventListener("click",previewPrivateIdea);
+        ownCard.append(node("p","open-project-card-note","Not a public listing. Others cannot discover this draft."),preview);
         browseProjectsList.append(ownCard);
       }
     }
@@ -810,6 +929,10 @@
       footer.append(node("span","",project.topic),node("span","","·"),node("span","",project.time));
       card.append(footer);
       card.append(node("p","open-project-estimate","Expected start: ~"+project.estimateDays+" days · when squad fills"));
+      card.append(node("p","open-project-card-note",
+        project.positions.some(p=>proposedRoleShare(project,p)!==null)
+          ?"Proposed net-profit split · see roles before joining"
+          :"No paid/profit terms proposed · see full details"));
       const membership=projectMembership(project);
       const button=node("button","open-project-interest",membership?"✓ View my position →":"View roles & join →");
       button.type="button";
@@ -970,6 +1093,15 @@
     byId("ideaBuilderStatus").textContent = "";
     const title = byId("ideaTitleInput").value.trim();
     const description = byId("ideaDescription").value.trim();
+    const rawShare=byId("ideaMemberShare").value.trim();
+    const rawProfit=byId("ideaProfitEstimate").value.trim();
+    const memberSharePct=rawShare===""?null:Number(rawShare);
+    const projectedMonthlyProfit=rawProfit===""?null:Number(rawProfit);
+    if((memberSharePct!==null && (!Number.isFinite(memberSharePct)||memberSharePct<0||memberSharePct>33.33)) ||
+      (projectedMonthlyProfit!==null && (!Number.isSafeInteger(projectedMonthlyProfit)||projectedMonthlyProfit<0||projectedMonthlyProfit>999999999))) {
+      byId("ideaProfitNotice").textContent="Check the proposed percentages (maximum 33.33% × 3 positions) and example profit amount.";
+      return;
+    }
     if (title.length < 3 || description.length < 25) {
       byId("ideaStatus").textContent = "Please add a title and describe your idea in more detail.";
       return;
@@ -980,6 +1112,9 @@
     }
     state.idea = {
       title, description,
+      aim:byId("ideaAim").value.trim(),outcome:byId("ideaOutcome").value.trim(),
+      helpNeeded:byId("ideaHelp").value.trim(),
+      memberSharePct,projectedMonthlyProfit,
       topic:byId("ideaTopic").value,
       neededRole:byId("neededRole").value
     };
@@ -1000,6 +1135,12 @@
   if (state.idea) {
     byId("ideaTitleInput").value = state.idea.title || "";
     byId("ideaDescription").value = state.idea.description || "";
+    byId("ideaAim").value = state.idea.aim || "";
+    byId("ideaOutcome").value = state.idea.outcome || "";
+    byId("ideaHelp").value = state.idea.helpNeeded || "";
+    byId("ideaMemberShare").value=state.idea.memberSharePct===null||state.idea.memberSharePct===undefined
+      ?"":state.idea.memberSharePct;
+    byId("ideaProfitEstimate").value=state.idea.projectedMonthlyProfit??"";
     byId("ideaTopic").value = state.idea.topic || "";
     byId("neededRole").value = state.idea.neededRole || "";
   }
@@ -1050,7 +1191,11 @@
           members:[
             {nick:state.profile.nickname+" (you)",role:state.profile.role || "Project creator",demo:false}
           ],
-          manager:window.ASDManagerDashboard.create(matches,state.idea.neededRole),
+          manager:window.ASDManagerDashboard.create(matches,state.idea.neededRole,state.idea.memberSharePct),
+          aim:state.idea.aim || state.idea.description,
+          outcome:state.idea.outcome || "",
+          helpNeeded:state.idea.helpNeeded || "",
+          projectedMonthlyProfit:state.idea.projectedMonthlyProfit,
           tasks:[
             {text:"Agree on the problem we're solving",done:false},
             {text:"Describe a small first prototype",done:false}
@@ -1172,10 +1317,42 @@
   });
 
 
+  function renderChatHub() {
+    const hub=byId("chatHubRooms");
+    hub.replaceChildren();
+    if (state.project) {
+      const own=node("article","chat-hub-room");
+      const details=node("div","chat-hub-room-info");
+      details.append(node("strong","",state.project.title+" · My project"));
+      details.append(node("small","","Creator room · "+(state.project.messages?.length||0)+" private demo messages"));
+      const enter=node("button","btn btn-accent btn-small","Open my project chat →");
+      enter.type="button";enter.addEventListener("click",()=>{
+        byId("chatContent").scrollIntoView({behavior:"smooth",block:"start"});
+      });
+      own.append(details,enter);hub.append(own);
+    }
+    const squads=openProjectExamples.filter(project=>projectMembership(project));
+    squads.forEach(project=>{
+      const membership=projectMembership(project);
+      const room=node("article","chat-hub-room");
+      room.dataset.chatProjectId=project.id;
+      const details=node("div","chat-hub-room-info");
+      const bucket=squadChatBuckets()[project.id];
+      details.append(node("strong","",project.title));
+      details.append(node("small","",membership.role+" · "+(Array.isArray(bucket)?bucket.length:0)+" private demo messages · "+(availableProjectSpots(project)===0?"Started":"Recruiting")));
+      const button=node("button","btn btn-accent btn-small chat-hub-open","💬 Open Squad Chat →");
+      button.type="button";
+      button.setAttribute("aria-label","Open "+project.title+" squad chat");
+      button.addEventListener("click",()=>openSquadChat(project));
+      room.append(details,button);hub.append(room);
+    });
+    if(!state.project && !squads.length) hub.append(node("p","chat-hub-empty","No chats yet. Join a sample squad under Find Your Team, or create a project to open your own room."));
+    byId("chatEmpty").classList.toggle("hidden",Boolean(state.project)||squads.length>0);
+    byId("chatContent").classList.toggle("hidden",!state.project);
+  }
   function renderChat() {
     const p=state.project;
-    byId("chatEmpty").classList.toggle("hidden",!!p);
-    byId("chatContent").classList.toggle("hidden",!p);
+    renderChatHub();
     if (!p) return;
     byId("chatProjectTitle").textContent=p.title+" · Team room";
     const members=byId("chatMembers");

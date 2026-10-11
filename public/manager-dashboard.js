@@ -9,14 +9,19 @@
     return item;
   };
   const permittedStatus=new Set(["pending","approved","rejected"]);
-  function create(matches,neededRole) {
+  function create(matches,neededRole,memberSharePct=null) {
     const positions=[];
     const add=value=>{if(value && positions.length<3 && !positions.includes(value))positions.push(value);};
     add(neededRole);
     (matches||[]).forEach(candidate=>add(candidate.role));
     ["Designer","Research","Marketing","Developer","Content","Business strategy"].forEach(add);
+    const valid=memberSharePct!==null && memberSharePct!==undefined &&
+      Number.isFinite(Number(memberSharePct)) && Number(memberSharePct)>=0 &&
+      Number(memberSharePct)*positions.length<=100;
+    const positionShares={};
+    if(valid)positions.forEach(role=>{positionShares[role]=Number(memberSharePct);});
     return {
-      positions,
+      positions,positionShares,
       applications:(matches||[]).map(candidate=>({
         id:candidate.id,nick:candidate.nick,desiredRole:candidate.role,
         interests:(candidate.interests||[]).slice(0,3),
@@ -46,6 +51,8 @@
       save();
     }
     const data=project.manager;
+    if(!data.positionShares || typeof data.positionShares!=="object" || Array.isArray(data.positionShares))
+      data.positionShares={};
     if(!Array.isArray(data.activity))data.activity=[];
     data.applications.forEach(app=>{
       if(!permittedStatus.has(app.status))app.status="pending";
@@ -71,12 +78,99 @@
       activity(manager,"Sample position reopened · recruiting resumed");
     }
   }
+  let currentContext=null;
+  function sumShares(positions,shares) {
+    return positions.reduce((total,role)=>{
+      const val=shares[role];
+      return total+(val===null || val===undefined || val==="" ? 0 : Number(val));
+    },0);
+  }
+  function showSplitSummary() {
+    const fields=[...get("managerProfitShares").querySelectorAll("input[data-profit-role]")];
+    const total=fields.reduce((sum,input)=>sum+(input.value===""?0:Number(input.value)),0);
+    const residual=100-total;
+    const estimated=Number(get("managerProfitEstimate").value);
+    get("managerProfitSplitSummary").textContent=total>100.00001
+      ?"⚠️ Total proposed teammate percentages exceed 100%. Reduce them before saving."
+      :fields.every(input=>input.value==="")
+        ?"No profit shares proposed. This project may be unpaid; no payment or ownership is promised."
+        :"Proposed teammate allocation: "+total.toFixed(2)+"% of net profit. Unallocated balance (including the creator): "+
+          residual.toFixed(2)+"%. "+(estimated>0?"At a hypothetical "+estimated.toLocaleString("en-NG",{style:"currency",currency:"NGN",maximumFractionDigits:0})+" net-profit month, actual amounts could differ. ":"")+
+          "These percentages are non-binding and not guaranteed.";
+  }
+  function populateBrief(project,manager) {
+    get("managerBriefAim").value=project.aim||"";
+    get("managerBriefOutcome").value=project.outcome||"";
+    get("managerBriefHelp").value=project.helpNeeded||"";
+    get("managerProfitEstimate").value=project.projectedMonthlyProfit??"";
+    const holder=get("managerProfitShares");
+    holder.replaceChildren();
+    manager.positions.forEach((role,index)=>{
+      const label=el("label","manager-profit-role");
+      const title=el("span","",role+" · proposed % of net profit");
+      const input=el("input");
+      input.type="number";input.min="0";input.max="100";input.step="0.01";input.inputMode="decimal";
+      input.dataset.profitRole=role;input.id="managerShare"+index;
+      input.setAttribute("aria-label","Proposed net profit share for "+role);
+      const share=manager.positionShares[role];
+      input.value=share===null||share===undefined?"":share;
+      input.placeholder="Not proposed";input.addEventListener("input",showSplitSummary);
+      label.append(title,input);holder.append(label);
+    });
+    showSplitSummary();
+  }
+  function saveBrief() {
+    if(!currentContext || !currentContext.state.project)return false;
+    const {state,save}=currentContext;
+    const project=state.project,manager=normalize(project,save);
+    const fields=[...get("managerProfitShares").querySelectorAll("input[data-profit-role]")];
+    let sum=0;const proposed={};
+    for(const input of fields){
+      const number=input.value.trim()===""?null:Number(input.value);
+      if(number!==null && (!Number.isFinite(number)||number<0||number>100)){
+        get("managerBriefStatus").textContent="Enter a role percentage between 0 and 100, or leave it blank.";
+        return false;
+      }
+      if(number!==null){sum+=number;proposed[input.dataset.profitRole]=number;}
+    }
+    const raw=get("managerProfitEstimate").value.trim();
+    const estimated=raw===""?null:Number(raw);
+    if(sum>100.00001 || (estimated!==null && (!Number.isSafeInteger(estimated)||estimated<0||estimated>999999999))){
+      get("managerBriefStatus").textContent="Total team shares must be at most 100%; the example monthly net profit must be a valid nonnegative amount.";
+      return false;
+    }
+    project.aim=get("managerBriefAim").value.trim();
+    project.outcome=get("managerBriefOutcome").value.trim();
+    project.helpNeeded=get("managerBriefHelp").value.trim();
+    project.projectedMonthlyProfit=estimated;
+    manager.positionShares=proposed;
+    if(state.idea){
+      state.idea.aim=project.aim;state.idea.outcome=project.outcome;
+      state.idea.helpNeeded=project.helpNeeded;state.idea.projectedMonthlyProfit=estimated;
+    }
+    activity(manager,"Updated creator-written project brief and proposed profit terms (demo)");
+    save();
+    get("managerBriefStatus").textContent="✓ Saved locally. This project is not published and no financial agreement was created.";
+    showSplitSummary();
+    return true;
+  }
+  get("managerBriefForm").addEventListener("submit",event=>{
+    event.preventDefault();
+    if(!get("managerBriefForm").reportValidity())return;
+    saveBrief();
+  });
+  get("managerPreviewListing").addEventListener("click",()=>{
+    if(!get("managerBriefForm").reportValidity() || !saveBrief())return;
+    document.dispatchEvent(new Event("asd-preview-project-brief"));
+  });
   function render(state,save,renderWorkspace){
     const project=state.project;
     get("managerEmpty").classList.toggle("hidden",Boolean(project));
     get("managerContent").classList.toggle("hidden",!project);
     if(!project)return;
     const manager=normalize(project,save);
+    currentContext={state,save};
+    populateBrief(project,manager);
     stage(project,manager);
     const positions=slots(project,manager);
     const pending=manager.applications.filter(app=>app.status==="pending");
