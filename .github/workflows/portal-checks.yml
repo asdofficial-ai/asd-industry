@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -23,14 +25,15 @@ jobs:
       - run: node --check lib/ai-staff-runner.js
       - run: node --check public/staff-console.js
       - run: node --check lib/human-staff-api.js
-      - run: node --check lib/support-case-core.js && node --check lib/support-case-api.js && node --check public/support-workspace.js && node --check public/support-lab.js && node --check lib/support-operations-core.js && node --check lib/support-operations-api.js && node --check lib/support-training-core.js && node --check lib/support-training-api.js && node --check public/support-conversation-lab.js && node --check public/ai-first-support-lab.js && node --check lib/support-handoff-core.js
+      - run: node --check lib/support-case-core.js && node --check lib/support-case-api.js && node --check public/support-workspace.js && node --check public/support-lab.js && node --check lib/support-operations-core.js && node --check lib/support-operations-api.js && node --check lib/support-training-core.js && node --check lib/support-training-api.js && node --check public/support-conversation-lab.js && node --check public/ai-first-support-lab.js && node --check lib/support-handoff-core.js && node --check public/support-knowledge.js && node --check lib/support-ai-context.js && node --check scripts/check-support-knowledge.js
       - run: node --check lib/staff-auth-core.js
       - run: node --check lib/identity-roles.js && node --check lib/founder-emergency.js && node --check public/identity-console.js && node --check public/verified-team.js
       - run: node --check public/founder-design.js && node --check public/founder-private.js
+      - run: npm run check:support-knowledge
       - run: node --check scripts/staff-migrate.js
       - run: node --check scripts/staff-provision.js
       - run: node --check public/app.js
-      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/identity-roles.test.js tests/founder-ui.test.js tests/support-case-core.test.js tests/support-operations-core.test.js tests/support-training-core.test.js tests/support-training-ui.test.js tests/support-handoff.test.js
+      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/identity-roles.test.js tests/founder-ui.test.js tests/support-case-core.test.js tests/support-operations-core.test.js tests/support-training-core.test.js tests/support-training-ui.test.js tests/support-handoff.test.js tests/support-knowledge.test.js tests/support-ai-context.test.js
 
   postgres-integration:
     runs-on: ubuntu-latest
@@ -53,6 +56,8 @@ jobs:
       STAFF_ADMIN_DB_URL: postgresql://staff_ci:disposable_ci_only@127.0.0.1:5432/asd_industry_staff
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
