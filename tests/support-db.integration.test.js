@@ -84,6 +84,15 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    const result=await made.json(),id=result.data.id;
    assert.equal(result.delivery,"not_sent");
    assert.equal(result.synthetic,true);
+   assert.equal((await call(path+"/"+id+"/conversation","GET",undefined,reviewer)).status,403);
+   assert.equal((await call(path+"/"+id+"/conversation","GET",undefined,a)).status,404);
+   const seeded=await call(path+"/"+id+"/conversation","GET",undefined,manager);
+   assert.equal(seeded.status,200);
+   const seededBody=await seeded.json();
+   assert.equal(seededBody.simulationOnly,true);
+   assert.equal(seededBody.outboundMessagingEnabled,false);
+   assert.equal(seededBody.data[0].sender_kind,"customer_simulator");
+   assert.equal(seededBody.data[0].external_delivery,false);
    assert.equal((await call(path+"/"+id,"GET",undefined,a)).status,404);
    assert.equal((await call(path+"/"+id,"GET",undefined,b)).status,404);
    const agentList=await call(path,"GET",undefined,a);
@@ -99,6 +108,30 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.equal((await call(path+"/"+id,"GET",undefined,a)).status,200);
    assert.equal((await call(path+"/"+id,"GET",undefined,b)).status,404);
    assert.equal((await call(path+"/"+id,"GET",undefined,manager)).status,200);
+   const trainingRequest="12345678-1234-4123-8123-123456789012";
+   const agentReply={message:"Hello fictional visitor; please try the example onboarding steps.",requestId:trainingRequest,syntheticAdultTest:true};
+   const firstReply=await call(path+"/"+id+"/conversation","POST",agentReply,a);
+   assert.equal(firstReply.status,201);
+   assert.equal((await firstReply.json()).outboundSent,false);
+   const again=await call(path+"/"+id+"/conversation","POST",agentReply,a);
+   assert.equal(again.status,200);
+   assert.equal((await again.json()).deduplicated,true);
+   assert.equal((await call(path+"/"+id+"/conversation","POST",{
+    ...agentReply,message:"Different fictional text with the same duplicate key."
+   },a)).status,409);
+   assert.equal((await call(path+"/"+id+"/simulate-customer","POST",{
+    message:"This is an invented customer followup for an internal training case.",
+    requestId:"12345678-1234-4123-8123-333333333333",syntheticAdultTest:true
+   },a)).status,403);
+   const simulated=await call(path+"/"+id+"/simulate-customer","POST",{
+    message:"Thank you, fictional human agent. This training issue is still open.",
+    requestId:"12345678-1234-4123-8123-222222222222",syntheticAdultTest:true
+   },manager);
+   assert.equal(simulated.status,201);
+   const trainingHistory=await call(path+"/"+id+"/conversation","GET",undefined,a);
+   assert.equal(trainingHistory.status,200);
+   assert.equal((await trainingHistory.json()).data.length,3);
+   assert.equal((await call(path+"/"+id+"/conversation","GET",undefined,b)).status,404);
    assert.equal((await call(path+"/"+id+"/note","POST",{internalOnly:true,note:"Synthetic training note; continue checking."},b)).status,404);
    const note=await call(path+"/"+id+"/note","POST",{internalOnly:true,note:"This synthetic test needs a tutorial clarification."},a);
    assert.equal(note.status,201);
@@ -109,7 +142,9 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    const assigned=await call(path+"/"+id+"/assign","POST",{agentId:ids[1]},manager);
    assert.equal(assigned.status,200);
    assert.equal((await call(path+"/"+id,"GET",undefined,a)).status,404);
+   assert.equal((await call(path+"/"+id+"/conversation","GET",undefined,a)).status,404);
    assert.equal((await call(path+"/"+id,"GET",undefined,b)).status,200);
+   assert.equal((await call(path+"/"+id+"/conversation","GET",undefined,b)).status,200);
    assert.equal((await call(path+"/"+id+"/draft","GET",undefined,a)).status,404);
    const initial=await call(path+"/"+id+"/draft","GET",undefined,b);
    assert.equal(initial.status,200);
@@ -141,6 +176,10 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.equal((await call(path+"/"+id+"/status","POST",{status:"closed"},b)).status,403);
    assert.equal((await call(path+"/"+id+"/status","POST",{status:"closed"},manager)).status,200);
    assert.equal((await call(path+"/"+id+"/note","POST",{internalOnly:true,note:"Attempt after closure."},b)).status,409);
+   assert.equal((await call(path+"/"+id+"/conversation","POST",{
+    message:"An attempt to post a simulated reply after closure must fail.",
+    requestId:"12345678-1234-4123-8123-444444444444",syntheticAdultTest:true
+   },b)).status,409);
    assert.equal((await call(path+"/"+id+"/draft","PATCH",{
     draft:"Another fictional training response must be blocked after closure.",syntheticAdultTest:true
    },b)).status,409);
