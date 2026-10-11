@@ -12,7 +12,8 @@
     "check": "node --check server.js && node --check public/app.js",
     "staff:migrate": "node scripts/staff-migrate.js",
     "staff:provision": "node scripts/staff-provision.js",
-    "test:staff": "node --test tests/staff-auth.test.js"
+    "test:staff": "node --test tests/staff-auth.test.js",
+    "check:support-knowledge": "node scripts/check-support-knowledge.js"
   },
   "dependencies": {
     "express": "^4.21.2",
