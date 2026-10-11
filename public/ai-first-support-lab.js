@@ -48,14 +48,13 @@
  function decide(prompt){
   const q=prompt.toLowerCase();
   if(/\b(human|person|live agent|real agent|speak to|someone)\b/.test(q))
-   return {status:"needs_human",reason:"You've requested a human. AI support cannot take over human-only decisions or identity checks."};
-  if(/\b(reset|recover|lost access|sign in|login|locked out|account access|verify identity)\b/.test(q))
-   return {status:"needs_human",reason:"Account access and ownership checks require a verified human workflow. No resets are active in this demo."};
-  if(/\b(approve|approval|override|change.*decision|change.*role|manager|payment|refund|transfer|withdraw)\b/.test(q))
-   return {status:"needs_human",reason:"The AI assistant has no authority to approve, override, move money, or change employee/customer permissions."};
-  if(/\b(plan|planning|idea|ideas)\b/.test(q)&&/\b(project|projects)\b/.test(q))
-   return {status:"answered",text:"For a sample project, outline the idea, the audience, the main features, and a small first milestone. This is a general example, not a check of your ASD Industry account."};
-  return {status:"needs_human",reason:"The AI demo can't reliably answer that question. It should explain this instead of guessing, then offer human support."};
+   return {status:"needs_human",reason:"You requested a human. The AI cannot impersonate an employee or make human-only decisions."};
+  // Public knowledge is reviewed and versioned. It grants NO customer/employee permissions.
+  const knowledge=window.ASDSupportKnowledge;
+  if(!knowledge||!knowledge.validate)return {status:"needs_human",reason:"Support knowledge is temporarily unavailable. I cannot guess."};
+  const hit=knowledge.respond(prompt);
+  if(hit.status==="answered")return {status:"answered",text:hit.text,topicId:hit.topicId,knowledgeVersion:hit.version};
+  return {status:"needs_human",reason:hit.text,topicId:hit.topicId};
  }
  function aiAsk(message){
   add("customer",message);
