@@ -1,0 +1,67 @@
+/* Chat hub & creator project brief — browser-local prototypes, not real commerce. */
+.chat-hub-panel{margin-bottom:17px}
+.chat-hub-rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:11px}
+.chat-hub-room{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:13px;min-width:0;
+  padding:15px;border:1px solid #376389;border-radius:12px;background:linear-gradient(120deg,#1b3b56,#11283d)
+}
+.chat-hub-room-info{flex:1 1 160px;min-width:0}
+.chat-hub-room-info strong{display:block;font-size:13px;color:#eff7ff;line-height:1.45;overflow-wrap:anywhere}
+.chat-hub-room-info small{display:block;font-size:11px;color:#b2ccdd;line-height:1.6;margin-top:5px}
+.chat-hub-room .btn{min-height:42px;font-size:11px;white-space:normal;justify-content:center;flex:1 1 175px}
+.chat-hub-empty{color:#a9c4d9;font-size:12px;line-height:1.75}
+.creator-brief-fields{margin:22px 0;padding:21px;border:1px solid #3c6483;border-radius:13px;
+  background:linear-gradient(130deg,#173750,#0c263b)}
+.creator-brief-fields h3{font-size:20px;color:#f2f9ff;letter-spacing:-.04em;margin:7px 0}
+.creator-brief-fields>p:not(.kicker){color:#b4cde0;font-size:12px;line-height:1.7;margin:0 0 18px}
+.creator-brief-fields label{display:block;margin:12px 0;color:#e5f3ff;font-weight:800;font-size:12px}
+.creator-brief-fields textarea,.creator-brief-fields input,
+.manager-brief-form textarea,.manager-brief-form input{
+  box-sizing:border-box;display:block;width:100%;margin-top:7px;padding:11px 12px;
+  border:1px solid #416786;border-radius:9px;color:#eaf5ff;background:#1a354b;font:inherit;
+  font-weight:500;font-size:12px;line-height:1.6;resize:vertical;min-width:0
+}
+.creator-brief-fields textarea:focus-visible,.creator-brief-fields input:focus-visible,
+.manager-brief-form textarea:focus-visible,.manager-brief-form input:focus-visible{
+  outline:2px solid #7cc0ff;outline-offset:2px
+}
+.creator-brief-fields textarea::placeholder,.creator-brief-fields input::placeholder,
+.manager-brief-form textarea::placeholder,.manager-brief-form input::placeholder{color:#94b5ce}
+.creator-profit-fields{border-top:1px solid #36546e;padding-top:15px;margin-top:19px}
+.creator-profit-fields h4{font-size:15px;color:#c3e8ff;margin:0 0 5px}
+.creator-profit-fields p{font-size:11px;color:#b7cbdf;line-height:1.7;margin:5px 0 11px}
+.creator-profit-fields .form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.creator-brief-note{color:#d0dfe8!important}
+.project-brief-viewer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:17px 0}
+.project-brief-item{background:#162f46;border:1px solid #355a7a;padding:12px 13px;border-radius:10px;min-width:0}
+.project-brief-item strong{color:#d6edff;font-size:11px;line-height:1.5;display:block}
+.project-brief-item p{font-size:11px;color:#b9d1e3;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0 0}
+.project-brief-item.finance{grid-column:1/-1;background:#152f38;border-color:#47766b}
+.project-brief-item.finance strong{color:#bbf0d8}
+.project-profit-disclaimer{font-size:10px;color:#a6c4d5;line-height:1.65;border-left:2px solid #78b5ed;padding-left:10px;margin:12px 0}
+.project-role-profit{display:block;flex-basis:100%;font-size:10px;line-height:1.5;margin-left:28px;color:#afdcd6}
+.project-role-option{flex-wrap:wrap;align-content:center}
+.project-role-name{flex-basis:calc(100% - 130px)}
+.manager-project-brief{margin:17px 0}
+.manager-brief-form{display:grid;gap:14px}
+.manager-brief-form>label{display:block;color:#d5edff;font-size:11px;font-weight:850;line-height:1.5}
+.manager-profit-shares{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.manager-profit-role{font-size:11px;font-weight:800;line-height:1.5;color:#bfdcf0;min-width:0}
+.manager-profit-role span{min-height:34px;display:block}
+.manager-profit-role input{width:100%;min-height:43px}
+.manager-profit-summary{font-size:11px;color:#c4e6d8;line-height:1.7;margin:3px 0}
+.manager-brief-footer{display:flex;gap:9px;flex-wrap:wrap}
+.manager-brief-footer>.btn{min-height:43px;flex:1 1 170px;justify-content:center;text-align:center;white-space:normal}
+@media(max-width:660px){
+  .chat-hub-room{padding:13px}
+  .creator-brief-fields{padding:15px;margin:18px 0}
+  .creator-profit-fields .form-row{grid-template-columns:1fr}
+  .project-brief-viewer{grid-template-columns:1fr}
+  .project-brief-item.finance{grid-column:auto}
+  .manager-profit-shares{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:350px){
+  .manager-profit-shares{grid-template-columns:1fr}
+  .project-role-profit{margin-left:0}
+  .project-role-name{flex-basis:100%}
+}
