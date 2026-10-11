@@ -12,8 +12,8 @@ test("simulated customer/agent conversation is visually separate from real emplo
  assert.doesNotMatch(preview,/type="password"|type="email"|autocomplete="username"/);
  assert.match(staff,/id="supportWorkspace" hidden/);
  const liveUI=read("support-workspace.js");
- assert.match(liveUI,//conversation/);
- assert.match(liveUI,//simulate-customer/);
+ assert.match(liveUI,/\/conversation/);
+ assert.match(liveUI,/\/simulate-customer/);
  assert.match(liveUI,/syntheticAdultTest:true/);
  assert.match(liveUI,/TRAINING SIMULATOR · INTERNAL ONLY/);
 });
