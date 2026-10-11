@@ -169,6 +169,7 @@
     responseSection.append(draftLabel,draftButton,e("p","Saved locally to the isolated test database. There is no Send button or outbound messaging service.","fine"));
     panel.append(responseSection);
    }
+   await renderTrainingConversation(id,panel,item);
    const events=e("div",undefined,"case-events");events.append(e("h3","Audit trail"));
    for(const v of data.events||[]){
     const line=e("div",undefined,"case-event");
@@ -179,6 +180,58 @@
    }
    panel.append(events);
   }catch(err){showError(err.message);}
+ }
+
+
+ async function renderTrainingConversation(id,panel,item){
+  const section=e("section",undefined,"training-chat");
+  section.append(e("span","TRAINING SIMULATOR · INTERNAL ONLY","eyebrow"),
+   e("h3","Customer ↔ Human Agent · Practice"),
+   e("p","These are fictional conversation messages. There is no live customer account, notification, email, or delivery.","fine"));
+  const thread=e("div",undefined,"training-thread");
+  thread.setAttribute("role","log");thread.setAttribute("aria-label","Simulation-only customer support messages");
+  section.append(thread);
+  const response=await api("/support/cases/"+id+"/conversation");
+  for(const message of response.data||[]){
+   const simulated=message.sender_kind==="customer_simulator";
+   const card=e("article",undefined,"training-bubble "+(simulated?"training-customer":"training-agent"));
+   card.append(e("span",simulated?"◌ CUSTOMER SIMULATOR":"✦ HUMAN AGENT · TRAINING","eyebrow"),
+    e("p",message.body),
+    e("small",new Date(message.created_at).toLocaleString()+" · NEVER DELIVERED"));
+   thread.append(card);
+  }
+  if(!thread.children.length)thread.append(e("p","No fictional messages have been recorded yet.","fine"));
+  thread.scrollTop=thread.scrollHeight;
+  if(!["closed","resolved","escalated"].includes(item.status)){
+   const makeMessageForm=(managerSimulator)=>{
+    const form=e("form",undefined,"training-compose");
+    const label=e("label",managerSimulator?"Simulate a fictional customer follow-up":"Write a human-agent training reply");
+    const input=e("textarea");input.rows=3;input.required=true;input.minLength=12;input.maxLength=900;
+    input.placeholder=managerSimulator?"Invent a harmless, fictional customer question":"Write an example response — not for real customers";
+    label.append(input);form.append(label);
+    const send=e("button",managerSimulator?"Add simulated customer follow-up":"Add simulated agent reply","primary");
+    send.type="submit";
+    form.append(send);
+    form.addEventListener("submit",async event=>{
+     event.preventDefault();
+     if(!form.reportValidity())return;
+     send.disabled=true;
+     try{
+      const route=managerSimulator?"/simulate-customer":"/conversation";
+      await post("/support/cases/"+id+route,{
+       message:input.value,syntheticAdultTest:true,requestId:crypto.randomUUID()
+      });
+      input.value="";
+      await refresh();
+     }catch(err){showError(err.message);}
+     finally{send.disabled=false;}
+    });
+    return form;
+   };
+   section.append(makeMessageForm(false));
+   if(role==="manager")section.append(makeMessageForm(true));
+  }else section.append(e("p","This case is read-only until authorized review or reopening.","fine"));
+  panel.append(section);
  }
 
  async function loadProfile(){
