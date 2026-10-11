@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/project-board.css">
   <link rel="stylesheet" href="/manager.css">
   <link rel="stylesheet" href="/squad-chat.css">
+  <link rel="stylesheet" href="/chat-brief.css">
   <script src="/country-picker.js" defer></script>
   <script src="/manager-dashboard.js" defer></script>
   <script src="/app.js" defer></script>
@@ -358,6 +359,12 @@
           </div>
           <h2 id="projectJoinTitle">Project details</h2>
           <p id="projectJoinExplanation" class="project-join-summary"></p>
+          <div class="project-brief-viewer" id="projectBriefViewer" aria-label="Project aim, goals, expected outcome and proposed earnings">
+            <div class="project-brief-item"><strong>🎯 What is the aim?</strong><p id="joinProjectAim"></p></div>
+            <div class="project-brief-item"><strong>🛠 What will the team build?</strong><p id="joinProjectOutcome"></p></div>
+            <div class="project-brief-item"><strong>🤝 What help is needed?</strong><p id="joinProjectHelp"></p></div>
+            <div class="project-brief-item finance"><strong>💰 Profit-sharing proposal · not guaranteed</strong><p id="joinProjectProfit"></p></div>
+          </div>
           <div class="project-join-facts">
             <div><small>OPEN SPOTS</small><strong id="projectJoinCapacity"></strong></div>
             <div><small>EXPECTED KICKOFF</small><strong id="projectJoinStart"></strong></div>
@@ -368,6 +375,7 @@
               <legend>Choose a position</legend>
               <p>Available positions are selectable. Full positions are marked <b>Filled</b>.</p>
               <div id="projectJoinRoleList" class="project-join-role-list"></div>
+              <p class="project-profit-disclaimer">Any percentage shown is a creator's illustrative proposal for a share of <b>net profit if earned</b>, not revenue, salary, ownership or a promise of payment. Real participation would require a reviewed agreement.</p>
             </fieldset>
             <p id="projectJoinMessage" class="project-join-message" role="status" aria-live="polite"></p>
             <div class="project-join-actions">
@@ -383,7 +391,24 @@
         <form class="panel form-panel" id="ideaForm">
           <div class="panel-header"><h2>Your project idea</h2><span class="tag">SANDBOX MATCHING</span></div>
           <label>Project name <input id="ideaTitleInput" name="title" required maxlength="70" placeholder="e.g. FarmLink marketplace"></label>
-          <label>Describe the problem and your idea <textarea name="description" id="ideaDescription" required minlength="25" maxlength="800" rows="6" placeholder="What problem are you solving, and how might the project help?"></textarea></label>
+          <label>Describe the problem and your idea <textarea name="description" id="ideaDescription" required minlength="25" maxlength="800" rows="5" placeholder="What problem are you solving, and how might the project help?"></textarea></label>
+          <section class="creator-brief-fields" aria-labelledby="creatorBriefHeading">
+            <p class="kicker">PROJECT CREATOR / WHAT OTHERS SHOULD KNOW</p>
+            <h3 id="creatorBriefHeading">Explain your project before anyone joins.</h3>
+            <p>People should know the purpose, expected outcome, the work involved, and whether any profit-sharing is being proposed.</p>
+            <label>Project aim <textarea id="ideaAim" maxlength="550" rows="3" placeholder="Why does this project exist? What problem should it solve?"></textarea></label>
+            <label>What will you build or deliver? <textarea id="ideaOutcome" maxlength="550" rows="3" placeholder="Explain the app, event, product, service or result your team wants to create."></textarea></label>
+            <label>What must new team members do? <textarea id="ideaHelp" maxlength="550" rows="3" placeholder="Describe responsibilities, needed skills and expected contributions."></textarea></label>
+            <div class="creator-profit-fields">
+              <h4>💰 Profit proposal (optional)</h4>
+              <p>If this succeeds and earns <b>net profit</b>, what share might each teammate receive? Leave blank if no split has been proposed. This is <b>not</b> an ownership, equity or payment agreement.</p>
+              <div class="form-row two-cols">
+                <label>Proposed net-profit share per teammate (%) <input id="ideaMemberShare" type="number" min="0" max="33.33" step="0.01" inputmode="decimal" placeholder="e.g. 10"></label>
+                <label>Illustrative monthly net profit (₦, optional) <input id="ideaProfitEstimate" type="number" min="0" max="999999999" step="1" inputmode="numeric" placeholder="Only if you have an estimate"></label>
+              </div>
+              <p class="creator-brief-note" id="ideaProfitNotice">A creator may adjust role-by-role proposals later in Manager. There is no guarantee of launch, earnings or any payout.</p>
+            </div>
+          </section>
           <div class="form-row two-cols">
             <label>Project focus <select id="ideaTopic" name="topic" required><option value="">Select a focus</option><option>Agriculture</option><option>AI</option><option>Apps</option><option>Websites</option><option>Business</option><option>Marketing</option><option>Design</option><option>Finance</option><option>Education</option><option>Gaming</option><option>Content</option><option>Other</option></select></label>
             <label>Skill you need most <select id="neededRole" name="neededRole" required><option value="">Select a skill</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option></select></label>
@@ -476,6 +501,24 @@
             <div class="manager-stat"><span>Open positions</span><strong id="managerCountOpen">3</strong></div>
             <div class="manager-stat"><span>Project kickoff</span><strong id="managerStartSummary">After team fills</strong></div>
           </div>
+          <section class="panel manager-project-brief" aria-labelledby="managerBriefHeading">
+            <div class="panel-header"><h2 id="managerBriefHeading">Project description &amp; proposed returns</h2><span class="tag">CREATOR EDITOR · DEMO</span></div>
+            <p class="manager-description">Describe the aim and work clearly. These details appear in your private listing preview, so viewers know what joining would mean. No real project is published yet.</p>
+            <form id="managerBriefForm" class="manager-brief-form">
+              <label>Aim / mission <textarea id="managerBriefAim" rows="2" maxlength="550" placeholder="What problem are you solving?"></textarea></label>
+              <label>Planned deliverable <textarea id="managerBriefOutcome" rows="2" maxlength="550" placeholder="What will be built or achieved?"></textarea></label>
+              <label>Member responsibilities <textarea id="managerBriefHelp" rows="2" maxlength="550" placeholder="What work is needed?"></textarea></label>
+              <p class="manager-description">A proposed percentage is for each <b>individual role</b> and is applied to net profit only if the project actually earns some. Every proposed share plus the creator's remaining share must total 100%.</p>
+              <div id="managerProfitShares" class="manager-profit-shares" aria-label="Proposed profit percentage by team position"></div>
+              <label>Illustrative monthly net profit (₦, optional) <input id="managerProfitEstimate" type="number" inputmode="numeric" min="0" max="999999999" step="1" placeholder="Optional scenario, not a forecast"></label>
+              <p id="managerProfitSplitSummary" class="manager-profit-summary"></p>
+              <div class="manager-brief-footer">
+                <button type="submit" class="btn btn-accent">Save project description →</button>
+                <button type="button" class="btn btn-ghost" id="managerPreviewListing">Preview how others would see it →</button>
+              </div>
+              <p id="managerBriefStatus" class="manager-profit-summary" role="status" aria-live="polite"></p>
+            </form>
+          </section>
           <div class="manager-grid">
             <section class="panel manager-inbox-panel" aria-labelledby="managerInboxTitle">
               <div class="panel-header"><h2 id="managerInboxTitle">Applications</h2><span class="tag">FICTIONAL APPLICANTS</span></div>
@@ -551,9 +594,14 @@
         <h1 id="chatTitle">Your team <em>chat.</em></h1>
         <p>A space for project discussions and decisions. This demo is private to your own tab — the sample teammates cannot read or reply to your messages.</p>
       </div>
+      <section class="panel chat-hub-panel" aria-labelledby="chatHubHeading">
+        <div class="panel-header"><h2 id="chatHubHeading">My chats</h2><span class="tag">PRIVATE PREVIEW</span></div>
+        <p class="manager-description">Your project room and the squads you joined appear here. Choose a team to open its separate chat.</p>
+        <div id="chatHubRooms" class="chat-hub-rooms"></div>
+      </section>
       <div id="chatEmpty" class="panel empty-state">
         <div class="empty-icon"><span>☰</span></div><h2>Your group chat starts with a project.</h2>
-        <p>Submit an idea, choose sample teammates, and create a simulated team. We'll open its dedicated chat room here.</p>
+        <p>Create your own project to unlock its creator room, or join an example squad from Find Your Team. Your joined squad chats will appear above.</p>
         <button class="btn btn-accent" type="button" data-nav="ideas">Find sample teammates →</button>
       </div>
       <div id="chatContent" class="hidden chat-layout">
