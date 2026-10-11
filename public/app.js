@@ -776,8 +776,6 @@
     selectedProject=null; // Private listing previews never allow joining.
     byId("projectJoinTitle").textContent=project.title+" · private preview";
     byId("projectJoinExplanation").textContent=project.summary;
-    byId("projectJoinForm").hidden=false;
-    applyProjectBrief(project);
     applyProjectBrief(project);
     byId("projectJoinCapacity").textContent="NOT PUBLISHED";
     byId("projectJoinStart").textContent="Not scheduled";
@@ -824,6 +822,8 @@
     const full=spots===0;
     byId("projectJoinTitle").textContent=project.title;
     byId("projectJoinExplanation").textContent=project.summary;
+    byId("projectJoinForm").hidden=false;
+    applyProjectBrief(project);
     byId("projectJoinCapacity").textContent=spots+" of "+total+" spots open";
     byId("projectJoinStart").textContent=full
       ? "Started · demo only"
