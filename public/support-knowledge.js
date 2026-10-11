@@ -1,0 +1,96 @@
+"use strict";
+/**
+ * ASD Industry AI Support — approved CUSTOMER-PUBLIC knowledge, snapshot 2026-10-11.
+ * Single source of truth for the browser demonstration and future private server adapter.
+ * Never include secrets, passwords, customer records, staff messages, internal Founder details,
+ * arbitrary user-uploaded instructions, or unreviewed repository files in public AI context.
+ * Status is explicit: "demo", "planned", or "disabled"; no live capabilities are implied.
+ */
+(function(root,factory){
+ const api=factory();
+ if(typeof module==="object"&&module.exports)module.exports=api;
+ else root.ASDSupportKnowledge=api;
+})(typeof globalThis!=="undefined"?globalThis:this,function(){
+ const reviewedAt="2026-10-11",version="2026.10.11.1";
+ const topics=[
+  {id:"about",title:"What ASD Industry is",tags:["what is asd industry","about asd industry","what is the platform","what does asd do"],status:"demo",answer:"ASD Industry is being developed as a platform for people to propose projects, find complementary skills, and organize teams. The current public site is an interactive demonstration, not a launched community.",source:"README.md"},
+  {id:"get-started",title:"Getting started",tags:["get started","start using","how to join","join asd industry","how to sign up","create account","register account"],status:"demo",answer:"The current public demonstration asks for a nickname, age group and interests. It creates a browser-local demo profile, not a real registered account. Real account registration and verification are not publicly enabled.",source:"README.md"},
+  {id:"real-signup",title:"Live account availability",tags:["real account","actual account","live signup","verified account","account registration","my account"],status:"disabled",answer:"Real customer accounts and identity verification are not publicly activated. Do not submit a real password or identity document to the browser demonstration.",source:"README.md"},
+  {id:"account-profile",title:"Builder profile",tags:["profile","nickname","bio","skills","edit profile","my interests","availability"],status:"demo",answer:"The demo Profile page lets you edit a local nickname, bio, interests and example skill details. It is not an authenticated, verified profile and is only visible in your browser demo session.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"login",title:"Login and passwords",tags:["login","log in","sign in","password","password strength","forgot password","wrong password","reset password"],status:"disabled",answer:"The public demo does not offer secure live email/password accounts. Private development includes password hashing and stronger signup checks, but real password reset and customer verification are not activated. Never share a password or OTP with anyone.",source:"docs/V08_IDENTITY_ACCESS_AND_RECOVERY.md",needsHumanForAction:true},
+  {id:"recovery",title:"Lost account access",tags:["locked out","account locked","lost access","account recovery","account hacked","recover account","forgot my password","change my password"],status:"disabled",answer:"Identity-backed account recovery is not active. In a future approved flow, verified human agents would check ownership and authorize a new password; they would never retrieve or reveal the original password. Do not send passwords, codes or ID images in chat.",source:"docs/V08_IDENTITY_ACCESS_AND_RECOVERY.md",needsHumanForAction:true},
+  {id:"project-idea",title:"Project planning advice",tags:["plan my project","project idea","project plan","project planning","how to build a project","first project"],status:"demo",answer:"For a new project, describe the problem, intended users, main features, expected outcomes and a small testable first milestone. ASD Industry's project tools are currently demonstration features; this guidance does not submit or approve a real project.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"project-submit",title:"Project applications",tags:["submit project","create project","project application","apply project","propose project","post project"],status:"demo",answer:"In the demonstration, the Projects page lets a project creator describe an idea, choose a category, set how many additional teammates are needed (1–12), and send a fictional application for simulated staff review. There is no real application backend or decision yet.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"project-review",title:"Project status and review",tags:["project review","review status","pending project","approved project","rejected project","approval","staff decision","my application"],status:"demo",answer:"The current review workflow is a labelled simulation. A real approved or declined project would require authorization from a verified human reviewer; AI cannot approve a project or change a staff decision.",source:"docs/V06-AI-STAFF.md",needsHumanForAction:true},
+  {id:"project-changes",title:"Change or appeal a decision",tags:["appeal project","reject appeal","override decision","change staff decision","approve for me","unblock project","cancel rejection"],status:"disabled",answer:"The AI cannot override project reviews, approve restricted requests or change employee decisions. A future authenticated human-review route is required for disputes or appeals.",source:"docs/V06-AI-STAFF.md",needsHumanForAction:true},
+  {id:"matching",title:"Finding teammates",tags:["find teammates","find team","teammates","matching","recruit members","hire teammate","find developer","team matching"],status:"demo",answer:"The Discover and Projects demos show fictional teammate suggestions based on interests and complementary skills. No real people are contacted, matched or recruited by these suggestions.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"seats",title:"Team size",tags:["team size","number of teammates","how many members","member limit","team slots","project seats"],status:"demo",answer:"The multipage project demonstration lets a project creator request 1–12 additional teammates. That number describes demo recruitment slots, not guaranteed real team membership.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"create-team",title:"When a team is created",tags:["create team","team created","unlock group","private group","start group","team group"],status:"demo",answer:"In the multipage demonstration, a creator requests human review, then fills the requested fictional teammate slots. Only afterward can the creator create a private demo group. This does not create a real shared team.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"team-chat",title:"Team chat",tags:["team chat","group chat","message teammates","send message","chat with team","group messages"],status:"demo",answer:"The Team Chat demonstration uses browser-local messages. Fictional teammates do not receive, read or reply to messages. A real secure team chat is not launched.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"workspace",title:"Workspace and tasks",tags:["workspace","task list","project tasks","tasks","progress tracking","project notes","milestone"],status:"demo",answer:"The Workspace demo includes example task lists, notes, member summaries and progress information. These are local test features, not collaboration or cloud storage.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"documents",title:"Project file uploads",tags:["upload file","upload document","add photo","upload video","attachment","file storage","project file"],status:"disabled",answer:"Actual shared file upload, attachment delivery and permanent project storage are not enabled in the public demo. Do not upload confidential or identity documents.",source:"README.md"},
+  {id:"feed",title:"Community feed",tags:["feed","post update","share progress","community posts","home feed","social post"],status:"demo",answer:"The Home demonstration showcases example project progress and community cards. It is not a live public social network, and no real audience is reached.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"discover",title:"Discover",tags:["discover","browse projects","search builders","explore projects","find creators"],status:"demo",answer:"Discover displays fictional builders and example projects. It does not search a database of verified members yet.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"notifications",title:"Notifications",tags:["notifications","notification bell","alerts","updates","project notification"],status:"demo",answer:"Notifications in the multipage demo describe local example events. There is no live background notification or email delivery service.",source:"docs/MULTIPAGE-PLATFORM.md"},
+  {id:"delete-data",title:"Removing demo data",tags:["delete account","remove account","erase my data","reset demo","clear my session","delete profile"],status:"demo",answer:"Use the demo's Exit or Reset Demo control to clear the local browser demonstration. This does not delete a real online account because live public accounts are not enabled.",source:"README.md",needsHumanForAction:false},
+  {id:"browser",title:"How the demo stores information",tags:["browser storage","sessionstorage","saved data","data stored","cloud data","sync devices","my data lost"],status:"demo",answer:"The existing public demonstration uses browser-tab session storage. Closing the tab or resetting the demo can remove that information. It is not cloud-backed account memory and does not sync across devices.",source:"README.md"},
+  {id:"payments",title:"Payments, investment and funding",tags:["pay","payment","transfer money","wallet","refund","withdraw","deposit","investment","earnings","funding","billing"],status:"disabled",answer:"ASD Industry has no active live payments, transfers, wallets, payouts or investments in this version. Do not send money, wallet credentials or payment evidence to supposed ASD Industry agents. ASD Pay is a separate project.",source:"README.md",needsHumanForAction:true},
+  {id:"equity",title:"Equity and ownership",tags:["equity","ownership","share profit","company shares","70%","30%","revenue split"],status:"planned",answer:"A 30% ASD Industry / 70% team split is only a proposal mentioned in early demonstration materials. It is not an active contract or legal ownership arrangement. Formal terms need legal review before any real use.",source:"README.md",needsHumanForAction:true},
+  {id:"age",title:"Age and guardian safeguards",tags:["age limit","age range","12-14","15-17","under 18","minor","guardian","parent","child safety"],status:"disabled",answer:"The demonstration asks for an age group, but real youth accounts, guardian verification and under-18 interactions are not enabled. An age selection alone is not proof of identity or guardian consent.",source:"README.md",needsHumanForAction:true},
+  {id:"reports",title:"Reporting safety problems",tags:["report abuse","report user","bullying","harassment","scam","fraud","sexual harassment","threat","unsafe"],status:"disabled",answer:"An operational in-app abuse reporting and safeguarding service is not yet active. Do not send private evidence or identity documents through the demo. If there is immediate danger, seek help from appropriate local emergency services or a trusted person.",source:"docs/V06-AI-STAFF.md",needsHumanForAction:true},
+  {id:"verification-badge",title:"Official employee badges",tags:["employee badge","staff badge","verified badge","human employee","official support","support agent verification"],status:"planned",answer:"Official ASD Industry employee badges are reserved for administrator-verified human employees who opt into publication. AI assistants cannot receive human badges, and selecting a title does not grant employment or privileges.",source:"docs/V08_IDENTITY_ACCESS_AND_RECOVERY.md"},
+  {id:"ai-v-human",title:"AI support versus human employees",tags:["ai support","support ai","human support","human agent","contact support","helpdesk","customer service","talk to an agent"],status:"planned",answer:"ASD Industry's intended support flow starts with AI guidance. If the AI cannot answer, lacks permission or you need a real person, a verified handoff should offer Human Support. The live handoff and real employee inbox are not connected in the current demonstration.",source:"docs/V09_HUMAN_CUSTOMER_SUPPORT.md",needsHumanForAction:true},
+  {id:"ai-project",title:"Project AI assistant",tags:["project assistant","ai builder","ai help build","build with ai","ai create project","ai brainstorming"],status:"planned",answer:"A separate AI Project Assistant is planned to help with project planning and troubleshooting. It will not have employee powers or permission to approve projects. A live customer-facing project AI is not yet connected.",source:"docs/V06-AI-STAFF.md"},
+  {id:"human-availability",title:"Human support availability",tags:["agent online","human online","opening hours","response time","wait time","agent available","agent offline","how long support"],status:"disabled",answer:"No live ASD Industry human support shifts, service hours or response-time guarantees are published. Employee availability tools exist only in private testing.",source:"docs/V09_HUMAN_CUSTOMER_SUPPORT.md",needsHumanForAction:true},
+  {id:"case-status",title:"Support cases and tickets",tags:["support ticket","case status","my ticket","track request","support case","ticket number","open ticket"],status:"disabled",answer:"Real customer ticket creation and case tracking are not enabled. The Human Support Desk currently manages synthetic adult-test cases only, with no customer contact or delivery.",source:"docs/V09_HUMAN_CUSTOMER_SUPPORT.md",needsHumanForAction:true},
+  {id:"privacy",title:"Privacy and personal information",tags:["privacy","personal data","data safety","how use data","privacy policy","data retention","my information"],status:"planned",answer:"The browser demonstration is local-only and is not a live protected customer account. Real cloud privacy terms, retention, verified identity workflows and consent controls must be approved before collecting customer information. Do not share secrets here.",source:"README.md",needsHumanForAction:true},
+  {id:"security",title:"Account and AI security",tags:["security","two factor","mfa","authentication","phishing","account security","suspicious login"],status:"planned",answer:"Separate private staff accounts and security controls are being developed. Real customer MFA and incident handling are not currently active. ASD Industry staff should never request your password or one-time code.",source:"docs/V08_IDENTITY_ACCESS_AND_RECOVERY.md",needsHumanForAction:true},
+  {id:"staff-jobs",title:"Employee access",tags:["work for asd","become employee","staff job","join support team","staff registration","employee login"],status:"disabled",answer:"There is no public employee self-registration. Human support staff accounts are privately provisioned and require administrator verification; the current public demo does not accept employment applications.",source:"docs/V08_IDENTITY_ACCESS_AND_RECOVERY.md"},
+  {id:"founder",title:"Founder privacy",tags:["founder account","owner dashboard","super admin","founder password","admin login","founder controls"],status:"disabled",answer:"Founder operations are private. The AI Support Assistant cannot access or change Founder credentials, dashboards, emergency contacts, roles or internal employee records.",source:"docs/V08_IDENTITY_ACCESS_AND_RECOVERY.md",needsHumanForAction:true},
+  {id:"real-ai",title:"AI knowledge and capabilities",tags:["is ai real","real ai","model connected","ai trained","chatbot intelligent","ai brain","ai learn"],status:"planned",answer:"The current AI-first support screen is a scripted demonstration using approved product notes. It is not yet connected to a live model or a user-account database. Future responses must be grounded in current reviewed knowledge.",source:"docs/V09_HUMAN_CUSTOMER_SUPPORT.md"},
+  {id:"support-link",title:"Getting to help",tags:["where is support","help center","contact human","customer support link","support button","ask ai first"],status:"demo",answer:"In the fictional AI-first preview, ask the AI a question first. If the demo cannot answer or the action requires a human, the Contact Human Support button appears. The button opens a fictional conversation, not a real employee connection.",source:"public/ai-first-support-lab.html"},
+  {id:"bugs",title:"Reporting bugs",tags:["bug","site broken","button not working","app crashes","glitch","not loading","technical problem"],status:"demo",answer:"If a demo feature is not working, note which page or button was affected and what happened, without sharing passwords or private data. The public site does not yet have a real authenticated bug-ticket system.",source:"docs/MULTIPAGE-PLATFORM.md",needsHumanForAction:true}
+ ];
+ const FORBIDDEN=/(?:password\s*=|api[_-]?key\s*=|BEGIN PRIVATE KEY|wallet seed\s*:|shamadasd897@|alihaidardanbawa@|industry_founder_emergency_profiles)/i;
+ const t=Object.freeze(topics.map(x=>Object.freeze({...x,tags:Object.freeze(x.tags.slice())})));
+ function tokenize(v){return String(v||"").toLowerCase().replace(/[^a-z0-9% -]/g," ").split(/\s+/).filter(w=>w.length>2);}
+ function lookup(question){
+  if(typeof question!=="string"||question.length>700)return null;
+  const q=question.toLowerCase();
+  const tokens=new Set(tokenize(q));
+  const ranked=t.map(x=>{
+   let score=0;
+   for(const tag of x.tags){
+    if(q.includes(tag))score+=tag.length>=11?11:7;
+    const terms=tokenize(tag);
+    const hits=terms.filter(w=>tokens.has(w)).length;
+    if(hits>0&&hits===terms.length)score+=terms.length*2;
+    else if(hits>=2)score+=hits;
+   }
+   return {item:x,score};
+  }).sort((a,b)=>b.score-a.score);
+  if(!ranked.length||ranked[0].score<5)return null;
+  if(ranked[1]&&ranked[0].score===ranked[1].score&&ranked[0].score<9)return null;
+  return ranked[0].item;
+ }
+ function respond(question){
+  const item=lookup(question);
+  if(!item)return Object.freeze({status:"needs_human",reason:"cannot_answer",topicId:null,text:"I do not have a sufficiently reliable approved answer for that question. I can offer a human support handoff in the fictional preview."});
+  // Knowledge of a policy is NOT permission to execute a restricted customer action.
+  const action=/\b(please|can you|do it|for me|reset my|approve my|unlock my|refund my|pay me|withdraw my|delete my|recover my|change my)\b/i.test(question);
+  if(item.needsHumanForAction&&action){
+   return Object.freeze({status:"needs_human",reason:"permission_denied",topicId:item.id,text:item.answer+" I cannot perform that account-specific or restricted action."});
+  }
+  return Object.freeze({status:"answered",topicId:item.id,text:item.answer,availability:item.status,version});
+ }
+ function validate(){
+  const seen=new Set();
+  for(const topic of t){
+   if(!/^[a-z0-9-]+$/.test(topic.id)||seen.has(topic.id))throw Error("Invalid or duplicate knowledge ID.");
+   seen.add(topic.id);
+   if(!["demo","planned","disabled"].includes(topic.status)||topic.tags.length<2||topic.answer.length<45||topic.answer.length>630||!topic.source||FORBIDDEN.test(topic.answer))throw Error("Unsafe or incomplete support knowledge: "+topic.id);
+  }
+  return t.length;
+ }
+ return Object.freeze({version,reviewedAt,topics:t,lookup,respond,validate});
+});
