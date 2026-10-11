@@ -113,6 +113,22 @@ test("joined squads expose separate private chat only to existing demo members",
   assert.match(html,/squad-chat\.css/);
   assert.doesNotMatch(script,/\bfetch\s*\(/);
 });
+test("Group Chat directory includes joined squads and project briefs distinguish proposals from guarantees",()=>{
+  for(const id of ["chatHubRooms","ideaAim","ideaOutcome","ideaHelp","ideaMemberShare",
+    "ideaProfitEstimate","joinProjectAim","joinProjectOutcome","joinProjectHelp",
+    "joinProjectProfit","projectBriefViewer","managerBriefForm","managerProfitShares",
+    "managerBriefAim","managerBriefOutcome","managerBriefHelp","managerProfitEstimate",
+    "managerPreviewListing","managerProfitSplitSummary"]){
+    assert.ok(ids.includes(id),"missing creator/viewer field: "+id);
+  }
+  assert.match(html,/not guaranteed/i);
+  assert.match(html,/private chat preview/i);
+  assert.match(script,/function renderChatHub\(\)/);
+  assert.match(script,/function previewPrivateIdea\(\)/);
+  assert.match(script,/function projectProfitDescription\(project\)/);
+  assert.match(script,/function applyProjectBrief\(project\)/);
+  assert.match(html,/chat-brief\.css/);
+});
 test("country picker accepts 249 country/territory entries and alphabetical selection",()=>{
   const sandbox={document:{querySelectorAll:()=>[]},window:{}};
   vm.runInNewContext(picker,sandbox,{timeout:1000});
