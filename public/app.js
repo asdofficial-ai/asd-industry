@@ -20,19 +20,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 8
         },
         {
           "role": "Developer",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 10
         },
         {
           "role": "Content writer",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 6
         }
-      ]
+      ],
+      "aim": "Help students practice consistently and prepare for school assessments.",
+      "outcome": "Build a study schedule, shared question bank and revision reminders.",
+      "helpNeeded": "Create educational material, write accessible guides, and build a simple prototype.",
+      "projectedMonthlyProfit": null
     },
     {
       "id": "science-fair",
@@ -49,19 +56,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": null
         },
         {
           "role": "Designer",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": null
         },
         {
           "role": "Researcher",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         }
-      ]
+      ],
+      "aim": "Make it easier for learners to coordinate school science presentations.",
+      "outcome": "Build a planning checklist and experiment showcase for a mock science fair.",
+      "helpNeeded": "Plan the showcase, research safe demonstrations, and design the presentation.",
+      "projectedMonthlyProfit": null
     },
     {
       "id": "agrolink",
@@ -78,19 +92,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 10
         },
         {
           "role": "Developer",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 12
         },
         {
           "role": "Marketing",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 7
         }
-      ]
+      ],
+      "aim": "Help nearby farmers share available produce and reach interested local buyers.",
+      "outcome": "Prototype listings, availability updates and a simple produce discovery page.",
+      "helpNeeded": "Organize research, create a usable prototype and explain the concept to farmers.",
+      "projectedMonthlyProfit": 250000
     },
     {
       "id": "cleanup",
@@ -107,19 +128,26 @@
         {
           "role": "Team manager",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         },
         {
           "role": "Designer",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         },
         {
           "role": "Community coordinator",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": null
         }
-      ]
+      ],
+      "aim": "Make local neighborhoods cleaner through volunteer collaboration.",
+      "outcome": "Plan a cleanup calendar and a recycling awareness campaign.",
+      "helpNeeded": "Coordinate volunteer activities, design posters and explain safe cleanup steps.",
+      "projectedMonthlyProfit": null
     },
     {
       "id": "creator-lab",
@@ -136,19 +164,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 10
         },
         {
           "role": "Video editor",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 13
         },
         {
           "role": "Content writer",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 7
         }
-      ]
+      ],
+      "aim": "Help people make useful short learning videos together.",
+      "outcome": "Produce a series of short educational tutorials with clear editing standards.",
+      "helpNeeded": "Plan topics, write scripts and edit practice videos.",
+      "projectedMonthlyProfit": 90000
     },
     {
       "id": "coding-buddy",
@@ -165,19 +200,26 @@
         {
           "role": "Project manager",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 8
         },
         {
           "role": "Developer",
           "capacity": 2,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": 12
         },
         {
           "role": "UI/UX designer",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": 8
         }
-      ]
+      ],
+      "aim": "Help beginners build coding confidence with practical exercises.",
+      "outcome": "Prototype coding challenges, progress tracking and peer-learning guides.",
+      "helpNeeded": "Create exercises, build a simple app and improve interface accessibility.",
+      "projectedMonthlyProfit": 120000
     },
     {
       "id": "community-map",
@@ -194,19 +236,26 @@
         {
           "role": "Product manager",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         },
         {
           "role": "Researcher",
           "capacity": 1,
-          "filled": 0
+          "filled": 0,
+          "profitSharePct": null
         },
         {
           "role": "Developer",
           "capacity": 1,
-          "filled": 1
+          "filled": 1,
+          "profitSharePct": null
         }
-      ]
+      ],
+      "aim": "Make public community events easier to discover.",
+      "outcome": "Prototype a map and directory of freely listed workshops and events.",
+      "helpNeeded": "Verify public event details, research locations and build the directory.",
+      "projectedMonthlyProfit": null
     }
   ];
   const builders = [
