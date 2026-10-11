@@ -11,3 +11,18 @@
 #profileBadgeStatus{display:inline-flex;margin:10px 0 15px;white-space:normal}
 #profileDepartment{border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--raised)}
 @media(max-width:690px){.team-card{padding:13px}#page-team .case-list{max-height:none}.manager-row{flex-direction:column}.manager-row button,.manager-row select{width:100%}}
+
+/* Private staff case training thread. Never outbound to customers. */
+.support-training-thread{margin:22px 0;padding:20px;background:#16221c;border:1px solid #4b6a53;border-radius:15px}
+.support-training-thread>h3{font-size:19px;line-height:1.3}.support-training-thread>p{color:var(--muted);font-size:12px}
+.training-messages{max-height:360px;overflow:auto;display:flex;flex-direction:column;gap:13px;margin:19px 0;padding:8px}
+.training-message{border:1px solid var(--border);background:var(--raised);padding:11px 13px;border-radius:14px;max-width:88%;align-self:flex-start;overflow-wrap:anywhere}
+.training-message.agent{align-self:flex-end;background:#2c4430;border-color:#6e906d}
+.training-message strong{font-size:11px;color:var(--accent)}
+.training-message p{font-size:12px;color:var(--text);line-height:1.65;white-space:pre-wrap;margin:8px 0}
+.training-message small{font-size:9px;color:var(--muted)}
+.training-compose{display:flex;flex-direction:column;gap:11px;margin-top:16px}
+.training-compose label{font-size:11px;color:var(--muted);font-weight:750}
+.training-compose select,.training-compose textarea{display:block;box-sizing:border-box;width:100%;padding:11px 12px;background:var(--panel);border:1px solid #536a56;color:var(--text);border-radius:9px;margin-top:7px;font:inherit}
+.training-compose button{align-self:flex-start}
+@media(max-width:690px){.support-training-thread{padding:14px}.training-message{max-width:96%}.training-compose button{width:100%}}
