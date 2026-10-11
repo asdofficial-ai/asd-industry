@@ -1191,7 +1191,11 @@
           members:[
             {nick:state.profile.nickname+" (you)",role:state.profile.role || "Project creator",demo:false}
           ],
-          manager:window.ASDManagerDashboard.create(matches,state.idea.neededRole),
+          manager:window.ASDManagerDashboard.create(matches,state.idea.neededRole,state.idea.memberSharePct),
+          aim:state.idea.aim || state.idea.description,
+          outcome:state.idea.outcome || "",
+          helpNeeded:state.idea.helpNeeded || "",
+          projectedMonthlyProfit:state.idea.projectedMonthlyProfit,
           tasks:[
             {text:"Agree on the problem we're solving",done:false},
             {text:"Describe a small first prototype",done:false}
