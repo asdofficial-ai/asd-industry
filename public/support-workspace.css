@@ -11,3 +11,16 @@
 #profileBadgeStatus{display:inline-flex;margin:10px 0 15px;white-space:normal}
 #profileDepartment{border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--raised)}
 @media(max-width:690px){.team-card{padding:13px}#page-team .case-list{max-height:none}.manager-row{flex-direction:column}.manager-row button,.manager-row select{width:100%}}
+
+/* Training-only conversation inside authenticated staff case. Never an actual customer inbox. */
+.training-chat{margin:22px 0;background:var(--raised);border:1px solid var(--border);padding:clamp(15px,2vw,22px);border-radius:15px}
+.training-chat>h3{margin:8px 0}.training-thread{display:grid;gap:10px;max-height:410px;overflow-y:auto;background:var(--bg);padding:14px;border:1px solid var(--border);border-radius:12px}
+.training-bubble{max-width:88%;padding:13px;border:1px solid var(--border);border-radius:13px;background:var(--panel)}
+.training-bubble.training-agent{margin-left:auto;background:#24352c;border-color:#547554}
+.training-bubble.training-customer{margin-right:auto;background:#252623;border-color:#615843}
+.training-bubble .eyebrow{letter-spacing:1px;font-size:9px}.training-bubble p{margin:8px 0;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text)!important}
+.training-bubble small{font-size:9px;color:var(--muted);letter-spacing:.6px}
+.training-compose{margin:17px 0 0;padding-top:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.training-compose label{font-weight:750;font-size:12px;color:var(--text)}.training-compose textarea{width:100%;background:#15211b;color:var(--text);border:1px solid var(--border);border-radius:11px;padding:12px;margin-top:8px}
+.training-compose button{align-self:flex-start}.training-compose button:hover{filter:brightness(1.1)}
+@media(max-width:640px){.training-bubble{max-width:94%}.training-compose button{width:100%}}
