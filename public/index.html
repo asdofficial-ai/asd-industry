@@ -351,42 +351,7 @@
         <p class="open-projects-disclaimer">ⓘ Tap <strong>View roles &amp; join</strong> to check vacancies and the expected start. Joining is a <strong>browser-only simulation</strong>—no real people are contacted or added to a team. A full simulated squad automatically closes and leaves this open-project list.</p>
         <p id="openProjectsStatus" class="open-projects-status" role="status" aria-live="polite"></p>
       </section>
-      <dialog id="projectJoinDialog" class="project-join-dialog" aria-labelledby="projectJoinTitle" aria-describedby="projectJoinExplanation">
-        <div class="project-join-dialog-inner">
-          <div class="project-join-dialog-head">
-            <span class="open-project-tag">SAMPLE PROJECT · DEMO ONLY</span>
-            <button type="button" class="project-join-close" id="closeProjectJoinDialog" aria-label="Close project details">✕</button>
-          </div>
-          <h2 id="projectJoinTitle">Project details</h2>
-          <p id="projectJoinExplanation" class="project-join-summary"></p>
-          <div class="project-brief-viewer" id="projectBriefViewer" aria-label="Project aim, goals, expected outcome and proposed earnings">
-            <div class="project-brief-item"><strong>🎯 What is the aim?</strong><p id="joinProjectAim"></p></div>
-            <div class="project-brief-item"><strong>🛠 What will the team build?</strong><p id="joinProjectOutcome"></p></div>
-            <div class="project-brief-item"><strong>🤝 What help is needed?</strong><p id="joinProjectHelp"></p></div>
-            <div class="project-brief-item finance"><strong>💰 Profit-sharing proposal · not guaranteed</strong><p id="joinProjectProfit"></p></div>
-          </div>
-          <div class="project-join-facts">
-            <div><small>OPEN SPOTS</small><strong id="projectJoinCapacity"></strong></div>
-            <div><small>EXPECTED KICKOFF</small><strong id="projectJoinStart"></strong></div>
-          </div>
-          <p id="projectJoinRule" class="project-join-rule">Example timeline. The project starts automatically once the last team role is filled in this browser demo.</p>
-          <form id="projectJoinForm">
-            <fieldset class="project-role-fieldset">
-              <legend>Choose a position</legend>
-              <p>Available positions are selectable. Full positions are marked <b>Filled</b>.</p>
-              <div id="projectJoinRoleList" class="project-join-role-list"></div>
-              <p class="project-profit-disclaimer">Any percentage shown is a creator's illustrative proposal for a share of <b>net profit if earned</b>, not revenue, salary, ownership or a promise of payment. Real participation would require a reviewed agreement.</p>
-            </fieldset>
-            <p id="projectJoinMessage" class="project-join-message" role="status" aria-live="polite"></p>
-            <div class="project-join-actions">
-              <button type="button" class="btn btn-ghost" id="cancelProjectJoin">Close</button>
-              <button class="btn btn-accent" id="confirmProjectJoin" type="submit">Join demo squad →</button>
-            </div>
-          </form>
-          <button type="button" id="joinedSquadChatShortcut" class="btn btn-accent joined-squad-chat-shortcut" hidden>💬 Open Squad Chat →</button>
-          <p class="project-join-privacy">No real registration, invitation, recruiting, messaging or confirmed start date. This is a fictional example. Any squad chat is private to this browser tab.</p>
-        </div>
-      </dialog>
+
       <div class="content-grid">
         <form class="panel form-panel" id="ideaForm">
           <div class="panel-header"><h2>Your project idea</h2><span class="tag">SANDBOX MATCHING</span></div>
@@ -462,6 +427,42 @@
         </aside>
       </div>
     </section>
+      <dialog id="projectJoinDialog" class="project-join-dialog" aria-labelledby="projectJoinTitle" aria-describedby="projectJoinExplanation">
+        <div class="project-join-dialog-inner">
+          <div class="project-join-dialog-head">
+            <span class="open-project-tag">SAMPLE PROJECT · DEMO ONLY</span>
+            <button type="button" class="project-join-close" id="closeProjectJoinDialog" aria-label="Close project details">✕</button>
+          </div>
+          <h2 id="projectJoinTitle">Project details</h2>
+          <p id="projectJoinExplanation" class="project-join-summary"></p>
+          <div class="project-brief-viewer" id="projectBriefViewer" aria-label="Project aim, goals, expected outcome and proposed earnings">
+            <div class="project-brief-item"><strong>🎯 What is the aim?</strong><p id="joinProjectAim"></p></div>
+            <div class="project-brief-item"><strong>🛠 What will the team build?</strong><p id="joinProjectOutcome"></p></div>
+            <div class="project-brief-item"><strong>🤝 What help is needed?</strong><p id="joinProjectHelp"></p></div>
+            <div class="project-brief-item finance"><strong>💰 Profit-sharing proposal · not guaranteed</strong><p id="joinProjectProfit"></p></div>
+          </div>
+          <div class="project-join-facts">
+            <div><small>OPEN SPOTS</small><strong id="projectJoinCapacity"></strong></div>
+            <div><small>EXPECTED KICKOFF</small><strong id="projectJoinStart"></strong></div>
+          </div>
+          <p id="projectJoinRule" class="project-join-rule">Example timeline. The project starts automatically once the last team role is filled in this browser demo.</p>
+          <form id="projectJoinForm">
+            <fieldset class="project-role-fieldset">
+              <legend>Choose a position</legend>
+              <p>Available positions are selectable. Full positions are marked <b>Filled</b>.</p>
+              <div id="projectJoinRoleList" class="project-join-role-list"></div>
+              <p class="project-profit-disclaimer">Any percentage shown is a creator's illustrative proposal for a share of <b>net profit if earned</b>, not revenue, salary, ownership or a promise of payment. Real participation would require a reviewed agreement.</p>
+            </fieldset>
+            <p id="projectJoinMessage" class="project-join-message" role="status" aria-live="polite"></p>
+            <div class="project-join-actions">
+              <button type="button" class="btn btn-ghost" id="cancelProjectJoin">Close</button>
+              <button class="btn btn-accent" id="confirmProjectJoin" type="submit">Join demo squad →</button>
+            </div>
+          </form>
+          <button type="button" id="joinedSquadChatShortcut" class="btn btn-accent joined-squad-chat-shortcut" hidden>💬 Open Squad Chat →</button>
+          <p class="project-join-privacy">No real registration, invitation, recruiting, messaging or confirmed start date. This is a fictional example. Any squad chat is private to this browser tab.</p>
+        </div>
+      </dialog>
     <section class="view hidden" id="view-workspace" data-view="workspace" aria-labelledby="workspaceTitle">
       <div class="page-heading"><p class="kicker">03 / THE BUILD SPACE</p><h1 id="workspaceTitle">Your project <em>workspace.</em></h1><p>A focused place to turn an idea into tasks and progress. Teammates shown in this demo are fictional.</p></div>
       <div class="workspace-toolbar"><span class="workspace-toolbar-title">PROJECT OVERVIEW <small>·  DEMO ONLY</small></span><div class="workspace-toolbar-actions"><button type="button" class="btn btn-small btn-ghost" data-nav="manager">♛ Manage team →</button><button type="button" class="btn btn-small btn-ghost" data-nav="chat">☰ Group chat →</button><button type="button" class="btn btn-small btn-accent" data-nav="ideas">+ New project idea</button></div></div><div id="workspaceEmpty" class="panel empty-state"><div class="empty-icon"><span>＋</span></div><h2>No project yet</h2><p>Create your demo profile and submit a project idea to start a simulated team.</p><button class="btn btn-accent" type="button" data-nav="ideas">Go to ideas →</button><button class="btn btn-ghost" type="button" data-nav="profile">Create demo profile</button></div>
