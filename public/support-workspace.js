@@ -169,6 +169,7 @@
     responseSection.append(draftLabel,draftButton,e("p","Saved locally to the isolated test database. There is no Send button or outbound messaging service.","fine"));
     panel.append(responseSection);
    }
+   await renderTrainingConversation(panel,id,item.status);
    const events=e("div",undefined,"case-events");events.append(e("h3","Audit trail"));
    for(const v of data.events||[]){
     const line=e("div",undefined,"case-event");
@@ -181,6 +182,52 @@
   }catch(err){showError(err.message);}
  }
 
+ async function renderTrainingConversation(panel,caseId,caseStatus){
+  // Staff-only API. This is a simulation: no customer account, recipient or outbound send.
+  const thread=await api("/support/cases/"+caseId+"/training-thread");
+  const section=e("section",undefined,"support-training-thread");
+  section.append(e("span","INTERNAL TRAINING / NO CUSTOMER DELIVERY","eyebrow"),
+   e("h3","Customer ↔ human agent training conversation"),
+   e("p","Simulate a customer question and an employee reply. This is NOT live support, and real customers will never see these messages.","fine"));
+  const lines=e("div",undefined,"training-messages");
+  if(!thread.data.length)lines.append(e("p","No simulated messages yet.","fine"));
+  for(const msg of thread.data){
+   const bubble=e("div",undefined,"training-message "+(msg.speaker==="agent_simulated"?"agent":"customer"));
+   bubble.append(e("strong",msg.speaker==="agent_simulated"?"Human agent · simulated":"Customer · simulated"),
+    e("p",msg.body),e("small",new Date(msg.created_at).toLocaleString()));
+   lines.append(bubble);
+  }
+  section.append(lines);
+  if(!["closed","resolved","escalated"].includes(caseStatus)){
+   const form=e("form",undefined,"training-compose");
+   const label=e("label","Simulated message role");
+   const speaker=e("select");speaker.setAttribute("aria-label","Fictional training speaker");
+   const speakers=role==="manager"?[
+    ["agent_simulated","Fictional human agent"],
+    ["customer_simulated","Fictional customer (Manager only)"]
+   ]:[["agent_simulated","Fictional human agent"]];
+   for(const [value,name] of speakers){const o=e("option",name);o.value=value;speaker.append(o);}
+   label.append(speaker);
+   const note=e("textarea");note.rows=3;note.required=true;note.minLength=12;note.maxLength=900;
+   note.placeholder="Enter a fictional adult training message. No emails, passwords, identity numbers or personal details.";
+   const draft=e("label","Training message — never sent to any customer");draft.append(note);
+   const send=e("button","Add simulated message","soft-button");send.type="submit";
+   form.append(label,draft,send);
+   form.addEventListener("submit",async event=>{
+    event.preventDefault();if(!form.reportValidity())return;send.disabled=true;
+    try{
+     const requestId=crypto.randomUUID();
+     const output=await post("/support/cases/"+caseId+"/training-thread",{
+      speaker:speaker.value,body:note.value,syntheticAdultTest:true,requestId
+     });
+     if(output.outboundDelivery!==false)throw Error("Unsafe delivery state.");
+     await openCase(caseId);
+    }catch(err){showError(err.message);}finally{send.disabled=false;}
+   });
+   section.append(form);
+  }else section.append(e("p","This case's simulated conversation is read-only in its current status.","fine"));
+  panel.append(section);
+ }
  async function loadProfile(){
   const response=await api("/support/profile"),p=response.data;
   $("profileDisplayName").value=p.display_name;
