@@ -27,6 +27,18 @@ if(process.env.GITHUB_EVENT_NAME==="pull_request"){
  const relevant=changed.filter(p=>entries.includes(p));
  if(relevant.length&&!changed.includes("public/support-knowledge.js"))
   throw Error("Customer-facing changes need reviewed public/support-knowledge.js updates: "+relevant.join(", "));
+ if(changed.includes("public/support-knowledge.js")){
+  // A knowledge edit without a version increment is easily missed by deployed clients.
+  try{
+   const previous=cp.execFileSync("git",["show","origin/"+base+":public/support-knowledge.js"],{cwd:root,encoding:"utf8"});
+   const match=previous.match(/version="([0-9.]+)"/);
+   if(match&&match[1]===kb.version)throw Error("Increment support knowledge version when updating reviewed answers.");
+  }catch(e){
+   if(e.message.includes("Increment support"))throw e;
+   // No prior catalog on an older base: this PR introduces the feature.
+  }
+ }
+
  console.log("Support knowledge PR review: "+relevant.length+" customer-facing paths; "+(changed.includes("public/support-knowledge.js")?"catalog updated":"no catalog update necessary"));
 }
 console.log("ASD Industry AI Support: "+quantity+" approved-public topics, version "+kb.version+"; source paths verified.");
