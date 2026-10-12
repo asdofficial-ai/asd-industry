@@ -3,153 +3,148 @@ const test=require("node:test"),assert=require("node:assert/strict");
 const fs=require("node:fs"),path=require("node:path"),vm=require("node:vm");
 const location=path.join(__dirname,"../public/");
 const html=fs.readFileSync(path.join(location,"support-conversation-lab.html"),"utf8");
-const script=fs.readFileSync(path.join(location,"support-conversation-lab.js"),"utf8");
+const script=fs.readFileSync(path.join(location,"support-chat-v2.js"),"utf8");
 class FakeNode {
- constructor(tag="button",id=""){
+ constructor(tag="div",id=""){
   this.tagName=tag.toUpperCase();this.id=id;this.dataset={};this.children=[];
-  this.hidden=false;this.disabled=false;this.value="";this.textContent="";
-  this.listeners={};this.attributes={};this.scrollHeight=130;this.scrollTop=0;
-  this.classes=new Set();
-  this.classList={toggle:(name,on)=>{
-   const desired=on===undefined?!this.classes.has(name):!!on;
-   if(desired)this.classes.add(name);else this.classes.delete(name);return desired;},
-   contains:name=>this.classes.has(name)};
+  this.hidden=false;this.disabled=false;this.value="";this.textContent="";this.className="";
+  this.listeners={};this.attributes={};this.scrollHeight=300;this.scrollTop=0;this.classes=new Set();
+  this.classList={
+   add:(...names)=>names.forEach(name=>this.classes.add(name)),
+   remove:(...names)=>names.forEach(name=>this.classes.delete(name)),
+   toggle:(name,on)=>{const want=on===undefined?!this.classes.has(name):!!on;
+    if(want)this.classes.add(name);else this.classes.delete(name);return want;},
+   contains:name=>this.classes.has(name)
+  };
  }
  addEventListener(type,fn){(this.listeners[type]??=[]).push(fn);}
- fire(type,target=this){for(const fn of this.listeners[type]||[])fn({target,preventDefault(){},isComposing:false});}
+ fire(type){for(const fn of this.listeners[type]||[])fn({target:this,preventDefault(){},key:"",isComposing:false});}
  click(){this.fire("click");}
- closest(selector){
-  if(selector==="[data-perspective]"&&this.dataset.perspective)return this;
-  return null;
- }
- append(...items){for(const x of items)this.children.push(x);}
+ append(...items){this.children.push(...items);}
  replaceChildren(...items){this.children=[...items];}
- setAttribute(name,val){this.attributes[name]=String(val);}
- querySelector(selector){
-  for(const c of this.children){
-   if(typeof c==="object"&&c.tagName===selector.toUpperCase())return c;
-   const found=c?.querySelector?.(selector);if(found)return found;
-  }return null;
- }
- querySelectorAll(selector){
-  if(selector==="[data-perspective]")return this.children.filter(x=>x.dataset?.perspective);
-  throw Error("Unexpected nested query "+selector);
- }
+ setAttribute(name,value){this.attributes[name]=String(value);}
+ focus(){}
  reportValidity(){return true;}
- requestSubmit(){this.fire("submit");}
 }
 function boot(){
- const ids=["personaTabs","chatLayout","agentInbox","agentContext","agentCaseActions",
- "customerQuickReplies","agentQuickReplies","customerDemoChoices","chatPerspectiveLabel",
- "threadTitle","threadSubtitle","chatSafety","chatInput","chatSend","handoffPrompt",
- "handoffAction","handoffWhy","chatMessages","contextTitle","contextCode","contextCategory",
- "contextPriority","contextOwner","contextStatus","claimCase","markInProgress",
- "markResolved","escalateCase","addInternalNote","internalNotes","agentNote","chatHint",
- "chatForm","resetChat"];
- const byId=Object.fromEntries(ids.map(id=>[id,new FakeNode("div",id)]));
- const things=[];
- function data(key,value,tag="button"){
-  const n=new FakeNode(tag);n.dataset[key]=value;things.push(n);return n;
+ const matches=[...html.matchAll(/\bid="([^"]+)"/g)];
+ const byId=Object.fromEntries(matches.map(m=>[m[1],new FakeNode("div",m[1])]));
+ for(const m of html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)){
+  if(/\shidden(?:\s|>|$)/.test(m[0]))byId[m[1]].hidden=true;
  }
- const customer=data("perspective","customer");
- const agent=data("perspective","agent");
- byId.personaTabs.append(customer,agent);
- const caseRows={};
- for(const name of ["project","security","technical"]){
-  const n=data("case",name);n.append(new FakeNode("small"));caseRows[name]=n;
+ const quickCustomer=[],quickHuman=[];
+ for(const m of html.matchAll(/<button[^>]*data-quick-(customer|human)="([^"]+)"[^>]*>/g)){
+  const el=new FakeNode("button");
+  if(m[1]==="customer"){el.dataset.quickCustomer=m[2];quickCustomer.push(el);}
+  else{el.dataset.quickHuman=m[2];quickHuman.push(el);}
  }
- const quick=data("quick","Could you show the next fictional project step?");
- const agentQuick=data("agentQuick","Thank you; here are the fictional project steps.");
- const exampleProject=data("customerCase","project");
- const exampleAI=data("customerCase","security");
  const document={
   getElementById:id=>{if(!byId[id])throw Error("Missing DOM "+id);return byId[id];},
   createElement:tag=>new FakeNode(tag),
   querySelectorAll:selector=>{
-   const key=selector.match(/^\[data-([a-z-]+)\]$/)?.[1];
-   if(!key)throw Error("Unexpected document query "+selector);
-   const prop=key.replace(/-([a-z])/g,(_m,c)=>c.toUpperCase());
-   return things.filter(x=>x.dataset[prop]!==undefined);
-  }
+   if(selector==="[data-quick-customer]")return quickCustomer;
+   if(selector==="[data-quick-human]")return quickHuman;
+   throw Error("Unexpected document selector "+selector);
+  },
+  addEventListener:()=>{}
  };
- vm.runInNewContext(script,{document,Date,console},{timeout:1500});
- const textOf=(id)=>byId[id].children.map(entry=>{
-  if(entry.children?.length){
-   const walk=n=>String(n.textContent||"")+" "+(n.children||[]).map(walk).join(" ");
-   return walk(entry);
-  }
-  return entry.textContent||"";
- }).join(" ");
- return {byId,caseRows,customer,agent,quick,agentQuick,exampleProject,exampleAI,textOf,
-  switch:(node)=>byId.personaTabs.fire("click",node),
-  submit:(value)=>{byId.chatInput.value=value;byId.chatForm.fire("submit");}};
+ vm.runInNewContext(script,{document,Date,console,Set,String,Number},{timeout:2500});
+ const walk=n=>typeof n==="string"?n:(n?.textContent||"")+" "+(n?.children||[]).map(walk).join(" ");
+ const textOf=id=>walk(byId[id]);
+ const ask=text=>{byId.customerInput.value=text;byId.customerForm.fire("submit");};
+ const agentSend=text=>{byId.agentInput.value=text;byId.agentForm.fire("submit");};
+ return {byId,textOf,ask,agentSend,quickCustomer,quickHuman,
+  click:id=>byId[id].click(),
+  set:(id,value)=>{byId[id].value=value;byId[id].fire("change");}
+ };
 }
-test("screenshot customer page shows one conversation; agent sees functional case controls and replies",()=>{
+test("AI answers FAQs and only later offers human help for an unauthorized request",()=>{
  const x=boot();
- assert.equal(x.byId.agentInbox.hidden,true,"Customers must not see employee inbox");
- assert.equal(x.byId.agentContext.hidden,true,"Customers must not see agent case details");
- assert.equal(x.byId.customerDemoChoices.hidden,false);
- assert.match(x.textOf("chatMessages"),/FICTIONAL AI HANDOFF ACCEPTED/);
- x.switch(x.agent);
- assert.equal(x.byId.agentInbox.hidden,false);
- assert.equal(x.byId.agentContext.hidden,false);
- assert.equal(x.byId.customerDemoChoices.hidden,true);
- assert.equal(x.byId.contextCode.textContent,"DEMO-101");
- x.byId.markResolved.click();
- assert.equal(x.byId.contextStatus.textContent,"resolved");
- assert.equal(x.byId.chatSend.disabled,true,"Resolved case should not accept agent reply");
- x.byId.markInProgress.click();
- assert.equal(x.byId.contextStatus.textContent,"in progress");
- x.agentQuick.click();
- assert.match(x.textOf("chatMessages"),/Thank you; here are the fictional project steps/);
- x.byId.escalateCase.click();
- assert.equal(x.byId.contextStatus.textContent,"escalated");
- assert.equal(x.byId.markInProgress.disabled,true,"Agent may not bypass pending manager escalation");
- assert.equal(x.byId.chatSend.disabled,true,"Agent replies pause while escalated");
- x.byId.agentNote.value="Sample internal staff note";
- x.byId.addInternalNote.click();
- assert.match(x.textOf("internalNotes"),/Sample internal staff note/);
- x.switch(x.customer);
- assert.equal(x.byId.agentContext.hidden,true);
- assert.match(x.textOf("chatMessages"),/fictional project steps/);
- assert.doesNotMatch(x.textOf("chatMessages"),/Sample internal staff note/);
+ assert.equal(x.byId.customerScreen.hidden,false);
+ assert.equal(x.byId.agentScreen.hidden,true);
+ assert.equal(x.byId.humanOffer.hidden,true);
+ assert.equal(x.byId.customerHeading.textContent,"ASD AI Support Assistant");
+ x.ask("How can I start a sample project?");
+ assert.equal(x.byId.humanOffer.hidden,true,"Basic AI answer must not directly open humans");
+ assert.match(x.textOf("customerMessages"),/define your idea/);
+ x.ask("Please approve my fictional project.");
+ assert.equal(x.byId.humanOffer.hidden,false,"Unauthorized AI request should offer human help");
+ assert.match(x.textOf("customerMessages"),/no permission/i);
+ const before=x.byId.customerMessages.children.length;
+ x.click("contactHuman");
+ assert.equal(x.byId.customerScreen.hidden,false,"Customer should not leave the existing page");
+ assert.equal(x.byId.humanOffer.hidden,true);
+ assert.equal(x.byId.waitingBox.hidden,false);
+ assert.ok(x.byId.customerMessages.children.length>before);
+ assert.match(x.textOf("customerMessages"),/HANDOFF ACCEPTED/);
+ x.click("viewAgent");
+ assert.equal(x.byId.agentScreen.hidden,false);
+ assert.equal(x.byId.customerScreen.hidden,true);
+ assert.match(x.textOf("agentInbox"),/Example project guidance/);
+ assert.equal(x.byId.caseTitle.textContent,"Example project guidance");
+ assert.equal(x.byId.claimCase.hidden,false);
 });
-test("AI-first entry requires failed or unauthorized AI action before handoff, then preserves the thread",()=>{
+test("agent claims AI handoff, replies in the SAME customer thread, and keeps notes private",()=>{
  const x=boot();
- x.exampleAI.click();
- assert.equal(x.byId.threadTitle.textContent,"ASD AI Support");
- assert.equal(x.byId.handoffPrompt.hidden,true);
- assert.equal(x.caseRows.security.hidden,true,"AI questions cannot appear in agent inbox yet");
- x.submit("How do I organize this sample project team?");
- assert.equal(x.byId.handoffPrompt.hidden,true,"Answered FAQ must not create human handoff");
- x.submit("I forgot my password and need account recovery help.");
- assert.equal(x.byId.handoffPrompt.hidden,false);
- assert.equal(x.caseRows.security.hidden,true);
- const before=x.byId.chatMessages.children.length;
- x.byId.handoffAction.click();
- assert.equal(x.byId.handoffPrompt.hidden,true);
- assert.ok(x.byId.chatMessages.children.length>before,"Continue thread instead of creating a new one");
- x.switch(x.agent);
- assert.equal(x.caseRows.security.hidden,false,"Case becomes visible after handoff");
- assert.equal(x.byId.contextCode.textContent,"DEMO-102");
- x.submit("I can help review this fictional issue safely.");
- x.switch(x.customer);
- assert.match(x.textOf("chatMessages"),/help review this fictional issue/);
- assert.match(x.textOf("chatMessages"),/AI HANDOFF ACCEPTED/);
- x.byId.resetChat.click();
- assert.equal(x.byId.agentInbox.hidden,true);
- assert.equal(x.byId.contextCode.textContent,"DEMO-101");
+ x.ask("My fictional account needs a password reset.");
+ x.click("contactHuman");x.click("viewAgent");
+ x.click("claimCase");
+ assert.equal(x.byId.caseStatusPill.textContent,"IN PROGRESS");
+ assert.equal(x.byId.agentActionsArea.hidden,false);
+ x.agentSend("Hello fictional customer, I can explain this training account process.");
+ assert.match(x.textOf("agentMessages"),/Hello fictional customer/);
+ x.click("privateNoteTab");
+ x.agentSend("Internal agent-only note about the simulated project support case.");
+ assert.match(x.textOf("agentMessages"),/Internal agent-only note/);
+ x.click("viewCustomer");
+ assert.match(x.textOf("customerMessages"),/Hello fictional customer/);
+ assert.match(x.textOf("customerMessages"),/HANDOFF ACCEPTED/);
+ assert.doesNotMatch(x.textOf("customerMessages"),/Internal agent-only note/);
+ assert.equal(x.byId.customerHeading.textContent,"ASD Human Support · Demo");
+ x.quickHuman[0].click();
+ assert.match(x.textOf("customerMessages"),/next step/);
+ x.click("viewAgent");
+ assert.match(x.textOf("agentMessages"),/next step/);
 });
-test("all visible action selectors exist and simulator cannot send real messages",()=>{
+test("agent actions and independent simulated Manager review update case status and activity",()=>{
+ const x=boot();
+ x.ask("Please override a staff review decision.");
+ x.click("contactHuman");x.click("viewAgent");x.click("claimCase");
+ x.click("waitingCase");
+ assert.equal(x.byId.caseStatusPill.textContent,"WAITING ON CUSTOMER");
+ x.click("waitingCase");
+ assert.equal(x.byId.caseStatusPill.textContent,"IN PROGRESS");
+ x.click("escalateCase");
+ assert.equal(x.byId.dialogBackdrop.hidden,false);
+ x.byId.dialogInput.value="This sample issue needs an independent manager review.";
+ x.click("dialogConfirm");
+ assert.equal(x.byId.caseStatusPill.textContent,"ESCALATED TO MANAGER");
+ assert.equal(x.byId.agentActionsArea.hidden,true);
+ assert.equal(x.byId.reviewCase.hidden,true,"Agent cannot approve own escalation");
+ x.set("agentRole","manager");
+ assert.equal(x.byId.reviewCase.hidden,false);
+ x.click("reviewCase");
+ x.byId.dialogInput.value="Manager reviewed this synthetic training case in the isolated preview.";
+ x.click("dialogConfirm");
+ assert.equal(x.byId.caseStatusPill.textContent,"IN PROGRESS");
+ x.click("resolveCase");
+ assert.equal(x.byId.caseStatusPill.textContent,"RESOLVED");
+ x.click("resolveCase");
+ assert.equal(x.byId.caseStatusPill.textContent,"CLOSED");
+ assert.match(x.textOf("agentAudit"),/Manager closed/);
+ x.click("resetPreview");
+ assert.equal(x.byId.customerScreen.hidden,false);
+ assert.equal(x.byId.agentScreen.hidden,true);
+ assert.equal(x.byId.humanOffer.hidden,true);
+});
+test("all new controls exist and the simulator never connects or stores real messages",()=>{
  for(const id of ["viewCustomer","viewAgent","customerScreen","agentScreen","customerMessages",
- "contactHuman","humanOffer","agentInbox","agentAudit","claimCase","waitingCase",
- "resolveCase","reopenCase","escalateCase","reviewCase","resetPreview","customerForm"]){
+  "contactHuman","humanOffer","agentInbox","agentAudit","claimCase","waitingCase",
+  "resolveCase","reopenCase","escalateCase","reviewCase","resetPreview","customerForm",
+  "customerReset","agentRole","agentAvailability","saveDraft","dialogConfirm","caseSearch","caseFilter"]){
   assert.match(html,new RegExp('id="'+id+'"'),"Missing control "+id);
  }
- assert.match(html,/id="viewAgent"/);
- assert.match(html,/id="viewCustomer"/);
- assert.match(html,/id="caseFilter"/); assert.match(html,/id="caseSearch"/);
- for(const method of [/fetch\s*\(/i,/XMLHttpRequest/i,/WebSocket/i,/localStorage/i,/sessionStorage/i,/indexedDB/i,/innerHTML\s*=/i,/document\.cookie/i])
-  assert.doesNotMatch(script,method,"Demo must remain in-memory only");
- assert.match(html,/TRAINING PREVIEW — NO LIVE SERVICE/);
+ for(const pattern of [/fetch\s*\(/i,/XMLHttpRequest/i,/WebSocket/i,/localStorage/i,/sessionStorage/i,/indexedDB/i,/innerHTML\s*=/i,/document\.cookie/i]){
+  assert.doesNotMatch(script,pattern,"Preview must remain entirely offline");
+ }
 });
