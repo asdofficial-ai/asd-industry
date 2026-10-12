@@ -25,6 +25,8 @@ app.get("/api/status", (req, res) => res.json({
 }));
 // Staff API is fail-closed and has no open registration. It requires dedicated credentials and database.
 app.use("/api/staff", require("./lib/human-staff-api").router());
+// Demo-only AI question route. No secrets in browser; disabled without explicit server environment configuration.
+app.use("/api/support-ai", require("./lib/customer-support-ai").router());
 app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res) => res.status(404).json({ error: "Not found" }));
 if (require.main === module) {
