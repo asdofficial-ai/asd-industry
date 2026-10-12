@@ -357,6 +357,7 @@
  $("dialogCancel").addEventListener("click",()=>{$("dialogBackdrop").hidden=true;dialogAction=null;say("Fictional action cancelled.");});
  $("dialogConfirm").addEventListener("click",confirmDialog);
  $("resetPreview").addEventListener("click",reset);
+ $("customerReset").addEventListener("click",reset);
  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("dialogBackdrop").hidden){$("dialogBackdrop").hidden=true;dialogAction=null;}});
  reset();
 })();
