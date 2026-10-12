@@ -19,7 +19,7 @@
  };
  function say(who,body){
   const row=el("article",undefined,"bubble"+(who==="customer"?" mine":""));
-  const label=who==="customer"?"YOU · DEMO":who==="human"?"HUMAN HELP · SIMULATOR":"AI SUPPORT · SCRIPTED FAQ";
+  const label=who==="customer"?"YOU · DEMO":who==="human"?"HUMAN HELP · SIMULATOR":"ASD AI SUPPORT · DEMO";
   const textNode=el("p",body);
   row.append(el("span",label,"who"),textNode,el("small","DEMO · NOT SENT"));
   const box=$("messages");box.append(row);
@@ -171,7 +171,14 @@
  document.querySelectorAll("[data-prompt]").forEach(button=>button.addEventListener("click",()=>{
   if(mode==="ai")ask(button.dataset.prompt);
  }));
- $("humanButton").addEventListener("click",humanDemo);
+ // Phone keyboards and desktop Enter should submit immediately; Shift+Enter adds a newline.
+ $("question").addEventListener("keydown",event=>{
+  if(event.key==="Enter"&&!event.shiftKey&&!event.isComposing){
+   event.preventDefault();
+   if(!pending&&$("question").value.trim())$("chatForm").requestSubmit();
+  }
+ });
+  $("humanButton").addEventListener("click",humanDemo);
  $("startOver").addEventListener("click",reset);
  reset();
  void detectModel();
