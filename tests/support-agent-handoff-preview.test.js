@@ -141,14 +141,14 @@ test("AI-first entry requires failed or unauthorized AI action before handoff, t
  assert.equal(x.byId.contextCode.textContent,"DEMO-101");
 });
 test("all visible action selectors exist and simulator cannot send real messages",()=>{
- for(const id of ["personaTabs","agentInbox","agentContext","handoffPrompt","handoffAction",
- "markResolved","markInProgress","escalateCase","claimCase","agentNote","addInternalNote",
- "resetChat","customerDemoChoices","chatForm","chatMessages"]){
+ for(const id of ["viewCustomer","viewAgent","customerScreen","agentScreen","customerMessages",
+ "contactHuman","humanOffer","agentInbox","agentAudit","claimCase","waitingCase",
+ "resolveCase","reopenCase","escalateCase","reviewCase","resetPreview","customerForm"]){
   assert.match(html,new RegExp('id="'+id+'"'),"Missing control "+id);
  }
- assert.match(html,/data-perspective="agent"/);
- assert.match(html,/data-perspective="customer"/);
- for(const key of ["project","technical","security"])assert.ok(html.includes('data-case="'+key+'"'));
+ assert.match(html,/id="viewAgent"/);
+ assert.match(html,/id="viewCustomer"/);
+ assert.match(html,/id="caseFilter"/); assert.match(html,/id="caseSearch"/);
  for(const method of [/fetch\s*\(/i,/XMLHttpRequest/i,/WebSocket/i,/localStorage/i,/sessionStorage/i,/indexedDB/i,/innerHTML\s*=/i,/document\.cookie/i])
   assert.doesNotMatch(script,method,"Demo must remain in-memory only");
  assert.match(html,/No real customer messages, live agents, authentication/);
