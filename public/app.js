@@ -645,7 +645,21 @@
 
   // Demo-only access gate. This is not identity verification or real registration.
   const signupForm = byId("signupForm");
-  signupForm.addEventListener("submit", event => {
+  byId("signupAge").addEventListener("change",()=>{
+    const adult=byId("signupAge").value==="18+";
+    byId("practicePasswordFields").hidden=!adult;
+    byId("signupPasswordPreview").required=adult;
+    byId("signupPasswordConfirm").required=adult;
+    byId("signupPasswordPreview").value="";
+    byId("signupPasswordConfirm").value="";
+    byId("passwordStrength").textContent=adult?"Adult practice account: choose a unique password of 12 or more characters.":"Guest demo only: no persistent account or password is created for under-18 visitors.";
+  });
+  byId("signupPasswordPreview").addEventListener("input",()=>{
+    const value=byId("signupPasswordPreview").value;
+    const error=vault?.strong(value,byId("signupEmail").value.trim(),byId("signupNickname").value.trim());
+    byId("passwordStrength").textContent=value?(error||"Meets basic practice password rules. Use a unique password that you have never used elsewhere."):"Use a unique passphrase of 12 or more characters.";
+  });
+  signupForm.addEventListener("submit", async event => {
     event.preventDefault();
     if (!signupForm.reportValidity()) return;
     const nick = byId("signupNickname").value.trim();
@@ -659,6 +673,15 @@
       byId("signupStatus").textContent = "Please acknowledge that this is a browser-only demo.";
       return;
     }
+    const adult=age==="18+";
+    if(adult){
+      if(!vault?.enabled()){byId("signupStatus").textContent="This browser cannot save encrypted practice accounts.";return;}
+      if(vault.exists()){byId("signupStatus").textContent="A practice account already exists here. Switch to Log in.";return;}
+      const pwd=byId("signupPasswordPreview").value,confirm=byId("signupPasswordConfirm").value;
+      const error=vault.strong(pwd,contact.email,nick);
+      if(error){byId("signupStatus").textContent=error;return;}
+      if(pwd!==confirm){byId("signupStatus").textContent="The two passwords do not match.";return;}
+    }
     state = {
       entryCompleted:true,
       profile:{id:"ASD-DEMO-0001",nickname:nick,ageGroup:age,email:contact.email,country:contact.country,
@@ -667,8 +690,19 @@
       idea:null,
       project:null,
       sampleProjectInterests:[],
-      sampleProjectJoins:{}
+      sampleProjectJoins:{},sampleSquadChatMessages:{},projectHistory:[]
     };
+    if(adult){
+      const btn=signupForm.querySelector('button[type="submit"]');
+      btn.disabled=true;
+      try{
+        await vault.create({email:contact.email,password:byId("signupPasswordPreview").value,nickname:nick,state});
+        try{sessionStorage.removeItem(STORE_KEY);}catch(_){}
+      }catch(error){byId("signupStatus").textContent=error.message;btn.disabled=false;return;}
+      btn.disabled=false;
+    }
+    byId("signupPasswordPreview").value="";
+    byId("signupPasswordConfirm").value="";
     save();
     // Populate the new builder editor with the demo's local identity.
     profileForm.reset();
@@ -682,7 +716,40 @@
     renderRisks();
     go("home");
   });
+  byId("loginForm").addEventListener("submit",async event=>{
+    event.preventDefault();
+    if(!byId("loginForm").reportValidity())return;
+    const email=byId("loginEmailPreview").value.trim().toLowerCase();
+    const submit=byId("practiceLoginSubmit");submit.disabled=true;
+    byId("loginStatus").textContent="";
+    try{
+      state=await vault.unlock({email,password:byId("loginPasswordPreview").value});
+      try{sessionStorage.removeItem(STORE_KEY);}catch(_){}
+      byId("loginPasswordPreview").value="";
+      profileForm.reset();syncProfileEditor();renderEmailVerification();
+      syncIdeaBuilderFromProfile();renderMatches();renderRisks();go("home");
+    }catch(error){byId("loginStatus").textContent=error.message;byId("loginPasswordPreview").value="";}
+    finally{submit.disabled=false;}
+  });
+  byId("changePracticePasswordForm").addEventListener("submit",async event=>{
+    event.preventDefault();
+    const form=byId("changePracticePasswordForm");
+    if(!form.reportValidity()||!vault?.isUnlocked())return;
+    const currentPassword=byId("currentPracticePassword").value;
+    const newPassword=byId("newPracticePassword").value;
+    if(newPassword!==byId("confirmNewPracticePassword").value){
+      byId("changePasswordStatus").textContent="The two new passwords do not match.";return;
+    }
+    const btn=byId("savePracticePassword");btn.disabled=true;
+    try{
+      await vault.changePassword({currentPassword,newPassword,email:state.profile.email,state});
+      byId("changePasswordStatus").textContent="Practice password changed successfully on this device.";
+      form.reset();
+    }catch(error){byId("changePasswordStatus").textContent=error.message;}
+    finally{byId("currentPracticePassword").value="";byId("newPracticePassword").value="";byId("confirmNewPracticePassword").value="";btn.disabled=false;}
+  });
   function leaveDemo() {
+    if(vault?.isUnlocked())vault.lock();
     state={entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[],sampleProjectJoins:{}};
     try { sessionStorage.removeItem(STORE_KEY); } catch (_) {}
     signupForm.reset();profileForm.reset();ideaForm.reset();
@@ -699,7 +766,7 @@
     showGate();
   }
   const logOutDemo = () => {
-    if (confirm("Log out and clear this tab's demo profile, projects and messages? This preview cannot log you back in yet.")) {
+    if (confirm(vault?.isUnlocked()?"Lock your practice account? Your project and messages remain encrypted on this device.":"Exit your temporary guest session and clear its tab data?")) {
       leaveDemo();
       setAccessMode("login");
     }
