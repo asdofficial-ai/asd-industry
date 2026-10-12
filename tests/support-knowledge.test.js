@@ -6,7 +6,7 @@ const lab=fs.readFileSync(path.join(__dirname,"../public/ai-first-support-lab.js
 const labPage=fs.readFileSync(path.join(__dirname,"../public/ai-first-support-lab.html"),"utf8");
 test("AI support knows reviewed customer-facing topics and availability; no secrets",()=>{
  assert.ok(KB.validate()>=30,"Broad customer FAQ catalog is required.");
- assert.match(KB.version,/^2026\.10\.11/);
+ assert.match(KB.version,/^2026\.10\.12/);
  for(const id of ["about","get-started","project-submit","matching","workspace","team-chat",
   "feed","privacy","login","recovery","payments","equity","age","reports","security",
   "case-status","founder","human-availability","ai-v-human","real-ai","support-link"]){
