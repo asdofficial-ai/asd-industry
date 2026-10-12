@@ -115,7 +115,7 @@
   const c=current();
   if(status==="claim"&&c.status==="open"&&!c.assigned){
    c.assigned=true;c.status="in_progress";add("system","Agent claimed the fictional support case.");
-  }else if(status==="in_progress"&&c.status!=="in_progress"){
+  }else if(status==="in_progress"&&["resolved","waiting_on_customer"].includes(c.status)&&c.assigned){
    c.status="in_progress";c.assigned=true;add("system","Fictional case reopened for staff work.");
   }else if(status==="escalated"&&c.status==="in_progress"&&c.assigned){
    c.status="escalated";add("system","Fictional case escalated to a Manager. Agent replies are paused until reviewed.");
@@ -188,7 +188,7 @@
   $("contextOwner").textContent=c.assigned?"Sample Human Agent":"Unassigned · waiting";
   $("contextStatus").textContent=cleanStatus(c.status);
   $("claimCase").disabled=!isAgent||c.phase!=="human"||c.assigned||c.status!=="open";
-  $("markInProgress").disabled=!isAgent||c.phase!=="human"||c.status==="in_progress";
+  $("markInProgress").disabled=!isAgent||c.phase!=="human"||!c.assigned||!["resolved","waiting_on_customer"].includes(c.status);
   $("markResolved").disabled=!isAgent||c.phase!=="human"||!c.assigned||c.status!=="in_progress";
   $("escalateCase").disabled=!isAgent||c.phase!=="human"||!c.assigned||c.status!=="in_progress";
   $("addInternalNote").disabled=!isAgent||c.phase!=="human";
