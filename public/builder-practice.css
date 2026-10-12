@@ -1,0 +1,28 @@
+/* ASD Industry adult practice account + proposed registration fee + creator Manager UX */
+.practice-password-fields{display:grid;gap:11px;margin:9px 0 16px}.practice-password-fields[hidden]{display:none!important}
+.practice-password-fields label{font-weight:730;font-size:12px}.practice-password-fields small{display:block;color:#a8bad1;font-weight:450;margin:4px 0}
+.practice-safety{font-size:12px;line-height:1.6;color:#a7c4cf;background:#122738;border:1px solid #2a4760;border-radius:8px;padding:11px;margin:2px 0}
+.practice-fee-panel{padding:17px 17px 15px;border:1px solid #466c78;border-radius:14px;background:linear-gradient(145deg,#112738,#0b1b2d);margin:17px 0}
+.practice-fee-head{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.practice-fee-head span{font-size:10px;letter-spacing:1.2px;font-weight:800;color:#a6c3d5}.practice-fee-head strong{font-size:24px;color:#d0e7fc}
+.practice-fee-panel h3{font-size:16px;color:#f5faff;line-height:1.3;margin:9px 0 5px}.practice-fee-panel p{font-size:12px;color:#b1c7d5;line-height:1.65;margin:7px 0}
+.practice-fee-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:13px 0}
+.practice-fee-steps span{font-size:10px;line-height:1.45;border:1px solid #2d4d65;background:#142c41;color:#c7dfed;padding:8px 10px;border-radius:8px}
+.practice-fee-panel p.practice-fee-warning{font-size:11px;color:#ffdca5;background:#3a2c1d;border:1px solid #7d5a3a;padding:9px 11px;border-radius:9px}
+.practice-security-panel{padding:18px;margin:14px 0;border:1px solid #335978;border-radius:13px}
+.practice-security-panel summary,.manager-project-create>summary{cursor:pointer;font-weight:800;font-size:15px;color:#cee6ff;padding:15px 18px;border-radius:11px;background:linear-gradient(100deg,#16344c,#10263f);border:1px solid #30526d;line-height:1.5}
+.practice-security-panel form{display:grid;gap:12px;margin-top:15px}
+.practice-security-panel label{font-size:12px;font-weight:740;color:#e3eefa}.practice-security-panel input{display:block;width:100%;max-width:560px;margin-top:6px;border-radius:9px;border:1px solid #4b6980;background:#101e30;color:#fff;padding:12px}
+.practice-security-panel p{font-size:12px;color:#9fb8cc}.practice-security-panel button{justify-self:start}
+.manager-saved-library{margin-bottom:17px}.manager-saved-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;margin:14px 0}
+.manager-saved-card{border:1px solid #2d5472;background:#132b43;border-radius:13px;padding:15px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0}
+.manager-saved-card strong{font-size:16px;word-break:break-word}.manager-saved-card p{color:#acc2d7;font-size:12px;margin:0}.manager-saved-card button{margin-top:auto}
+.manager-project-create{margin:0 0 25px}.manager-project-create>summary:hover,.practice-security-panel summary:hover{border-color:#5da9ea}
+.manager-project-create #ideaForm{margin:14px 0;max-width:none}
+.manager-advanced-brief{border:1px solid #355f83;background:#122a42;border-radius:12px;margin:12px 0}
+.manager-advanced-brief>summary{cursor:pointer;color:#a5d4ff;font-size:13px;font-weight:780;padding:15px;line-height:1.5}
+.manager-advanced-brief>h3,.manager-advanced-brief>p,.manager-advanced-brief>label,.manager-advanced-brief>.creator-profit-fields,.manager-advanced-brief>.kicker{margin-left:15px;margin-right:15px}
+#view-ideas .content-grid{grid-template-columns:1fr}#view-ideas .aside-stack{display:none}
+#view-manager #ideaForm .gate-form{min-width:0}
+#view-manager .manager-project-create textarea{min-height:65px}
+@media(max-width:600px){.manager-saved-list{grid-template-columns:1fr}.practice-fee-steps{grid-template-columns:1fr}.practice-security-panel{padding:12px}.manager-project-create>summary{padding:13px;font-size:14px}}
