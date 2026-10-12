@@ -146,6 +146,7 @@
    waiting?"Add a fictional follow-up while waiting…":"Message the fictional human agent…";
   $("customerSend").disabled=["resolved","closed","escalated"].includes(c.status);
   $("customerQuick").hidden=!inAI;
+  $("humanQuick").hidden=inAI;
  }
  function metrics(){
   const container=$("agentMetrics");container.replaceChildren();
@@ -302,7 +303,7 @@
  }
  function reset(){
   cases=createCases();view="customer";role="agent";availability="available";selectedCase="project";composerType="reply";
-  $("caseSearch").value="";$("caseFilter").value="all";$("agentAvailability").value="available";
+  $("caseSearch").value="";$("caseFilter").value="all";$("agentAvailability").value="available";$("agentRole").value="agent";
   $("customerInput").value="";$("agentInput").value="";$("dialogBackdrop").hidden=true;dialogAction=null;
   $("customerScreen").hidden=false;$("agentScreen").hidden=true;
   $("viewCustomer").classList.add("active");$("viewAgent").classList.remove("active");
@@ -320,9 +321,21 @@
   const value=button.dataset.quickCustomer;
   if(!safe(value))return;customerSubmit(value);
  }));
+ document.querySelectorAll("[data-quick-human]").forEach(button=>button.addEventListener("click",()=>{
+  const c=customerCase();
+  if(c.stage==="ai")return;
+  const value=button.dataset.quickHuman;if(!safe(value))return;
+  customerSubmit(value);
+  if(value.toLowerCase().includes("escalate"))say("Escalation was requested in the fictional thread. An assigned human agent must decide whether to escalate the case.");
+ }));
  $("contactHuman").addEventListener("click",handoff);
  $("caseSearch").addEventListener("input",renderInbox);
  $("caseFilter").addEventListener("change",renderInbox);
+ $("agentRole").addEventListener("change",()=>{
+  role=$("agentRole").value==="manager"?"manager":"agent";
+  say(role==="manager"?"Manager-only training actions are visible. This role switch does not grant real permissions.":"Human Agent training actions are visible. Manager approval controls are hidden.");
+  render();
+ });
  $("agentAvailability").addEventListener("change",()=>{
   availability=$("agentAvailability").value;say("Fictional agent availability: "+availability);
   render();
