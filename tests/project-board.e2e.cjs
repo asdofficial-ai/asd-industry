@@ -92,6 +92,7 @@ async function testWidth(browser,width){
     await page.locator('input[name="ideaInterests"][value="Education"]').check();
     await page.locator("#ideaAvailability").selectOption("flexible");
     await page.locator('#ideaForm button[type="submit"]').click();
+    await page.evaluate(()=>document.querySelector('[data-nav="ideas"]').click());
     assert.equal(await page.locator("#openProjectsList .own-project-card").count(),1,"private draft remains visible");
     assert.match(await page.locator(".own-project-card").textContent(),/ONLY YOU SEE THIS/);
     assert.deepEqual(errors,[],"no browser JS errors");
