@@ -72,14 +72,12 @@ test("password recovery and unknown questions offer a human option, never reveal
  assert.equal(get("messages").children.length,count);
  assert.match(get("feedback").textContent,/Do not enter passwords/);
 });
-test("single support page offers instant FAQ and optional server-only model, without storing secrets",()=>{
+test("support page answers from local knowledge and optionally uses protected server model",()=>{
  const script=read("support-page.js");
- for(const disallowed of [/XMLHttpRequest/i,/WebSocket/i,/sendMail/i,/localStorage/i,/sessionStorage/i,/indexedDB/i,/document\\.cookie/i,/innerHTML\\s*=/i,/Bearer\\s/i]){
-  assert.doesNotMatch(script,disallowed);
+ for(const forbidden of ["XMLHttpRequest","WebSocket","sendMail","localStorage","sessionStorage","indexedDB","document.cookie","innerHTML","Bearer "]){
+  assert.equal(script.includes(forbidden),false,forbidden+" must not appear in customer JS.");
  }
- assert.match(script,/window\\.ASDSupportKnowledge/);
- assert.match(script,/\\/api\\/support-ai\\/status/);
- assert.match(script,/\\/api\\/support-ai\\/ask/);
- assert.match(script,/AbortController/);
- assert.match(script,/no real staff/i);
+ for(const marker of ["window.ASDSupportKnowledge","/api/support-ai/status","/api/support-ai/ask","AbortController","no real staff"]){
+  assert.ok(script.includes(marker),marker+" missing");
+ }
 });
