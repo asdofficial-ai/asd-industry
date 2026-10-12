@@ -51,19 +51,35 @@ test("profile overview is separate from the editor and saves return to overview"
   assert.match(script,/go\("profile"\)/);
   assert.match(script,/byId\("profileLogout"\)\.addEventListener/);
 });
-test("password and login controls exist but cannot accept real credentials",()=>{
+test("practice signup and login accept strong local demo passwords without creating server accounts",()=>{
   for(const id of ["signupTab","loginTab","signupPanel","loginPanel",
-    "signupPasswordPreview","loginEmailPreview","loginPasswordPreview","profileLogout"]){
-    assert.ok(ids.includes(id),"missing auth shell element "+id);
+    "signupPasswordPreview","signupPasswordConfirm","loginForm","loginEmailPreview",
+    "loginPasswordPreview","profileLogout","practiceSecurityPanel","changePracticePasswordForm",
+    "currentPracticePassword","newPracticePassword","confirmNewPracticePassword",
+    "managerSavedProjects","managerCreateDetails","registrationFeePreview"]){
+    assert.ok(ids.includes(id),"missing demo account element "+id);
   }
-  for(const id of ["signupPasswordPreview","loginPasswordPreview"]){
-    assert.match(html,new RegExp('id="'+id+'"[^>]*disabled'));
-  }
-  assert.match(html,/Log in · Coming soon/);
-  assert.match(script,/setAccessMode\("login"\)/);
-  assert.doesNotMatch(html,/id="avatarChoices"/);
-  assert.doesNotMatch(html,/class="avatar-choice"/);
-  assert.match(html,/id="avatarUpload"/);
+  assert.doesNotMatch(html,/id="signupPasswordPreview"[^>]*disabled/);
+  assert.doesNotMatch(html,/id="loginPasswordPreview"[^>]*disabled/);
+  assert.match(html,/type="password"/);
+  assert.match(html,/₦2,000/);
+  assert.match(html,/NOT ACCEPTING PAYMENTS/);
+  assert.match(html,/href="\/builder-practice.css"/);
+  assert.match(html,/src="\/demo-vault.js"/);
+  assert.match(script,/vault\.create\(/);
+  assert.match(script,/vault\.unlock\(/);
+  assert.match(script,/vault\.changePassword\(/);
+  assert.doesNotMatch(script,/\bfetch\s*\(/);
+});
+test("project creator is inside Manager and detailed fields are collapsed",()=>{
+  const ideas=html.indexOf('id="view-ideas"'),manager=html.indexOf('id="view-manager"');
+  const creator=html.indexOf('id="ideaForm"');
+  assert.ok(ideas>=0&&manager>ideas&&creator>manager);
+  assert.ok(html.includes('id="managerAdvancedBrief"'));
+  assert.ok(html.includes('id="managerSavedProjects"'));
+  assert.match(script,/function renderSavedProjects\(/);
+  assert.match(script,/projectHistory\.unshift/);
+  assert.match(script,/vault\.persist\(state\)/);
 });
 test("Find Your Team shows available slots, role picker and local-only full-team closure",()=>{
   const required=["openProjectsSection","openProjectsHeading","openProjectsList",
