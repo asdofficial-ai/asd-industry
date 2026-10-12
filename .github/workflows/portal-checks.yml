@@ -33,7 +33,7 @@ jobs:
       - run: node --check scripts/staff-migrate.js
       - run: node --check scripts/staff-provision.js
       - run: node --check public/app.js
-      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/identity-roles.test.js tests/founder-ui.test.js tests/support-case-core.test.js tests/support-operations-core.test.js tests/support-training-core.test.js tests/support-training-ui.test.js tests/support-handoff.test.js tests/support-bridge.test.js tests/support-page.test.js tests/support-knowledge.test.js tests/support-ai-context.test.js tests/customer-support-ai.test.js
+      - run: node --test tests/portal-core.test.js tests/staff-workflow.test.js tests/ai-staff-runner.test.js tests/staff-auth.test.js tests/identity-roles.test.js tests/founder-ui.test.js tests/support-case-core.test.js tests/support-operations-core.test.js tests/support-training-core.test.js tests/support-training-ui.test.js tests/support-handoff.test.js tests/support-agent-handoff-preview.test.js tests/support-bridge.test.js tests/support-page.test.js tests/support-knowledge.test.js tests/support-ai-context.test.js tests/customer-support-ai.test.js
 
   postgres-integration:
     runs-on: ubuntu-latest
