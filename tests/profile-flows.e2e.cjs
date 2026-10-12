@@ -97,7 +97,9 @@ async function testProfile(width,browser){
     await page.locator("#loginEmailPreview").fill("sample@example.com");
     await page.locator("#loginPasswordPreview").fill("Cedar River Orbit! 2026");
     await page.locator("#practiceLoginSubmit").click();
-    assert.ok(await page.locator("#view-home").isVisible(),"practice login restores workspace");
+    await page.locator("#view-home").waitFor({state:"visible",timeout:15000}).catch(async err=>{
+      throw Error("Practice login failed: "+(await page.locator("#loginStatus").textContent())+" / "+err.message);
+    });
     await page.locator('[data-nav="profile"]').first().click();
     assert.equal(await page.locator("#profileDisplayHandle").textContent(),"@sample.dev");
     assert.deepEqual(errors,[]);
