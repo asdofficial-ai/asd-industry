@@ -6,7 +6,7 @@
 
 The ASD Industry customer uses **AI Support first**. The assistant gives an answer only when it can ground that answer in reviewed customer-public information and safely explain the current feature status. If it has insufficient information, lacks permission, sees a high-stakes action, or a customer requests a human, it explains the limitation and offers a **Contact Human Support** handoff.
 
-The current `/ai-first-support-lab.html` is **fictional**: its answers come from the curated, versioned `public/support-knowledge.js`. It does not contact a real AI provider, authenticate customers, or deliver messages. Human contact is an in-memory simulation. The future production route must validate an actual signed-in customer's age/privacy eligibility and a server-created, expiring, single-use handoff grant based on a trusted AI assessment. The client must not be allowed to set `needs_human` by itself as an authorization claim.
+The main customer entry is now the smaller **`/support.html`** page, linked from the ASD Industry entry screen and main navigation. The earlier `/ai-first-support-lab.html` remains a separate legacy design example. Both are **fictional**: its answers come from the curated, versioned `public/support-knowledge.js`. It does not contact a real AI provider, authenticate customers, or deliver messages. Human contact is an in-memory simulation. The future production route must validate an actual signed-in customer's age/privacy eligibility and a server-created, expiring, single-use handoff grant based on a trusted AI assessment. The client must not be allowed to set `needs_human` by itself as an authorization claim.
 
 Knowledge is **retrieved at answer time, not embedded permanently in a model's weights**. This makes it possible to correct or withdraw outdated statements without retraining. The public corpus contains only safe, customer-visible explanations, feature status and approved help procedures; it is not an internal data dump.
 
@@ -46,3 +46,12 @@ A GitHub Actions gate checks that PRs changing selected public customer features
 - Multilingual reviews, including Hausa and Arabic, so translations match source policy and never invent capabilities.
 
 **Owner note:** This knowledge-update policy is now written in the repo so future assistants/developers have a concrete checklist instead of relying on conversational memory alone.
+
+## October 12 customer interface simplification
+The customer-facing entry is a **single `Need Support?` page**. The entry link is visible on the signup/demo entry page, desktop navigation and mobile header. This same URL can be shared from social accounts later; no social account has been connected or modified.
+
+The one-page demo uses the same approved public knowledge catalog. It answers safe, grounded general questions. Requests to retrieve/reveal passwords, reset account access, change security controls, or perform restricted actions cannot be fulfilled by the demo. An unclear or unauthorized answer offers **Contact Human Support**. A clear explicit statement such as **“I need human support”** automatically opens a **fictional** human handoff view, without asking the user to press an extra button. No actual employee gets a message and no live customer request is created.
+
+**Production 2FA reminder:** Authenticator-app two-factor authentication (time-based one-time passwords or passkeys) is planned for appropriately verified adult customer/staff sessions. It is **not active** here. Real secure recovery must never let an agent retrieve or disclose the previous password; staff recovery must be independently authorized and audited.
+
+At launch, any customer-initiated human request must be tied to a **verified signed-in customer**, a server-issued short-lived one-use authorization, a real case, and a verified eligible staff role. The browser must never be trusted merely because it sets an AI failure or human-request flag. Keep real customer messaging **disabled** until authentication, youth/privacy safeguards, MFA and incident response are reviewed.
