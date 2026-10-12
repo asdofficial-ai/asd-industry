@@ -24,6 +24,7 @@ ALTER TABLE industry_support_training_messages ADD CONSTRAINT industry_support_t
  CHECK(sender_kind IN ('customer_simulator','human_agent','ai_support'));
 ALTER TABLE industry_support_training_messages DROP CONSTRAINT IF EXISTS industry_support_training_messages_check;
 -- Explicit separate names avoid accidental removal of other check constraints.
+ALTER TABLE industry_support_training_messages DROP CONSTRAINT IF EXISTS industry_support_training_sender_check;
 ALTER TABLE industry_support_training_messages
  ADD CONSTRAINT industry_support_training_sender_check CHECK(
   (sender_kind='human_agent' AND actor_staff_id IS NOT NULL)
