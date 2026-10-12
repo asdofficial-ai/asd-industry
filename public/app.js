@@ -765,11 +765,15 @@
     renderMatches();renderRisks();
     showGate();
   }
-  const logOutDemo = () => {
-    if (confirm(vault?.isUnlocked()?"Lock your practice account? Your project and messages remain encrypted on this device.":"Exit your temporary guest session and clear its tab data?")) {
-      leaveDemo();
-      setAccessMode("login");
+  const logOutDemo = async () => {
+    if(!confirm(vault?.isUnlocked()?"Lock this account? Your project and messages remain encrypted on this device.":"Exit your temporary guest session and clear its tab data?"))return;
+    if(vault?.isUnlocked()){
+      try{await vault.flush();}catch(error){
+        alert("Changes could not be saved. Please check browser storage before signing out.");return;
+      }
     }
+    leaveDemo();
+    setAccessMode("login");
   };
   byId("signOut").addEventListener("click", logOutDemo);
   byId("profileLogout").addEventListener("click", logOutDemo);
