@@ -28,7 +28,7 @@ ALTER TABLE industry_support_training_messages DROP CONSTRAINT IF EXISTS industr
 ALTER TABLE industry_support_training_messages
  ADD CONSTRAINT industry_support_training_sender_check CHECK(
   (sender_kind='human_agent' AND actor_staff_id IS NOT NULL)
-  OR (sender_kind='customer_simulator' AND actor_staff_id IS NOT NULL)
+  OR (sender_kind='customer_simulator')
   OR (sender_kind='ai_support' AND actor_staff_id IS NOT NULL));
 -- Training messages must never reach anyone outside the isolated case.
 ALTER TABLE industry_support_case_events DROP CONSTRAINT IF EXISTS industry_support_case_events_event_type_check;
