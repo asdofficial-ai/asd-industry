@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="theme-color" content="#101514"><meta name="robots" content="noindex,nofollow">
+ <meta name="description" content="ASD Industry Support — ask AI first, request a human when needed. Private design preview.">
+ <title>Need Support? · ASD Industry</title>
+ <link rel="stylesheet" href="/support-page.css">
+ <script defer src="/support-knowledge.js"></script>
+ <script defer src="/support-page.js"></script>
+</head>
+<body>
+ <div class="page">
+  <header class="top">
+   <a class="back" href="/" aria-label="Back to ASD Industry">← <span>ASD INDUSTRY</span></a>
+   <span class="preview">● DESIGN DEMO</span>
+  </header>
+  <main>
+   <div class="intro"><span class="eyebrow">HELP CENTRE</span><h1>Need support<span>?</span></h1>
+    <p>Ask our AI Support Assistant anything about ASD Industry. Need a person instead? Just type <strong>“I need human support.”</strong></p>
+   </div>
+   <section class="chat" aria-label="Support conversation">
+    <div class="chat-head"><div class="avatar" aria-hidden="true">✦</div>
+     <div><h2 id="serviceName">ASD AI Support</h2><p id="serviceDetail">Answers common questions · human help when needed</p></div>
+     <span id="serviceStatus" class="online">AI FIRST</span>
+    </div>
+    <p class="notice" role="note"><strong>Preview, not live support.</strong> Answers come from reviewed demo FAQs. No AI model or human employee is connected. Messages stay in this page and disappear when you refresh. Never enter personal details, passwords or codes.</p>
+    <div id="messages" class="messages" role="log" aria-label="Demo support messages" aria-live="polite" aria-relevant="additions"></div>
+    <div id="handoff" class="handoff" hidden><p><strong>Need someone from our team?</strong><br><span id="handoffText">The assistant could not complete that request.</span></p>
+     <button id="humanButton" type="button">Contact Human Support ↗</button></div>
+    <div class="quick" id="quickQuestions" aria-label="Example questions">
+      <button type="button" data-prompt="What is ASD Industry?">About ASD</button>
+      <button type="button" data-prompt="How do I find teammates?">Find a team</button>
+      <button type="button" data-prompt="I forgot my password.">Account access</button>
+      <button type="button" data-prompt="I need human support">Human support</button>
+    </div>
+    <form id="chatForm" class="compose">
+     <label class="sr" for="question">Your support question</label>
+     <textarea id="question" rows="2" maxlength="500" minlength="2" required placeholder="Ask me anything about ASD Industry…"></textarea>
+     <button type="submit" id="send">Send ➤</button>
+    </form>
+   </section>
+   <div class="bottom"><span id="feedback" role="status" aria-live="polite">Start by asking the AI Support Assistant.</span><button id="startOver" type="button">↻ New conversation</button></div>
+   <p class="foot">Security roadmap: authenticator-app 2FA, verified human agents, secure customer sessions and account recovery are planned—not active in this demo.</p>
+  </main>
+ </div>
+</body>
+</html>
