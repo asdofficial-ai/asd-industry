@@ -108,7 +108,7 @@
  }
  function agentCanWork(c){return c.assigned==="Example Agent"&&(role==="manager"||role==="agent");}
  function agentCanReply(c){return agentCanWork(c)&&["in_progress","waiting"].includes(c.status);}
- function chooseCase(id){if(!cases.some(c=>c.id===id))return;selectedCase=id;composerType="reply";render();}
+ function chooseCase(id){if(!cases.some(c=>c.id===id))return;selectedCase=id;composerType="reply";$("agentInput").value=activeCase().draft||"";render();}
  function setView(next){
   if(!["customer","agent"].includes(next))return;
   view=next;
@@ -116,7 +116,7 @@
   for(const [id,active] of [["viewCustomer",next==="customer"],["viewAgent",next==="agent"]]){
    $(id).classList.toggle("active",active);$(id).setAttribute("aria-pressed",String(active));
   }
-  if(next==="agent")selectedCase=customerCase().stage!=="ai"?"project":"technical";
+  if(next==="agent"){selectedCase=customerCase().stage!=="ai"?"project":"technical";composerType="reply";$("agentInput").value=activeCase().draft||"";}
   render();
   say(next==="customer"?"Customer chat: same history when AI hands off; all staff controls are hidden.":
    "Agent workspace: manage a fictional inbox. Real employees require separate verified authentication.");
@@ -213,9 +213,13 @@
   $("sidebarTitle").textContent=c.title;
   for(const [id,value] of [["metaTicket",c.ticket],["metaCustomer",c.customer],["metaDepartment",c.category],
     ["metaPriority",c.priority],["metaAgent",c.assigned||"Unclaimed"],["metaStatus",statusName(c.status)]])$(id).textContent=value;
-  history($("agentMessages"),c.messages,"agent");
+  if(role==="agent"&&!agentCanWork(c)){
+   $("agentMessages").replaceChildren(node("p","Claim the fictional case before accessing its AI handoff messages and conversation history.","footnote"));
+  }else history($("agentMessages"),c.messages,"agent");
   const log=$("agentAudit");log.replaceChildren();
-  for(const action of c.events){const line=node("p",undefined,"audit-event");line.append(node("b",action.time+" · "),node("span",action.text));log.append(line);}
+  if(role==="agent"&&!agentCanWork(c)){
+   log.append(node("p","Case activity becomes available after claim.","audit-event"));
+  }else for(const action of c.events){const line=node("p",undefined,"audit-event");line.append(node("b",action.time+" · "),node("span",action.text));log.append(line);}
   updateControls(c);
   $("draftStatus").textContent=c.draft?"A private, unsent draft is saved in this browser tab.":"Draft is private to this fictional agent and never delivered.";
  }
