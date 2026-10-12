@@ -43,6 +43,25 @@ test("model adapter sends secret only as server Authorization header and checks 
  assert.equal(hits,1);
  await assert.rejects(()=>AI.modelReply("Test",{env:demoEnv,fetcher:async()=>({ok:false,status:503})}),/Provider unavailable/);
 });
+test("Gemini model adapter uses a server key in header, never client JavaScript",async()=>{
+ const env={...demoEnv,SUPPORT_AI_PROVIDER:"gemini",SUPPORT_AI_MODEL:"gemini-2.5-flash-lite"};
+ const reply=await AI.modelReply("Invent a simple activity for a fictional coding club",{
+  env,fetcher:async(url,options)=>{
+   assert.match(url,/generativelanguage\\.googleapis\\.com\\/v1beta\\/models\\/gemini-2\\.5-flash-lite:generateContent/);
+   assert.equal(options.headers["x-goog-api-key"],env.SUPPORT_AI_API_KEY);
+   assert.equal(options.headers.Authorization,undefined);
+   const payload=JSON.parse(options.body);
+   assert.match(payload.system_instruction.parts[0].text,/PRIVATE DEVELOPMENT DEMONSTRATION/);
+   assert.equal(payload.contents[0].parts[0].text,"Invent a simple activity for a fictional coding club");
+   assert.doesNotMatch(options.body,/CI-ONLY-unusable-key-not-real/);
+   return {ok:true,json:async()=>({candidates:[{content:{parts:[{text:JSON.stringify({
+    status:"answered",reply:"Try a sample quiz app project."
+   })}]}}]})};
+  }
+ });
+ assert.equal(reply.status,"answered");
+ assert.equal(reply.reply,"Try a sample quiz app project.");
+});
 test("scoped HTTP API answers approved FAQ instantly, blocks missing origin and never activates customer chat",async()=>{
  const app=express();
  const fake=async()=>({ok:true,json:async()=>({choices:[{message:{content:JSON.stringify({status:"answered",reply:"Plan a very small test feature."})}}]})});
