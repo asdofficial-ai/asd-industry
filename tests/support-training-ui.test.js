@@ -4,11 +4,13 @@ const read=p=>fs.readFileSync(path.join(__dirname,"../public",p),"utf8");
 test("simulated customer/agent conversation is visually separate from real employee portal",()=>{
  const preview=read("support-conversation-lab.html");
  const staff=read("support-console.html");
- assert.match(preview,/FICTIONAL, OFFLINE PREVIEW/);
- assert.match(preview,/id="customerView"/);
- assert.match(preview,/id="agentView"/);
- assert.match(preview,/id="conv-thread"/);
- assert.match(preview,/id="conv-form"/);
+ assert.match(preview,/FICTIONAL \/ SIMULATED ONLY/);
+ assert.match(preview,/data-perspective="customer"/);
+ assert.match(preview,/data-perspective="agent"/);
+ assert.match(preview,/id="chatMessages"/);
+ assert.match(preview,/id="chatForm"/);
+ assert.match(preview,/id="agentContext"[^>]*hidden/);
+ assert.match(preview,/id="agentInbox"[^>]*hidden/);
  assert.doesNotMatch(preview,/type="password"|type="email"|autocomplete="username"/);
  assert.match(staff,/id="supportWorkspace" hidden/);
  const liveUI=read("support-workspace.js");
@@ -23,9 +25,9 @@ test("static conversation simulator has no network, persistent storage or unsafe
   assert.doesNotMatch(js,bad);
  }
  assert.match(js,/replaceChildren/);
- assert.match(js,/customer_simulator/);
- assert.match(js,/human_agent/);
- assert.match(js,/NOT DELIVERED/);
+ assert.match(js,/CUSTOMER · FICTIONAL/);
+ assert.match(js,/HUMAN AGENT · DEMO/);
+ assert.match(js,/NOT SENT/);
  const api=fs.readFileSync(path.join(__dirname,"../lib/support-training-api.js"),"utf8");
  assert.match(api,/outboundSent:false/);
  assert.match(api,/realCustomerConnected:false/);
