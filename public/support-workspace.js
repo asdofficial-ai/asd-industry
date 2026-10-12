@@ -25,7 +25,7 @@
  function showError(message){$("workspaceError").hidden=false;tell("workspaceError",message);}
  function clearError(){$("workspaceError").hidden=true;tell("workspaceError","");}
  function showTab(page){
-  if(!["dashboard","cases","create","guidelines","profile","team"].includes(page)||$("supportWorkspace").hidden)return;
+  if(!["dashboard","cases","create","guidelines","profile","team","ai-inbox"].includes(page)||$("supportWorkspace").hidden)return;
   if(page==="team"&&role!=="manager")return;
   for(const section of document.querySelectorAll(".workspace-page"))section.hidden=section.id!=="page-"+page;
   for(const b of document.querySelectorAll("[data-page]")){
@@ -34,6 +34,7 @@
   }
   if(page==="team")loadManager().catch(err=>showError(err.message));
   if(page==="profile")loadProfile().catch(err=>showError(err.message));
+  if(page==="ai-inbox")loadAiHandoffs().catch(err=>showError(err.message));
  }
  function showStats(data){
   const box=$("supportStats");box.replaceChildren();
@@ -194,8 +195,9 @@
   const response=await api("/support/cases/"+id+"/conversation");
   for(const message of response.data||[]){
    const simulated=message.sender_kind==="customer_simulator";
+   const ai=message.sender_kind==="ai_support";
    const card=e("article",undefined,"training-bubble "+(simulated?"training-customer":"training-agent"));
-   card.append(e("span",simulated?"◌ CUSTOMER SIMULATOR":"✦ HUMAN AGENT · TRAINING","eyebrow"),
+   card.append(e("span",simulated?"◌ CUSTOMER SIMULATOR":ai?"✦ AI SUPPORT · HANDOFF (SIMULATED)":"✦ HUMAN AGENT · TRAINING","eyebrow"),
     e("p",message.body),
     e("small",new Date(message.created_at).toLocaleString()+" · NEVER DELIVERED"));
    thread.append(card);
@@ -234,6 +236,30 @@
   panel.append(section);
  }
 
+ async function loadAiHandoffs(){
+  const info=await api("/support/ai-handoffs");
+  const target=$("aiHandoffList");target.replaceChildren();
+  if(!info.data.length){target.append(e("p","No AI handoff test messages yet.","fine"));return;}
+  for(const item of info.data){
+   const card=e("article",undefined,"team-card");
+   card.append(e("strong",item.subject),e("p","AI reason: "+item.assessment_reason.replaceAll("_"," "),"fine"),
+    e("p","Case status: "+item.status.replaceAll("_"," ")+" · SIMULATED · NOT DELIVERED","fine"));
+   if(item.assigned_staff_id||role==="manager"){
+    card.append(button("Open private training thread →",async()=>{
+     try{await refresh();showTab("cases");await openCase(item.case_id);}
+     catch(err){showError(err.message);}
+    },"secondary"));
+   }else{
+    card.append(button("Claim simulated handoff →",async()=>{
+     try{
+      await post("/support/cases/"+item.case_id+"/claim",{});
+      await refresh();showTab("cases");await openCase(item.case_id);
+     }catch(err){showError(err.message);}
+    },"primary"));
+   }
+   target.append(card);
+  }
+ }
  async function loadProfile(){
   const response=await api("/support/profile"),p=response.data;
   $("profileDisplayName").value=p.display_name;
@@ -302,6 +328,7 @@
   tell("agentIdentity",person.role==="manager"?"Manager · Human staff":person.badge?.verified?"Verified Human Support Agent":"Support Agent · Private account");
   tell("serviceStatus","Private human support session active. Synthetic adult-only cases; public messaging and recovery disabled.");
   $("managerTab").hidden=role!=="manager";
+  $("aiHandoffSimulator").hidden=role!=="manager";
   await loadProfile();await refresh();showTab("dashboard");
  }
  $("supportLoginForm").addEventListener("submit",async event=>{
@@ -324,6 +351,26 @@
   if(nav&& !$("supportWorkspace").hidden)showTab(nav.dataset.page);
  });
  $("refreshCases").addEventListener("click",refresh);
+ $("refreshHandoffs").addEventListener("click",()=>loadAiHandoffs().catch(err=>showError(err.message)));
+ $("aiHandoffSimulator").addEventListener("submit",async event=>{
+  event.preventDefault();if(role!=="manager")return;
+  if(!$("aiHandoffSimulator").reportValidity())return;
+  $("simulateHandoffBtn").disabled=true;
+  tell("aiHandoffFeedback","");
+  try{
+   const result=await post("/support/ai-handoffs/simulate",{
+    question:$("aiHandoffQuestion").value,requestId:crypto.randomUUID(),
+    syntheticAdultTest:$("aiHandoffFictional").checked
+   });
+   if(result.offered){
+    tell("aiHandoffFeedback","AI training message delivered to the PRIVATE staff case inbox only. No customer was contacted.");
+   }else{
+    tell("aiHandoffFeedback","Approved AI answer: "+result.aiAnswer+" — No human case was created.");
+   }
+   $("aiHandoffSimulator").reset();await loadAiHandoffs();await refresh();
+  }catch(err){tell("aiHandoffFeedback",err.message);}
+  finally{$("simulateHandoffBtn").disabled=false;}
+ });
  $("agentProfileForm").addEventListener("submit",async event=>{
   event.preventDefault();if(!$("agentProfileForm").reportValidity())return;
   $("saveProfile").disabled=true;tell("profileFeedback","");
