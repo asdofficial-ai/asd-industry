@@ -86,3 +86,35 @@ We can describe the **staff-workflow prototype as mostly implemented**, but a nu
 - **Not active:** No genuine customer authentication, live model, model fine-tuning, access to a person's private account, real staff booking, outbound customer chat, or automatic unreviewed ingestion of new code into AI. These require separate secure APIs, human review and launch clearance.
 
 This knowledge catalog is a **living reviewed source**, not a promise that every possible future question already has an answer. Unknown or ambiguous information must trigger honest uncertainty and safe handoff, never invention.
+
+## October 12 — Response-ready AI Support (PRIVATE BETA; real AI not activated)
+
+**User-reported issue:** the visually finished support page could not respond flexibly. It was a scripted public FAQ, not a connected language model. Replaced the unresponsive unknown-question path with an optional real server-side model adapter and retained an immediate approved-answer fallback.
+
+### Implementation
+- `public/support.html` remains the **single customer-visible entry point** from the ASD Industry demo. No Founder, Manager or direct Human Support staff-login link is added.
+- `public/support-page.js` immediately answers recognized questions from the reviewed, versioned `public/support-knowledge.js`, keeps a clear "thinking" state for server-model requests, uses a response timeout/error fallback, and lets users submit with Enter (Shift+Enter inserts a newline). It shows **Contact Human Support** only for unanswerable or unauthorized requests (and explicit human requests), but **human chat is still fictional**.
+- `lib/customer-support-ai.js` is a new **optional** Express `/api/support-ai` endpoint. It is mounted in `server.js` only on the isolated v0.9 development branch. It can call an external provider through **server-side** fetch after configured activation. Defaults to **disabled**, with no public signup, human agent, data storage or outbound messages. It intentionally omits customer history and refuses emails, secrets, private identifiers and sensitive account-changing actions. It has origin validation, request bounds, a basic per-IP limiter, 8.5-second upstream cutoff, short JSON output validation, and no logging of messages or credentials.
+- Supported providers: OpenAI-compatible official Chat Completions API via `SUPPORT_AI_PROVIDER=openai`, or Google's Gemini GenerateContent endpoint via `SUPPORT_AI_PROVIDER=gemini`. No API key is committed or embedded in website JavaScript; both providers require a separately provisioned key and budget/quota controls.
+
+### Server settings (development service only)
+Use the isolated Node staging **web service**, NOT the static design preview or the public production site.
+
+```text
+SUPPORT_AI_ENABLED=true
+SUPPORT_AI_PROVIDER=gemini          # or openai
+SUPPORT_AI_MODEL=gemini-2.5-flash-lite  # choose a currently available supported model
+SUPPORT_AI_API_KEY=<set as private server environment secret, never put in chat>
+SUPPORT_AI_ORIGIN=https://<exact-own-hostname>
+```
+
+If using OpenAI, configure a compatible model instead (such as `gpt-4.1-mini`). Model support, pricing, latency, regional availability, and quota must be verified before release. Setting a public-facing flag on a production service is **NOT** authorized. Keep existing Render staff and production services unchanged until explicit release review.
+
+`GET /api/support-ai/status` reports whether a model is configured (without revealing keys); `POST /api/support-ai/ask` accepts only 2–500-character, non-sensitive demo questions with same-origin POST and rate limits. Reviewed FAQ answers are returned without a provider call. Unmatched questions are sent to the configured provider only if the flag, key, model and allowed origin are present.
+
+### Reality and launch blockers
+- The existing public **static** preview can only provide immediate reviewed knowledge and simulated human handoff. It cannot execute Node API routes; copying browser code to static hosting **does not connect an AI model**.
+- This work prepares AI for real answers but **has not configured a provider credential or deployed a live-model Node service**. Until those are explicitly configured, unknown questions will honestly get a fallback and an optional fictional handoff.
+- Fast reviewed FAQs are synchronous. External AI responses depend on provider latency and network; "instant" cannot be guaranteed.
+- Real customers, youth-safety processes, provider privacy assessment, logging/retention consent, spending limits, secure customer authentication, single-use server-verified handoff, real staff messaging, human password recovery and MFA are still launch gates. Do not unlock access early.
+- Run `tests/customer-support-ai.test.js`, `tests/support-page.test.js`, and existing CI before considering the dev branch verified.
