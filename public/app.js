@@ -1578,8 +1578,12 @@
     });
   }
   byId("resetDemo").addEventListener("click",()=>{
-    if (!confirm("Clear your demo profile, project, tasks, group chat and notes, and return to the sign-up screen?")) return;
+    if(!confirm(vault?.isUnlocked()?
+      "Permanently erase this browser's encrypted practice account, saved projects and chat history? This cannot be undone.":
+      "Clear this temporary guest demo, projects, messages and notes?"))return;
+    if(vault?.isUnlocked())vault.erase();
     leaveDemo();
+    setAccessMode("signup");
   });
   renderMatches();
   renderRisks();
