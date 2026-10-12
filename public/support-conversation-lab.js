@@ -3,9 +3,10 @@
 (()=>{
  const $=id=>document.getElementById(id);
  const seed=()=>[
-  {kind:"customer_simulator",message:"Hello, I am a fictional adult using an example project account. How can I upload a sample file?",time:"09:41"},
-  {kind:"human_agent",message:"Welcome to the ASD Industry support demonstration! Open the example project, choose Files and select a practice file.",time:"09:42"},
-  {kind:"customer_simulator",message:"That helps. Does the fictional dashboard also let me preview the project before sharing it?",time:"09:43"}
+  {kind:"customer_simulator",message:"Could you override the decision on my fictional project application?",time:"09:41"},
+  {kind:"ai_support",message:"I cannot change a human project review decision. This fictional request needs a verified human review, so I am escalating it to the training agent inbox.",time:"09:41"},
+  {kind:"human_agent",message:"Hello! I received the simulated AI handoff. I can explain the project review process but cannot promise to change a decision.",time:"09:42"},
+  {kind:"customer_simulator",message:"Thanks. Please explain which review steps apply in this sample workflow.",time:"09:43"}
  ];
  const messages=seed();let perspective="customer";
  const unsafe=/password|passcode|secret|seed phrase|private key|\b(?:NIN|BVN)\b|[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:\+?\d[\d ()-]{7,}\d)/i;
@@ -24,7 +25,7 @@
   for(const m of messages){
    const mine=(customer&&m.kind==="customer_simulator")||(!customer&&m.kind==="human_agent");
    const bubble=maker("article",undefined,"conv-msg "+(mine?"mine":"theirs"));
-   bubble.append(maker("span",m.kind==="customer_simulator"?"CUSTOMER SIMULATOR":"HUMAN AGENT · SAMPLE","conv-author"),
+   bubble.append(maker("span",m.kind==="customer_simulator"?"CUSTOMER SIMULATOR":m.kind==="ai_support"?"AI SUPPORT · TRAINING HANDOFF":"HUMAN AGENT · SAMPLE","conv-author"),
     maker("p",m.message),maker("time",m.time+" · FICTIONAL · NOT DELIVERED"));
    thread.append(bubble);
   }
