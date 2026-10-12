@@ -32,7 +32,7 @@ This is a **reconstruction from the October 8, 2026 handoff**, not the recovered
 
 The browser stores demo data (including resized optional photos) in **sessionStorage only**, isolated to the current browser tab. It is not sent to the server. Use a test/example email and a non-identifying avatar rather than personal data or real photos of children; avoid entering real names, personal contact details, or sensitive ideas. A visitor must not be led to believe that fictional team members are real people. Clear all session data with the Reset Demo button or by closing the tab.
 
-The **30% ASD Industry / 70% team** split is merely a product proposal; the demo creates **no legal rights or financial obligations**. Future age/guardian, Nigerian data protection, safeguarding, employment and equity arrangements require qualified local legal review before any live release.
+Project equity, ownership allocations and internal financial arrangements are confidential management matters, not public support information. Any future legal commitments require independent review. Youth safeguards, privacy and employment arrangements also need appropriate review before launch.
 
 ## Run
 
