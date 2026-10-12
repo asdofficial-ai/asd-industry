@@ -69,6 +69,13 @@
    if(started!==session||mode!=="ai")return;
    if(!response.ok||!result||!["answered","needs_human"].includes(result.status)||
      typeof result.reply!=="string"||result.reply.length>700)throw Error("AI response unavailable");
+   const policy=window.ASDSupportKnowledge;
+   if((policy?.restricted&&policy.restricted(result.reply))||/\b\d{1,3}\s*(?:%|percent)\b/i.test(result.reply)){
+    messageNode.textContent=policy?.PRIVATE_REPLY||"These details are restricted to authorized project management.";
+    canHandoff=false;
+    $("feedback").textContent="Confidential management details are not available through AI Support.";
+    return;
+   }
    messageNode.textContent=result.reply;
    if(result.status==="answered"){
     canHandoff=false;
@@ -102,6 +109,13 @@
   if(secure.test(question)){$("feedback").textContent="Do not enter passwords, contact details, personal identifiers, or security codes.";return;}
   if(pending){$("feedback").textContent="Please wait for the current AI response.";return;}
   say("customer",question);
+  if(mode==="ai"&&window.ASDSupportKnowledge?.restricted?.(question)){
+   canHandoff=false;
+   say("ai",window.ASDSupportKnowledge.PRIVATE_REPLY);
+   $("feedback").textContent="Confidential project terms cannot be disclosed by customer AI support.";
+   paint();
+   return;
+  }
   if(mode==="human_demo"){
    $("feedback").textContent="This is a human-support mock conversation. Your message was not sent to anyone.";
    return;
