@@ -83,7 +83,9 @@ test("AI answers FAQs and only later offers human help for an unauthorized reque
  assert.match(x.textOf("agentInbox"),/Example project guidance/);
  assert.equal(x.byId.caseTitle.textContent,"Example project guidance");
  assert.equal(x.byId.claimCase.hidden,false);
+ assert.doesNotMatch(x.textOf("agentMessages"),/Please approve my fictional project/,"Unassigned agent must not read customer chat before claiming");
 });
+
 test("agent claims AI handoff, replies in the SAME customer thread, and keeps notes private",()=>{
  const x=boot();
  x.ask("My fictional account needs a password reset.");
@@ -136,6 +138,28 @@ test("agent actions and independent simulated Manager review update case status 
  assert.equal(x.byId.customerScreen.hidden,false);
  assert.equal(x.byId.agentScreen.hidden,true);
  assert.equal(x.byId.humanOffer.hidden,true);
+});
+test("agent reply drafts remain private to one case and searches filter the inbox",()=>{
+ const x=boot();
+ x.click("viewAgent");
+ assert.equal(x.byId.caseTitle.textContent,"Sample upload problem");
+ x.byId.agentInput.value="This fictional technical draft is private to one case.";
+ x.click("saveDraft");
+ assert.match(x.byId.draftStatus.textContent,/draft is saved/);
+ const findCase=text=>x.byId.agentInbox.children.find(child=>
+  (child.children||[]).some(y=>String(y.textContent||"").includes(text)));
+ const security=findCase("Safe account access");
+ assert.ok(security,"Unassigned case should appear in agent inbox");
+ security.click();
+ assert.equal(x.byId.agentInput.value,"","Draft must not leak into another customer's case");
+ const upload=findCase("Sample upload problem");upload.click();
+ assert.match(x.byId.agentInput.value,/technical draft/,"Returning to the original case restores its draft");
+ x.byId.caseSearch.value="never-matching";
+ x.byId.caseSearch.fire("input");
+ assert.doesNotMatch(x.textOf("agentInbox"),/Sample upload problem/);
+ x.byId.caseSearch.value="";
+ x.byId.caseSearch.fire("input");
+ assert.match(x.textOf("agentInbox"),/Sample upload problem/);
 });
 test("all new controls exist and the simulator never connects or stores real messages",()=>{
  for(const id of ["viewCustomer","viewAgent","customerScreen","agentScreen","customerMessages",
