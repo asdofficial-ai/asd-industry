@@ -1,83 +1,52 @@
 "use strict";
-/* All UI data fictional and in-memory. No fetch, websockets, storage, external messages or credentials. */
+/* ASD Industry customer↔human-agent design lab — immutable fictional seeds, no network or storage. */
 (()=>{
  const $=id=>document.getElementById(id);
- const create=(tag,value,cls)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(value!==undefined)el.textContent=String(value);return el;};
- const seed=()=>({
-  project:{subject:"Example project guidance",alias:"SampleBuilder",code:"DEMO-101",category:"Project help",priority:"Normal",status:"In progress",
-   messages:[["customer","Hello, could you explain the sample project setup steps?"],["agent","Welcome to this fictional ASD Industry support demonstration. I can show the example setup process."],["customer","I created my example project. What would the next step be?"],["agent","In this training scenario, open the example project checklist and review its sample milestones."]]},
-  security:{subject:"Safe account access",alias:"DemoCreator",code:"DEMO-102",category:"Account access",priority:"High",status:"Open",
-   messages:[["customer","Can a support employee look up my old password in the system?"],["agent","No. Staff cannot retrieve passwords. In a real service, secure recovery would issue a new password reset after verification."]]},
-  technical:{subject:"Sample upload problem",alias:"ExampleMaker",code:"DEMO-103",category:"Technical",priority:"Normal",status:"In progress",
-   messages:[["customer","I cannot upload a made-up sample image to my training project."],["agent","Thanks for the fictional example. Which step of the sample workflow did not complete?"]]}
- });
- const forbidden=/password\s*[:=]|passcode\s*[:=]|(?:\+?\d[\d().\s-]{7,}\d)|[\w.+-]+@[\w.-]+\.[a-z]{2,}|\b(?:NIN|BVN|OTP)\b|private key|seed phrase|recovery code|secret\s*[:=]/i;
- let conversations=seed(),current="project",perspective="customer";
- function formatTime(){return "just now";}
- function paint(){
-  const c=conversations[current];
-  $("threadTitle").textContent=c.subject;
-  $("threadSubtitle").textContent=perspective==="customer"?"Sample ASD human agent · fictional":"Conversation with "+c.alias+" · fictional";
-  $("chatPerspectiveLabel").textContent=perspective==="customer"?"CUSTOMER EXPERIENCE":"HUMAN AGENT WORKSPACE";
-  $("contextTitle").textContent=c.subject;
-  $("contextCode").textContent=c.code;
-  $("contextCategory").textContent=c.category;
-  $("contextPriority").textContent=c.priority;
-  $("contextStatus").textContent=c.status;
-  $("contextOwner").textContent="Fictional Human Agent";
-  $("agentCaseActions").hidden=perspective!=="agent";
-  $("chatSafety").textContent=perspective==="customer"
-   ?"Fictional customer view. An actual human agent is NOT online. Every message is a local demonstration."
-   :"Fictional staff view. This does NOT send replies to customers or access real employee accounts.";
-  $("chatHint").textContent=perspective==="customer"
-   ?"This view only shows how a future customer might contact a verified agent. No messages are delivered."
-   :"This view shows future human-agent composing tools. It has no customer inbox, delivery system or external database.";
-  $("chatInput").placeholder=perspective==="customer"?"Type a fictional customer question…":"Write a fictional human-agent training reply…";
-  $("chatSend").textContent="Add "+(perspective==="customer"?"customer":"agent")+" demo message ↗";
-  for(const b of document.querySelectorAll("[data-perspective]")){
-   const active=b.dataset.perspective===perspective;b.classList.toggle("selected",active);b.setAttribute("aria-pressed",String(active));
-  }
-  for(const b of document.querySelectorAll("[data-case]")){
-   b.classList.toggle("selected",b.dataset.case===current);
-  }
-  const thread=$("chatMessages");thread.replaceChildren();
-  for(const [speaker,message,time] of c.messages){
-   const mine=(speaker===perspective);
-   const line=create("div",undefined,"chat-line"+(mine?" sent":""));
-   const bubble=create("div",message,"bubble");
-   const info=create("div",undefined,"sender");
-   info.append(create("strong",speaker==="customer"?"Sample Customer":"Sample Human Agent"),
-     create("span",time||"example"));
-   line.append(bubble,info);thread.append(line);
+ const seed=()=>[
+  {kind:"customer_simulator",message:"Could you override the decision on my fictional project application?",time:"09:41"},
+  {kind:"ai_support",message:"I cannot change a human project review decision. This fictional request needs a verified human review, so I am escalating it to the training agent inbox.",time:"09:41"},
+  {kind:"human_agent",message:"Hello! I received the simulated AI handoff. I can explain the project review process but cannot promise to change a decision.",time:"09:42"},
+  {kind:"customer_simulator",message:"Thanks. Please explain which review steps apply in this sample workflow.",time:"09:43"}
+ ];
+ const messages=seed();let perspective="customer";
+ const unsafe=/password|passcode|secret|seed phrase|private key|\b(?:NIN|BVN)\b|[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:\+?\d[\d ()-]{7,}\d)/i;
+ const maker=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=String(text);if(cls)el.className=cls;return el;};
+ function repaint(){
+  const customer=perspective==="customer";
+  $("customerView").classList.toggle("selected",customer);
+  $("agentView").classList.toggle("selected",!customer);
+  $("customerView").setAttribute("aria-pressed",String(customer));
+  $("agentView").setAttribute("aria-pressed",String(!customer));
+  $("conv-contact").textContent=customer?"ASD Industry Human Support (fictional)":"DemoBuilder · fictional adult customer";
+  $("conv-subtitle").textContent=customer?"Human Support perspective · design only":"Staff agent workspace perspective · simulation only";
+  $("conv-label").textContent=customer?"Type a fictional customer message":"Type a fictional human-agent reply";
+  $("conv-input").placeholder=customer?"Practice asking a made-up question":"Practice a helpful reply without real user data";
+  const thread=$("conv-thread");thread.replaceChildren();
+  for(const m of messages){
+   const mine=(customer&&m.kind==="customer_simulator")||(!customer&&m.kind==="human_agent");
+   const bubble=maker("article",undefined,"conv-msg "+(mine?"mine":"theirs"));
+   bubble.append(maker("span",m.kind==="customer_simulator"?"CUSTOMER SIMULATOR":m.kind==="ai_support"?"AI SUPPORT · TRAINING HANDOFF":"HUMAN AGENT · SAMPLE","conv-author"),
+    maker("p",m.message),maker("time",m.time+" · FICTIONAL · NOT DELIVERED"));
+   thread.append(bubble);
   }
   thread.scrollTop=thread.scrollHeight;
  }
- document.addEventListener("click",event=>{
-  const p=event.target.closest("button[data-perspective]");
-  if(p){perspective=p.dataset.perspective;paint();return;}
-  const c=event.target.closest("button[data-case]");
-  if(c&&conversations[c.dataset.case]){current=c.dataset.case;paint();return;}
-  const q=event.target.closest("button[data-quick]");
-  if(q){$("chatInput").value=q.dataset.quick;$("chatInput").focus();}
+ function addMessage(value){
+  const message=value.trim();
+  const feedback=$("conv-feedback");
+  if(message.length<12||message.length>500){feedback.textContent="Use 12–500 characters for a fictional training message.";return;}
+  if(unsafe.test(message)){feedback.textContent="Do not enter real contacts, passwords, codes or identity information.";return;}
+  messages.push({kind:perspective==="customer"?"customer_simulator":"human_agent",
+   message,time:new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})});
+  if(messages.length>60)messages.splice(0,messages.length-60);
+  feedback.textContent="Added locally. No customer or employee was contacted.";
+  $("conv-input").value="";repaint();
+ }
+ $("customerView").addEventListener("click",()=>{perspective="customer";repaint();});
+ $("agentView").addEventListener("click",()=>{perspective="agent";repaint();});
+ $("conv-form").addEventListener("submit",event=>{event.preventDefault();if($("conv-form").reportValidity())addMessage($("conv-input").value);});
+ document.querySelectorAll("[data-conv-quick]").forEach(button=>{
+  button.addEventListener("click",()=>{const text=button.dataset.convQuick;addMessage(text);});
  });
- $("chatForm").addEventListener("submit",event=>{
-  event.preventDefault();
-  if(!$("chatInput").reportValidity())return;
-  const value=$("chatInput").value.trim();
-  if(forbidden.test(value)){
-   $("chatHint").textContent="For safety, do not enter private identifiers, contact details or credentials. Try a fictional question instead.";
-   $("chatInput").value="";return;
-  }
-  conversations[current].messages.push([perspective,value,formatTime()]);
-  $("chatInput").value="";paint();
- });
- $("markResolved").addEventListener("click",()=>{
-  if(perspective!=="agent")return;
-  conversations[current].status="Resolved (demo)";
-  paint();
- });
- $("resetChat").addEventListener("click",()=>{
-  conversations=seed();current="project";perspective="customer";$("chatInput").value="";paint();
- });
- paint();
+ repaint();
 })();
