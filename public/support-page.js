@@ -9,7 +9,7 @@
  const $=id=>document.getElementById(id);
  const secure=/(?:password|passcode|secret|pin|recovery code|otp|seed phrase|private key|verification code)\s*(?:is|=|:)\s*\S+|[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:\+?\d[\d ().-]{7,}\d)|\b(?:NIN|BVN)\s*(?:is|=|:)\s*[0-9]+|\b\d{7,}\b/i;
  const asksHuman=/\b(?:need|want|request|contact|connect(?: me)? to|speak to|talk to|chat with|get|reach)\s+(?:(?:a|an|the|real|live)\s+)?(?:human(?:\s+(?:support|agent|person|representative))?|(?:human\s+)?(?:customer\s+)?support\s+(?:agent|person|representative)|live\s+agent)\b/i;
- const protectedAction=/\b(?:retrieve|reveal|show|tell|send|recover|reset|change|unlock|disable|bypass|remove|view|access)\b.{0,75}\b(?:password|passcode|security code|recovery code|2fa|two.factor|authenticator|otp|account)\b/i;
+ const protectedAction=/(?:\b(?:retrieve|reveal|show|tell|send|recover|reset|change|unlock|disable|bypass|remove|view|access)\b.{0,75}\b(?:password|passcode|security code|recovery code|2fa|two.factor|authenticator|otp|account)\b|\bforgot\s+(?:my\s+|the\s+)?password\b|\blocked\s+out\b|\blost\s+access\b)/i;
  let mode="ai",canHandoff=false,items=[];
  const el=(tag,text,cls)=>{
   const node=document.createElement(tag);
