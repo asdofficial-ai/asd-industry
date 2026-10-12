@@ -50,3 +50,25 @@
 @media(max-width:730px){.chat-hero{padding:29px 0}.chat-hero-icon{display:none}.persona-bar{align-items:flex-start;flex-direction:column}.persona-controls{width:100%}.persona-controls button{flex:1;font-size:12px;padding:10px 6px}
 .chat-layout{display:block}.chat-list{display:flex;gap:8px;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border);padding:8px}.list-caption,.list-help{display:none}.chat-case{min-width:180px;flex:0 0 180px;min-height:66px;padding:8px}.chat-case strong{font-size:11px}.chat-main{min-height:580px}.chat-messages{height:310px;max-height:310px;padding:16px}.chat-context{display:block;padding:15px 18px}.chat-context dl{display:grid;grid-template-columns:1fr 1fr}.chat-compose{flex-direction:column}.chat-send{width:100%;padding:12px}.chat-principles{grid-template-columns:1fr}.chat-hero h1{font-size:48px;letter-spacing:-2.7px}.chat-status{font-size:8px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* V1.1: customer sees one continuous support chat; employees see staff inbox and tools. */
+.support-chat-demo [hidden]{display:none!important}
+.chat-layout.customer-layout{display:grid;grid-template-columns:minmax(0,1fr);max-width:790px;margin:0 auto;min-height:500px}
+.chat-layout.customer-layout .chat-main{min-width:0}
+.chat-layout.agent-layout{display:grid;grid-template-columns:minmax(180px,250px) minmax(0,1fr) minmax(185px,235px)}
+.customer-demo-choices{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:7px 15px 13px}
+.customer-demo-choices span{color:var(--muted);font-size:11px}
+.customer-demo-choices button{background:var(--raised);border:1px solid var(--border);color:var(--accent);font-size:11px;font-weight:700;border-radius:9px;padding:8px 10px}
+.customer-demo-choices button:hover{border-color:var(--accent)}
+.chat-handoff{display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap;margin:9px 15px 12px;padding:15px;border:1px solid var(--accent);border-radius:13px;background:linear-gradient(140deg,#223a2a,#152820)}
+.chat-handoff strong{display:block;color:var(--accent);font-size:13px}
+.chat-handoff p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.5}
+.chat-handoff button{background:var(--accent);color:#112014;font-size:12px;font-weight:800;border:0;border-radius:9px;padding:11px 13px}
+.case-action-stack{display:grid;gap:7px;margin:13px 0}
+.case-action-stack button{margin:0}
+.chat-context .case-note-label{display:block;margin:16px 0 5px;font-size:11px;color:var(--text);font-weight:700}
+.chat-context textarea{width:100%;background:#182922;color:var(--text);border:1px solid #627e62;padding:10px;font:inherit;font-size:12px;border-radius:10px;resize:vertical}
+.internal-notes{max-height:130px;overflow:auto;margin:12px 0}
+.case-internal-note{margin:6px 0;background:#21332a;padding:9px;border:1px solid var(--border);border-radius:8px;font-size:11px;overflow-wrap:anywhere}
+.chat-context button:disabled,.chat-send:disabled{cursor:not-allowed;opacity:.4}
+@media(max-width:1150px){.chat-layout.agent-layout{grid-template-columns:minmax(170px,220px) minmax(0,1fr)}.chat-layout.agent-layout .chat-context{grid-column:1/-1}}
+@media(max-width:730px){.chat-layout.customer-layout,.chat-layout.agent-layout{display:block;max-width:none}.chat-layout.agent-layout .chat-list{display:flex;gap:8px;overflow:auto}.chat-layout.agent-layout .chat-case{flex:0 0 180px}.chat-handoff{align-items:stretch}.chat-handoff button{width:100%}.customer-demo-choices{padding:10px}}
