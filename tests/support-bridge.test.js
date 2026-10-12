@@ -1,0 +1,45 @@
+"use strict";
+const test=require("node:test"),assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path");
+const KB=require("../public/support-knowledge");
+test("approved customer knowledge gives a truthful full ASD Industry overview",()=>{
+ assert.ok(KB.validate()>=30);
+ const about=KB.respond("Tell me everything about ASD Industry");
+ assert.equal(about.status,"answered");
+ assert.equal(about.topicId,"platform-tour");
+ assert.match(about.text,/project.building|team.matching/i);
+ assert.match(about.text,/demo/i);
+ assert.match(about.text,/not publicly active/i);
+ const help=KB.respond("What is ASD Industry?");
+ assert.equal(help.status,"answered");
+ const followup=KB.respond("Please change staff decision and approve my project application.");
+ assert.equal(followup.status,"needs_human");
+});
+test("AI-to-human bridge has no public customer route or real outbound delivery",()=>{
+ const server=fs.readFileSync(path.join(__dirname,"../server.js"),"utf8");
+ const mount=fs.readFileSync(path.join(__dirname,"../lib/human-staff-api.js"),"utf8");
+ const api=fs.readFileSync(path.join(__dirname,"../lib/support-bridge-api.js"),"utf8");
+ const migration=fs.readFileSync(path.join(__dirname,"../db/migrations/007_ai_to_human_support_bridge.sql"),"utf8");
+ assert.doesNotMatch(server,/app\.use\("\/api\/public-handoff"/);
+ assert.match(mount,/support-bridge-api/);
+ assert.match(api,/req\.staff\.role!=="manager"/);
+ assert.match(api,/decisionFromVerifiedAI/);
+ assert.match(api,/origin:"trusted_ai_service",verifiedServerSide:true/);
+ assert.match(api,/ai_handoff_created/);
+ assert.match(api,/customerMessagesSent:false/);
+ assert.doesNotMatch(api,/sendMail|SMTP|twilio|nodemailer|sendgrid/i);
+ assert.match(migration,/simulated boolean NOT NULL DEFAULT true CHECK\(simulated=true\)/);
+ assert.match(migration,/external_delivery boolean NOT NULL DEFAULT false CHECK\(external_delivery=false\)/);
+ assert.match(migration,/real_customer_id IS NULL/);
+});
+test("human inbox is protected staff UI; public customer support remains fictional",()=>{
+ const read=name=>fs.readFileSync(path.join(__dirname,"../public",name),"utf8");
+ const staff=read("support-console.html"),staffjs=read("support-workspace.js"),publicHelp=read("support.html");
+ assert.match(staff,/id="page-ai-inbox"/);
+ assert.match(staff,/id="aiHandoffList"/);
+ assert.match(staff,/id="aiHandoffSimulator" hidden/);
+ assert.match(staffjs,/\/support\/ai-handoffs\/simulate/);
+ assert.match(staffjs,/\/support\/ai-handoffs"/);
+ assert.match(staffjs,/AI SUPPORT · HANDOFF \(SIMULATED\)/);
+ assert.doesNotMatch(publicHelp,/href="\/support-console\.html"/);
+ assert.match(publicHelp,/Full platform guide/);
+});
