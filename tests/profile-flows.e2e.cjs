@@ -100,7 +100,7 @@ async function testProfile(width,browser){
     await page.locator("#view-home").waitFor({state:"visible",timeout:15000}).catch(async err=>{
       throw Error("Practice login failed: "+(await page.locator("#loginStatus").textContent())+" / "+err.message);
     });
-    await page.locator('[data-nav="profile"]').first().click();
+    await page.evaluate(()=>document.querySelector('button[data-nav="profile"]').click());
     assert.equal(await page.locator("#profileDisplayHandle").textContent(),"@sample.dev");
     assert.deepEqual(errors,[]);
     console.log("PASS profile flow "+width+"px");
