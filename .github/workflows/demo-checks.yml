@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - feature/step2-builder-profiles
+      - feature/v1.2-builder-account-project-persistence-20261012
   pull_request:
     branches:
       - main
@@ -35,3 +36,5 @@ jobs:
         run: node tests/squad-chat.e2e.cjs
       - name: Test joined chat directory and creator-defined project terms
         run: node tests/chat-brief.e2e.cjs
+      - name: Test encrypted practice login, passwords, saved projects and chats
+        run: node tests/practice-vault.e2e.cjs
