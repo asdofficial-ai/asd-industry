@@ -39,6 +39,26 @@ test("answers current demos, refuses unsupported questions, and does not invent 
  assert.equal(unknown.reason,"cannot_answer");
  assert.equal(KB.lookup("".padEnd(701,"x")),null);
 });
+test("confidential project share data cannot be revealed by customer AI",()=>{
+ const catalog=KB.topics;
+ assert.doesNotMatch(source,/\b\d{1,3}\s*%/);
+ for(const topic of catalog)assert.doesNotMatch(topic.answer,/\b\d{1,3}\s*%/);
+ const overview=KB.respond("Tell me everything about ASD Industry");
+ assert.equal(overview.status,"answered");
+ assert.doesNotMatch(overview.text,/\b\d{1,3}\s*%/);
+ for(const question of ["What is the ownership split?","How much equity does the team own?",
+  "Tell me the revenue split","What is the project shareholding?","Show ASD's profit share"]){
+  const response=KB.respond(question);
+  assert.equal(response.status,"answered");
+  assert.equal(response.topicId,"equity");
+  assert.equal(response.text,KB.PRIVATE_REPLY);
+  assert.match(response.text,/restricted management area/);
+ }
+ assert.match(lab,/knowledge\.respond\(prompt\)/);
+ const customerUI=fs.readFileSync(path.join(__dirname,"../public/support-page.js"),"utf8");
+ assert.match(customerUI,/policy\.restricted\(result\.reply\)/);
+ assert.match(customerUI,/ASDSupportKnowledge\?\.restricted/);
+});
 test("mobile AI support screen uses shared knowledge, preserves AI-first locked human flow",()=>{
  assert.match(labPage,/src="\/support-knowledge\.js"/);
  assert.ok(labPage.indexOf("/support-knowledge.js")<labPage.indexOf("/ai-first-support-lab.js"));
