@@ -118,3 +118,16 @@ If using OpenAI, configure a compatible model instead (such as `gpt-4.1-mini`). 
 - Fast reviewed FAQs are synchronous. External AI responses depend on provider latency and network; "instant" cannot be guaranteed.
 - Real customers, youth-safety processes, provider privacy assessment, logging/retention consent, spending limits, secure customer authentication, single-use server-verified handoff, real staff messaging, human password recovery and MFA are still launch gates. Do not unlock access early.
 - Run `tests/customer-support-ai.test.js`, `tests/support-page.test.js`, and existing CI before considering the dev branch verified.
+
+## October 12 — AI-to-human training bridge
+
+**Implemented in the private adult-testing backend, NOT in the public customer app.** `lib/support-bridge-api.js` is mounted under the already-authenticated `/api/staff/support/` server router. A logged-in human **Manager** can create a wholly fictional training question, but does **not** choose whether the AI failed. The server uses `public/support-knowledge.js` to make its own reviewed knowledge decision and the trusted `support-handoff-core.js` policy:
+
+- **Answered:** return the approved public answer; do **not** create a staff case.
+- **Cannot answer, insufficient authority, or other approved escalation:** transactionally create **one synthetic support case**, an **AI-to-human handoff record**, a clearly labeled **fictional customer question**, an **AI Support internal message**, and a staff audit event.
+- **Human staff inbox:** `GET /api/staff/support/ai-handoffs` lists only eligible human-agent cases and authorized Manager oversight. The agent claims the case while Available/Busy, then reads the AI handoff and conversation using the existing staff-only thread endpoint. Real agent training replies are append-only and are never delivered to a customer.
+- **Dedupe & privacy:** request UUID is unique and idempotent. It cannot be reused to submit a different question. No real customer identity, external delivery, email/SMS or public staff contact is added. Only fictional adult-test questions are accepted; secret/contact patterns are rejected. The dedicated migration is `007_ai_to_human_support_bridge.sql`, and disposable PostgreSQL CI covers permission bypass, rejected origin, duplicate sends, visibility and traceability.
+
+This **does not yet mean a real AI is contacting a real human agent**. The customer `/support.html` still uses its mock handoff; no unauthenticated public browser may post into the staff inbox. Only when verified customer login, privacy/age safeguards, trusted AI assessment, rate limits, one-use server-side grants, staff MFA, delivery and operational review are completed can a live AI-first handoff be activated.
+
+The official customer-public knowledge library is versioned separately, with a full-platform overview as well as topic-specific answers. Its facts are limited to reviewed, public ASD Industry information, with statuses marked `demo`, `planned` or `disabled`. It cannot read private Founder accounts or manager messages.
