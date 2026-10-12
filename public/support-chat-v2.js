@@ -1,7 +1,7 @@
 "use strict";
 /* ASD Industry support conversation V2: intentionally OFFLINE and IN-MEMORY only.
  * Simulates a customer starting with AI, an eligible same-thread human handoff,
- * and a separate agent/manager case desk. No backend, model, WebSocket or storage.
+ * and a separate agent/manager case desk. No backend, model, network socket or persistent storage.
  * In production, views are separate authenticated apps and the server must
  * verify AI outcome, customer identity, staff role, case ownership and grant.
  */
