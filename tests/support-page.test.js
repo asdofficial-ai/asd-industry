@@ -77,7 +77,7 @@ test("support page answers from local knowledge and optionally uses protected se
  for(const forbidden of ["XMLHttpRequest","WebSocket","sendMail","localStorage","sessionStorage","indexedDB","document.cookie","innerHTML","Bearer "]){
   assert.equal(script.includes(forbidden),false,forbidden+" must not appear in customer JS.");
  }
- for(const marker of ["window.ASDSupportKnowledge","/api/support-ai/status","/api/support-ai/ask","AbortController","no real staff"]){
+ for(const marker of ["window.ASDSupportKnowledge","/api/support-ai/status","/api/support-ai/ask","AbortController","No real staff connected"]){
   assert.ok(script.includes(marker),marker+" missing");
  }
 });
