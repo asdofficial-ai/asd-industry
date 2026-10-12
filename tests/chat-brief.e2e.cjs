@@ -57,7 +57,9 @@ async function testWidth(browser,width){
     await page.reload({waitUntil:"domcontentloaded"});
     await goto("chat");
     assert.equal(await page.locator("#chatHubRooms .chat-hub-room").count(),1,"hub persists after refresh");
-    await goto("ideas");
+    await goto("manager");
+    await page.locator("#managerCreateNewProject").click();
+    await page.locator("#managerAdvancedBrief summary").click();
     await page.locator("#ideaTitleInput").fill("My Learning Tool");
     await page.locator("#ideaDescription").fill("Build an educational app to organize study materials, reminders and practice plans.");
     await page.locator("#ideaAim").fill("Make revision planning easier for learners without complicated tools.");
@@ -71,6 +73,7 @@ async function testWidth(browser,width){
     await page.locator('input[name="ideaInterests"][value="Education"]').check();
     await page.locator("#ideaAvailability").selectOption("flexible");
     await page.locator('#ideaForm button[type="submit"]').click();
+    await goto("ideas");
     const ownCard=page.locator(".own-project-card");
     assert.ok(await ownCard.isVisible());
     await ownCard.locator(".open-project-interest").click();
@@ -82,7 +85,6 @@ async function testWidth(browser,width){
     assert.match(await page.locator("#projectJoinCapacity").textContent(),/NOT PUBLISHED/);
     assert.equal(await page.locator("#projectJoinForm").isVisible(),false,"creator cannot join private draft");
     await page.locator("#closeProjectJoinDialog").click();
-    await page.locator(".match-action").click();
     await goto("manager");
     assert.ok(await page.locator("#managerBriefForm").isVisible());
     assert.equal(await page.locator("#managerBriefAim").inputValue(),
