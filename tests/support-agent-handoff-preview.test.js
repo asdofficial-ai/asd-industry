@@ -102,6 +102,10 @@ test("screenshot customer page shows one conversation; agent sees functional cas
  assert.equal(x.byId.contextStatus.textContent,"in progress");
  x.agentQuick.click();
  assert.match(x.textOf("chatMessages"),/Thank you; here are the fictional project steps/);
+ x.byId.escalateCase.click();
+ assert.equal(x.byId.contextStatus.textContent,"escalated");
+ assert.equal(x.byId.markInProgress.disabled,true,"Agent may not bypass pending manager escalation");
+ assert.equal(x.byId.chatSend.disabled,true,"Agent replies pause while escalated");
  x.byId.agentNote.value="Sample internal staff note";
  x.byId.addInternalNote.click();
  assert.match(x.textOf("internalNotes"),/Sample internal staff note/);
