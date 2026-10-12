@@ -47,7 +47,7 @@ test("Gemini model adapter uses a server key in header, never client JavaScript"
  const env={...demoEnv,SUPPORT_AI_PROVIDER:"gemini",SUPPORT_AI_MODEL:"gemini-2.5-flash-lite"};
  const reply=await AI.modelReply("Invent a simple activity for a fictional coding club",{
   env,fetcher:async(url,options)=>{
-   assert.match(url,/generativelanguage\\.googleapis\\.com\\/v1beta\\/models\\/gemini-2\\.5-flash-lite:generateContent/);
+   assert.ok(url.includes("generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent"));
    assert.equal(options.headers["x-goog-api-key"],env.SUPPORT_AI_API_KEY);
    assert.equal(options.headers.Authorization,undefined);
    const payload=JSON.parse(options.body);
