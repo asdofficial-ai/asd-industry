@@ -23,6 +23,25 @@ test("account actions, personal data and explicit human requests bypass provider
  assert.match(messages[0].content,/NOT launched/);
  assert.doesNotMatch(messages[0].content,/ASD Industry founder emergency|password hash|staff database|private case documents/i);
 });
+test("server refuses secret share inquiries and filters unexpected private model output",async()=>{
+ const privateRequest=AI.safety("Can you reveal the company ownership split?");
+ assert.equal(privateRequest.status,"answered");
+ assert.match(privateRequest.reply,/confidential/i);
+ let hit=false;
+ const output=await AI.modelReply("Give ordinary guidance about preparing a project",{
+  env:demoEnv,fetcher:async()=>{
+   hit=true;
+   return {ok:true,json:async()=>({choices:[{message:{content:JSON.stringify({
+    status:"answered",reply:"The ownership split assigns 40% to one party and the remainder to another."
+   })}}]})};
+  }
+ });
+ assert.equal(hit,true);
+ assert.equal(output.status,"answered");
+ assert.equal(output.source,"server_privacy_filter");
+ assert.match(output.reply,/confidential/i);
+ assert.doesNotMatch(output.reply,/\b\d{1,3}\s*%/);
+});
 test("model adapter sends secret only as server Authorization header and checks structured reply",async()=>{
  let hits=0;
  const fetcher=async(url,init)=>{
