@@ -27,7 +27,7 @@ async function widthTest(browser,width){
     await page.reload({waitUntil:"domcontentloaded"});
     await goto("manager");
     assert.ok(await page.locator("#managerEmpty").isVisible(),"dashboard empty before project");
-    await goto("ideas");
+    await page.locator("#managerEmptyCreate").click();
     await page.locator("#ideaTitleInput").fill("Mentor Study Hub");
     await page.locator("#ideaDescription").fill("An educational app to help learners plan their study hours and practice questions.");
     await page.locator("#ideaTopic").selectOption("Education");
@@ -36,7 +36,6 @@ async function widthTest(browser,width){
     await page.locator('input[name="ideaInterests"][value="Education"]').check();
     await page.locator("#ideaAvailability").selectOption("flexible");
     await page.locator('#ideaForm button[type="submit"]').click();
-    await page.locator(".match-action").click();
     assert.ok(await page.locator("#workspaceContent").isVisible());
     assert.equal(await page.locator("#workspaceMembers .member").count(),1,"only project creator initially");
     await goto("manager");
