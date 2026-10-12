@@ -1,12 +1,53 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1112"><meta name="description" content="Fictional conversation preview: ASD Industry Human Support"><title>ASD Industry — Human Support Conversation Lab</title><link rel="stylesheet" href="/support-workspace.css"><link rel="stylesheet" href="/support-conversation-lab.css"><script defer src="/support-conversation-lab.js"></script></head><body><div class="support-shell"><header class="support-header"><div class="support-brand"><span class="support-mark">✦</span><span>ASD INDUSTRY<small>HUMAN SUPPORT / CONVERSATION LAB</small></span></div><span class="secure-pill">FICTIONAL UI</span></header>
-<main><section class="conv-hero"><div><span class="eyebrow">BETTER HUMAN COMMUNICATION</span><h1>Make support<br><em>feel human.</em></h1><p>Explore the future two-sided ASD Industry conversation experience. Try both sides without signing in or contacting anyone.</p></div><div class="conv-symbol" aria-hidden="true">◎<small>SUPPORT<br>SIMULATOR</small></div></section>
-<div class="banner" role="note"><strong>FICTIONAL, OFFLINE PREVIEW.</strong> Every person and case here is invented. Messages live in this browser tab only and disappear when refreshed. No backend, real customers, human employees, email, notifications, account recovery or AI model is connected. Do not enter personal information.</div>
-<section class="conv-top"><div><span class="eyebrow">CASE DEMO · #S-1024</span><h2>Sample project upload question</h2><p class="fine">A completely invented adult builder needs help with a fictional project.</p></div><div class="conv-stage"><span class="status-pill">◉ In progress</span><span class="status-pill mute">Human support example</span></div></section>
-<div class="conv-stage-switch" role="group" aria-label="Fictional conversation perspective"><button class="selected" id="customerView" type="button" aria-pressed="true">👤 Customer view</button><button id="agentView" type="button" aria-pressed="false">👨‍💼 Human Agent view</button></div>
-<div class="conv-columns"><section class="conv-main" aria-label="Example support conversation"><header class="conv-chat-top"><span class="conv-avatar">✦</span><div><strong id="conv-contact">ASD Industry Human Support</strong><span id="conv-subtitle">Sample human-agent conversation · no real staff connected</span></div><span class="conv-not-live">OFFLINE DEMO</span></header>
-<div id="conv-thread" class="conv-thread" role="log" aria-live="polite" aria-label="Simulated customer and human support messages"></div>
-<div class="conv-suggestions" id="conv-quick" role="group" aria-label="Example responses"><button type="button" data-conv-quick="Could you show me the fictional project upload steps?">How to upload?</button><button type="button" data-conv-quick="Thank you for explaining that sample workflow.">Thank you</button><button type="button" data-conv-quick="Please escalate this fictional issue for training.">Escalate example</button></div>
-<form id="conv-form" class="conv-compose"><label for="conv-input" id="conv-label">Send a fictional customer message</label><textarea id="conv-input" required rows="2" minlength="12" maxlength="500" placeholder="Type a made-up question (nothing private)"></textarea><div class="conv-compose-actions"><span id="conv-feedback" role="status">No actual messages will be delivered.</span><button type="submit">Add demo message ↗</button></div></form></section>
-<aside class="conv-side"><section class="support-card"><span class="eyebrow">SAFE BY DESIGN</span><h3>Human + AI, clearly separated</h3><p>AI Support can help with general answers. Only properly verified Human Support Agents can access their staff workspace and handle authorized cases.</p><div class="conv-person"><b class="conv-icon">✦</b><div><strong>Human Support Agent</strong><small>Official badge only after verification</small></div></div><div class="conv-person"><b class="conv-icon ai">✳</b><div><strong>AI Support Assistant</strong><small>Clearly labeled AI, never an employee</small></div></div></section>
-<section class="support-card"><span class="eyebrow">FUTURE LIVE WORKFLOW</span><h3>Your support system</h3><p>Customer creates a request → a verified human agent claims it → a secure in-app conversation begins → management reviews escalations → the case is resolved with an audit trail.</p><p class="fine">For now, only staff-only synthetic training conversations are coded. The customer sign-in and actual delivery system remain switched off.</p></section><section class="support-card"><h3>Explore the staff layout</h3><a href="/support-design-lab.html" class="soft-button">Open Human Support Desk →</a></section></aside></div>
-</main><footer>ASD INDUSTRY · DESIGN SIMULATOR · NO LIVE MESSAGES, CREDENTIALS OR ACCOUNT ACTIVITY</footer></div></body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1112">
+<title>ASD Industry — Customer ↔ Human Support Concept</title>
+<link rel="stylesheet" href="/support-workspace.css">
+<link rel="stylesheet" href="/support-conversation-lab.css">
+<script defer src="/support-conversation-lab.js?v=20261012-agent-workspace-1"></script>
+</head>
+<body class="support-chat-demo">
+<div class="support-shell">
+<header class="support-header"><div class="support-brand"><span class="support-mark">✦</span><span>ASD INDUSTRY<small>HUMAN SUPPORT / CHAT EXPERIENCE</small></span></div><span class="secure-pill">DESIGN LAB</span></header>
+<main>
+<section class="chat-hero"><div><span class="eyebrow">CUSTOMER CARE / V1.0 PREVIEW</span><h1>Real humans.<br><em>Clear answers.</em></h1><p>One continuous conversation: the customer starts with AI, and an authorized human agent takes over when the AI cannot help. Preview both sides of the fictional workflow.</p></div><div class="chat-hero-icon" aria-hidden="true">◎<span>✦</span></div></section>
+<div class="banner" role="note"><strong>FICTIONAL / SIMULATED ONLY.</strong> No real customer messages, live agents, authentication, emails, passwords, phone numbers or backend connections. Every action is a fictional, in-memory demo and resets on refresh. Switching to the agent role is for design review only; it is not an employee login. Never enter private information.</div>
+<section class="persona-bar" aria-label="Choose a fictional account preview">
+<div><span class="eyebrow">HOW WOULD IT LOOK?</span><h2>Switch perspectives</h2></div>
+<div id="personaTabs" class="persona-controls" role="group" aria-label="Fictional conversation perspective">
+<button type="button" data-perspective="customer" class="selected" aria-pressed="true">◉ Customer view</button>
+<button type="button" data-perspective="agent" aria-pressed="false">♜ Human agent view</button>
+</div></section>
+<div class="chat-layout customer-layout" id="chatLayout">
+<aside class="chat-list" id="agentInbox" aria-label="Fictional agent inbox" hidden>
+ <div class="list-caption"><span class="eyebrow">TRAINING INBOX</span><span class="chip">DEMO</span></div>
+ <button class="chat-case selected" type="button" data-case="project"><span class="chat-avatar">◎</span><span><strong>Example project guidance</strong><small>SampleBuilder · Open</small></span><span class="chat-unread">2</span></button>
+ <button class="chat-case" type="button" data-case="security"><span class="chat-avatar">◇</span><span><strong>Safe account access</strong><small>DemoCreator · Pending</small></span></button>
+ <button class="chat-case" type="button" data-case="technical"><span class="chat-avatar">✥</span><span><strong>Sample upload problem</strong><small>ExampleMaker · In progress</small></span></button>
+ <div class="list-help"><strong>Example agent status</strong><p>Human Support · Illustrative employee. Official badges require verification and consent.</p><span class="availability-dot"></span> Available in simulation</div>
+</aside>
+<section class="chat-main" aria-label="Fictional human support conversation">
+ <div class="chat-head"><div class="chat-person"><div class="agent-icon">✦</div><div><span class="eyebrow" id="chatPerspectiveLabel">CUSTOMER EXPERIENCE</span><h2 id="threadTitle">Example project guidance</h2><p id="threadSubtitle">Talking with a sample human agent</p></div></div><span class="chat-status">SIMULATED</span></div>
+ <div class="chat-safety" id="chatSafety">This is an AI-first training conversation. A fictional human may take over when AI cannot help. No data is sent.</div>
+<div id="customerDemoChoices" class="customer-demo-choices" aria-label="Fictional customer examples"><span>Explore a fictional customer journey:</span><button type="button" data-customer-case="project">Previously transferred chat</button><button type="button" data-customer-case="security">Start with AI support</button></div>
+ <div class="chat-handoff" id="handoffPrompt" hidden><div><strong>AI cannot complete this request</strong><p id="handoffWhy">A human handoff is recommended.</p></div><button id="handoffAction" type="button">Contact Human Support →</button></div>
+ <div id="chatMessages" class="chat-messages" role="log" aria-live="polite" aria-label="Fictional conversation history"></div>
+ <div class="quick-replies" id="customerQuickReplies"><button type="button" data-quick="Could you explain the next example step?">Next steps</button><button type="button" data-quick="Thanks for your help with this fictional issue.">Say thanks</button><button type="button" data-quick="I would like this sample case escalated.">Escalate request</button></div>
+ <div class="quick-replies" id="agentQuickReplies" hidden><button type="button" data-agent-quick="I can guide you through the fictional project steps.">Project guidance</button><button type="button" data-agent-quick="I am reviewing this sample issue and will update you here.">Review update</button><button type="button" data-agent-quick="Your fictional case is now being handled by human support.">Acknowledgement</button></div>
+ <form id="chatForm" class="chat-compose" autocomplete="off">
+ <label class="sr-chat" for="chatInput">Fictional chat message</label>
+ <textarea id="chatInput" rows="2" maxlength="400" minlength="12" required placeholder="Type a fictional message, no personal information…"></textarea>
+ <button type="submit" class="chat-send" id="chatSend">Add demo message ↗</button>
+ </form>
+ <p class="chat-disclaimer" id="chatHint">No real customer messages. This is an interactive design concept, not a communication service.</p>
+</section>
+<aside class="chat-context" id="agentContext" aria-label="Agent-only fictional case metadata" hidden><span class="eyebrow">CASE CONTEXT</span><h3 id="contextTitle">Sample project guidance</h3><p class="fine">These details are imaginary and change only within this page.</p><dl><dt>Ticket</dt><dd id="contextCode">DEMO-101</dd><dt>Category</dt><dd id="contextCategory">Project help</dd><dt>Priority</dt><dd id="contextPriority">Normal</dd><dt>Assigned to</dt><dd id="contextOwner">Sample Human Agent</dd><dt>Status</dt><dd id="contextStatus">In progress</dd></dl><div id="agentCaseActions"><h3>Agent case controls · demo</h3>
+ <div class="case-action-stack"><button class="secondary" id="claimCase" type="button">Claim case</button><button class="secondary" id="markInProgress" type="button">Reopen / in progress</button><button class="secondary" id="escalateCase" type="button">Escalate to manager</button><button class="secondary" id="markResolved" type="button">Mark case resolved</button></div>
+ <label class="case-note-label" for="agentNote">Internal staff note · hidden from customers</label><textarea id="agentNote" rows="3" minlength="8" maxlength="250" placeholder="Fictional internal note…"></textarea><button class="secondary" id="addInternalNote" type="button">Save internal note</button>
+ <div id="internalNotes" class="internal-notes"></div>
+ <p class="fine">Only the agent-side demo can change these values. In production, server permissions must enforce every action.</p></div><button class="soft-button" type="button" id="resetChat">↻ Reset design preview</button></aside>
+</div>
+<section class="chat-principles"><article><span>01 / HUMAN VERIFIED</span><strong>Employee badge</strong><p>Customers can identify staff through official in-app verification, not by someone claiming a job title.</p></article><article><span>02 / FULL CONTEXT</span><strong>Case ownership</strong><p>Assigned agents work authorized cases and managers handle controlled escalations.</p></article><article><span>03 / ALWAYS PRIVATE</span><strong>Safe communication</strong><p>No one needs your account password. Secure resets must go through a separate verified process.</p></article></section>
+</main>
+<footer>ASD INDUSTRY · CUSTOMER ↔ HUMAN SUPPORT · VISUAL TRAINING ONLY · NOT A LIVE CUSTOMER SERVICE</footer>
+</div></body></html>
