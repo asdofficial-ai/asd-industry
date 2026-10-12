@@ -183,7 +183,18 @@
             <div><strong id="profileStatsVerification">Pending</strong><span>Email verification</span></div>
           </div>
           <p class="profile-stat-note">*Project completions are self-marked in this demo. No real teammates, qualifications or achievements have been verified.</p>
-          <div class="profile-account-bar"><div><strong>Account access</strong><small>Preview mode · Your demo data stays in this tab until you log out.</small></div><button id="profileLogout" type="button" class="btn btn-ghost">Log out ↗</button></div>
+          <div class="profile-account-bar"><div><strong>Account access</strong><small>Adults: encrypted device-only demo. Guest sessions: temporary.</small></div><button id="profileLogout" type="button" class="btn btn-ghost">Log out ↗</button></div>
+          <details class="panel practice-security-panel" id="practiceSecurityPanel" hidden>
+            <summary>🔐 Change practice password</summary>
+            <p>For your local adult practice account only. Real cloud accounts are not enabled.</p>
+            <form id="changePracticePasswordForm">
+              <label>Current password <input id="currentPracticePassword" type="password" autocomplete="current-password" required></label>
+              <label>New password <input id="newPracticePassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></label>
+              <label>Confirm password <input id="confirmNewPracticePassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></label>
+              <button class="btn btn-accent" type="submit" id="savePracticePassword">Update practice password</button>
+              <p id="changePasswordStatus" role="status" aria-live="polite"></p>
+            </form>
+          </details>
           <p id="profileNotice" class="profile-save-notice" role="status" aria-live="polite"></p>
         </section>
         <div class="profile-columns">
@@ -359,74 +370,7 @@
       </section>
 
       <div class="content-grid">
-        <form class="panel form-panel" id="ideaForm">
-          <div class="panel-header"><h2>Your project idea</h2><span class="tag">SANDBOX MATCHING</span></div>
-          <label>Project name <input id="ideaTitleInput" name="title" required maxlength="70" placeholder="e.g. FarmLink marketplace"></label>
-          <label>Describe the problem and your idea <textarea name="description" id="ideaDescription" required minlength="25" maxlength="800" rows="5" placeholder="What problem are you solving, and how might the project help?"></textarea></label>
-          <section class="creator-brief-fields" aria-labelledby="creatorBriefHeading">
-            <p class="kicker">PROJECT CREATOR / WHAT OTHERS SHOULD KNOW</p>
-            <h3 id="creatorBriefHeading">Explain your project before anyone joins.</h3>
-            <p>People should know the purpose, expected outcome, the work involved, and whether any profit-sharing is being proposed.</p>
-            <label>Project aim <textarea id="ideaAim" maxlength="550" rows="3" placeholder="Why does this project exist? What problem should it solve?"></textarea></label>
-            <label>What will you build or deliver? <textarea id="ideaOutcome" maxlength="550" rows="3" placeholder="Explain the app, event, product, service or result your team wants to create."></textarea></label>
-            <label>What must new team members do? <textarea id="ideaHelp" maxlength="550" rows="3" placeholder="Describe responsibilities, needed skills and expected contributions."></textarea></label>
-            <div class="creator-profit-fields">
-              <h4>💰 Profit proposal (optional)</h4>
-              <p>If this succeeds and earns <b>net profit</b>, what share might each teammate receive? Leave blank if no split has been proposed. This is <b>not</b> an ownership, equity or payment agreement.</p>
-              <div class="form-row two-cols">
-                <label>Proposed net-profit share per teammate (%) <input id="ideaMemberShare" type="number" min="0" max="33.33" step="0.01" inputmode="decimal" placeholder="e.g. 10"></label>
-                <label>Illustrative monthly net profit (₦, optional) <input id="ideaProfitEstimate" type="number" min="0" max="999999999" step="1" inputmode="numeric" placeholder="Only if you have an estimate"></label>
-              </div>
-              <p class="creator-brief-note" id="ideaProfitNotice">A creator may adjust role-by-role proposals later in Manager. There is no guarantee of launch, earnings or any payout.</p>
-            </div>
-          </section>
-          <div class="form-row two-cols">
-            <label>Project focus <select id="ideaTopic" name="topic" required><option value="">Select a focus</option><option>Agriculture</option><option>AI</option><option>Apps</option><option>Websites</option><option>Business</option><option>Marketing</option><option>Design</option><option>Finance</option><option>Education</option><option>Gaming</option><option>Content</option><option>Other</option></select></label>
-            <label>Skill you need most <select id="neededRole" name="neededRole" required><option value="">Select a skill</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option></select></label>
-          </div>
-          <section class="idea-builder-details" aria-labelledby="ideaBuilderTitle">
-            <div class="idea-builder-heading">
-              <span class="idea-builder-step">02 / TEAM SETUP</span>
-              <h3 id="ideaBuilderTitle">Now, who will you build with?</h3>
-              <p>Choose your interests, your role and when you're available <strong>for this project</strong>. These details help with sample team matching.</p>
-            </div>
-            <label>Your role in the project
-              <select id="ideaRole" required>
-                <option value="">What can you contribute?</option>
-                <option>Project leader</option><option>Developer</option><option>Designer</option>
-                <option>Marketing</option><option>Research</option><option>Content</option>
-                <option>Sales</option><option>Business strategy</option><option>I want to learn</option>
-              </select>
-            </label>
-            <label>Choose your interests <small>(at least one)</small></label>
-            <div class="choice-grid" id="ideaInterestChoices">
-              <label><input type="checkbox" name="ideaInterests" value="AI"><span>AI</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Websites"><span>Websites</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Apps"><span>Apps</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Business"><span>Business</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Marketing"><span>Marketing</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Design"><span>Design</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Finance"><span>Finance</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Education"><span>Education</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Gaming"><span>Gaming</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Content"><span>Content</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Agriculture"><span>Agriculture</span></label>
-              <label><input type="checkbox" name="ideaInterests" value="Other"><span>Other</span></label>
-            </div>
-            <label>When can you work on this project?
-              <select id="ideaAvailability" required>
-                <option value="">Choose availability</option>
-                <option value="weekends">Weekends</option>
-                <option value="evenings">Evenings</option>
-                <option value="flexible">Flexible</option>
-              </select>
-            </label>
-            <p class="field-hint" id="ideaBuilderStatus" role="status" aria-live="polite"></p>
-          </section>
-          <div class="info-box">Please don't share passwords, contact details, business secrets or personal information. Everything here stays inside your current browser tab.</div>
-          <button class="btn btn-accent submit-btn" type="submit">Find sample teammates <span aria-hidden="true">→</span></button>
-          <p class="field-hint" id="ideaStatus" role="status"></p>
-        </form>
+
         <aside class="aside-stack">
           <div class="panel" id="matchingPanel"><div class="panel-header"><h2>Match preview</h2><span class="tag">SIMULATION</span></div><p class="muted">Submit an idea, then choose your project skills and interests to see illustrative matches.</p><div id="matchResults" aria-live="polite"></div></div>
           <div class="panel"><p class="kicker">WAITING SYSTEM · FUTURE FEATURE</p><h3>What if there's no match?</h3><p>Planned: allow 3–6 hours to find a suitable team, then suggest a related project. This preview does <b>not</b> run a background matching queue.</p></div>
@@ -491,11 +435,92 @@
         <p>Review sample applications, choose who fills each open position, and organize your squad—all inside your private demo workspace.</p>
       </div>
       <div class="manager-shell">
+        <section class="panel manager-saved-library" aria-labelledby="savedProjectsHeading">
+          <div class="panel-header"><h2 id="savedProjectsHeading">📁 My saved projects</h2><span class="tag">LOCAL PRACTICE</span></div>
+          <p>Reopen your project or review a completed one. Adult practice projects are encrypted on this device.</p>
+          <div id="managerSavedProjects" class="manager-saved-list" role="status" aria-live="polite"></div>
+          <button type="button" class="btn btn-accent btn-small" id="managerCreateNewProject">＋ New project</button>
+          <p id="managerSavedStatus" class="field-hint" role="status"></p>
+        </section>
+        <details class="manager-project-create" id="managerCreateDetails">
+          <summary>✦ Create a project · description and team setup</summary>
+        <form class="panel form-panel" id="ideaForm">
+          <div class="panel-header"><h2>Create your project</h2><span class="tag">SANDBOX MATCHING</span></div>
+          <label>Project name <input id="ideaTitleInput" name="title" required maxlength="70" placeholder="e.g. FarmLink marketplace"></label>
+          <label>Describe the problem and your idea <textarea name="description" id="ideaDescription" required minlength="25" maxlength="800" rows="5" placeholder="What problem are you solving, and how might the project help?"></textarea></label>
+          <details class="creator-brief-fields manager-advanced-brief" id="managerAdvancedBrief">
+            <summary>Optional detailed brief &amp; profit proposal</summary>
+
+            <p class="kicker">PROJECT CREATOR / WHAT OTHERS SHOULD KNOW</p>
+            <h3 id="creatorBriefHeading">Explain your project before anyone joins.</h3>
+            <p>People should know the purpose, expected outcome, the work involved, and whether any profit-sharing is being proposed.</p>
+            <label>Project aim <textarea id="ideaAim" maxlength="550" rows="3" placeholder="Why does this project exist? What problem should it solve?"></textarea></label>
+            <label>What will you build or deliver? <textarea id="ideaOutcome" maxlength="550" rows="3" placeholder="Explain the app, event, product, service or result your team wants to create."></textarea></label>
+            <label>What must new team members do? <textarea id="ideaHelp" maxlength="550" rows="3" placeholder="Describe responsibilities, needed skills and expected contributions."></textarea></label>
+            <div class="creator-profit-fields">
+              <h4>💰 Profit proposal (optional)</h4>
+              <p>If this succeeds and earns <b>net profit</b>, what share might each teammate receive? Leave blank if no split has been proposed. This is <b>not</b> an ownership, equity or payment agreement.</p>
+              <div class="form-row two-cols">
+                <label>Proposed net-profit share per teammate (%) <input id="ideaMemberShare" type="number" min="0" max="33.33" step="0.01" inputmode="decimal" placeholder="e.g. 10"></label>
+                <label>Illustrative monthly net profit (₦, optional) <input id="ideaProfitEstimate" type="number" min="0" max="999999999" step="1" inputmode="numeric" placeholder="Only if you have an estimate"></label>
+              </div>
+              <p class="creator-brief-note" id="ideaProfitNotice">A creator may adjust role-by-role proposals later in Manager. There is no guarantee of launch, earnings or any payout.</p>
+            </div>
+          
+          </details>
+          <div class="form-row two-cols">
+            <label>Project focus <select id="ideaTopic" name="topic" required><option value="">Select a focus</option><option>Agriculture</option><option>AI</option><option>Apps</option><option>Websites</option><option>Business</option><option>Marketing</option><option>Design</option><option>Finance</option><option>Education</option><option>Gaming</option><option>Content</option><option>Other</option></select></label>
+            <label>Skill you need most <select id="neededRole" name="neededRole" required><option value="">Select a skill</option><option>Developer</option><option>Designer</option><option>Marketing</option><option>Research</option><option>Content</option><option>Sales</option><option>Business strategy</option></select></label>
+          </div>
+          <section class="idea-builder-details" aria-labelledby="ideaBuilderTitle">
+            <div class="idea-builder-heading">
+              <span class="idea-builder-step">02 / TEAM SETUP</span>
+              <h3 id="ideaBuilderTitle">Now, who will you build with?</h3>
+              <p>Choose your interests, your role and when you're available <strong>for this project</strong>. These details help with sample team matching.</p>
+            </div>
+            <label>Your role in the project
+              <select id="ideaRole" required>
+                <option value="">What can you contribute?</option>
+                <option>Project leader</option><option>Developer</option><option>Designer</option>
+                <option>Marketing</option><option>Research</option><option>Content</option>
+                <option>Sales</option><option>Business strategy</option><option>I want to learn</option>
+              </select>
+            </label>
+            <label>Choose your interests <small>(at least one)</small></label>
+            <div class="choice-grid" id="ideaInterestChoices">
+              <label><input type="checkbox" name="ideaInterests" value="AI"><span>AI</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Websites"><span>Websites</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Apps"><span>Apps</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Business"><span>Business</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Marketing"><span>Marketing</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Design"><span>Design</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Finance"><span>Finance</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Education"><span>Education</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Gaming"><span>Gaming</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Content"><span>Content</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Agriculture"><span>Agriculture</span></label>
+              <label><input type="checkbox" name="ideaInterests" value="Other"><span>Other</span></label>
+            </div>
+            <label>When can you work on this project?
+              <select id="ideaAvailability" required>
+                <option value="">Choose availability</option>
+                <option value="weekends">Weekends</option>
+                <option value="evenings">Evenings</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </label>
+            <p class="field-hint" id="ideaBuilderStatus" role="status" aria-live="polite"></p>
+          </section>
+          <div class="info-box">Please don't share passwords, contact details, business secrets or personal information. Everything here stays inside your current browser tab.</div>
+          <button class="btn btn-accent submit-btn" type="submit">Find sample teammates <span aria-hidden="true">→</span></button>
+          <p class="field-hint" id="ideaStatus" role="status"></p>
+        </form>
+        </details>
         <div id="managerEmpty" class="panel manager-empty">
           <span class="manager-empty-mark" aria-hidden="true">♛</span>
           <h2>Every great team starts with an idea.</h2>
-          <p>Start by describing a project and creating your sample workspace. You'll then see fictional applications and can practice managing a team here.</p>
-          <button type="button" class="btn btn-accent" data-nav="ideas">＋ Start a project →</button>
+          <p>Create your project above. You'll see sample applicants and can practice managing the team right here.</p>
+          <button type="button" class="btn btn-accent" id="managerEmptyCreate">＋ Start a project →</button>
         </div>
         <div id="managerContent" class="hidden">
           <div class="manager-banner">
@@ -599,7 +624,7 @@
       <div class="page-heading">
         <p class="kicker">04 / TEAM COLLABORATION</p>
         <h1 id="chatTitle">Your team <em>chat.</em></h1>
-        <p>A space for project discussions and decisions. This demo is private to your own tab — the sample teammates cannot read or reply to your messages.</p>
+        <p>Project discussions and decisions are saved encrypted for adult practice accounts on this device; guest messages stay in this tab. No fictional teammates receive messages.</p>
       </div>
       <section class="panel chat-hub-panel" aria-labelledby="chatHubHeading">
         <div class="panel-header"><h2 id="chatHubHeading">My chats</h2><span class="tag">PRIVATE PREVIEW</span></div>
