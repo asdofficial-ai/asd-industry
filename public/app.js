@@ -789,6 +789,9 @@
       byId("profileStatus").textContent="Please check your nickname, username, email and country.";
       return;
     }
+    if(vault?.isUnlocked() && state.profile && contact?.email!==state.profile.email){
+      byId("profileStatus").textContent="This practice account email is fixed. A verified email-change flow will be added for real accounts.";return;
+    }
     if (skills.length>maxSkills) {
       byId("profileStatus").textContent="Choose no more than "+maxSkills+" skills.";
       return;
@@ -1249,12 +1252,24 @@
     byId("role").value=state.profile.role;
     byId("availability").value=state.profile.availability;
     document.querySelectorAll('input[name="interests"]').forEach(input=>{input.checked=interests.includes(input.value);});
-    state.project = null;
+    if(state.project)save();
+    const exampleMatches=scoredBuilders().filter(b=>b.score>=35).slice(0,3);
+    state.project={
+      demoProjectId:globalThis.crypto?.randomUUID?.()||"practice-"+Date.now(),
+      title:state.idea.title,description:state.idea.description,topic:state.idea.topic,completed:false,
+      members:[{nick:state.profile.nickname+" (you)",role:state.profile.role||"Project creator",demo:false}],
+      manager:window.ASDManagerDashboard.create(exampleMatches,state.idea.neededRole,state.idea.memberSharePct),
+      aim:state.idea.aim||state.idea.description,
+      outcome:state.idea.outcome||"",
+      helpNeeded:state.idea.helpNeeded||"",
+      projectedMonthlyProfit:state.idea.projectedMonthlyProfit,
+      tasks:[{text:"Agree on our project goal",done:false},{text:"Make a small first prototype",done:false}],
+      notes:[],messages:[]
+    };
     save();
-    byId("ideaStatus").textContent = "Idea saved locally. Matches below are fictional examples, not real people.";
-    renderMatches();
-    renderOpenProjects();
-    renderRisks();
+    byId("ideaStatus").textContent="Project created in Manager and saved on this device. Matching results are fictional.";
+    byId("managerCreateDetails").open=false;
+    renderMatches();renderOpenProjects();renderRisks();go("manager");
   });
   if (state.idea) {
     byId("ideaTitleInput").value = state.idea.title || "";
