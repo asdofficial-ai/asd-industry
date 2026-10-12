@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="/chat-brief.css">
   <script src="/country-picker.js" defer></script>
   <script src="/manager-dashboard.js" defer></script>
+  <script src="/demo-vault.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -39,7 +40,7 @@
           <div class="auth-tabs" role="tablist" aria-label="Account actions"><button type="button" role="tab" id="signupTab" aria-controls="signupPanel" aria-selected="true" class="auth-tab is-active">Sign up</button><button type="button" role="tab" id="loginTab" aria-controls="loginPanel" aria-selected="false" class="auth-tab">Log in</button></div>
           <div id="signupPanel" role="tabpanel" aria-labelledby="signupTab">
           <h2>Sign up to <em>build.</em></h2>
-          <p class="gate-subheading">Choose a nickname, age group, email and country to explore ASD Industry. Your project skills come later. This is a local demo: no account is created and no verification email is sent.</p>
+          <p class="gate-subheading">Choose your builder nickname and age group. Adults can create a password-protected local practice account. This is NOT real online registration; no email is sent.</p>
           <form id="signupForm" class="gate-form">
             <div class="gate-form-row">
               <label>Builder nickname
@@ -67,27 +68,32 @@
                 </div>
               </div>
             </div>
-            <label class="auth-future-label">Password <small>· available when real accounts launch</small>
-              <input id="signupPasswordPreview" type="password" placeholder="Password setup coming soon" autocomplete="off" disabled>
-            </label>
+            <div class="practice-password-fields" id="practicePasswordFields">
+              <label>Practice password <small>· at least 12 characters</small>
+                <input id="signupPasswordPreview" type="password" minlength="12" maxlength="256" placeholder="A unique practice password" autocomplete="new-password">
+              </label>
+              <label>Confirm password <input id="signupPasswordConfirm" type="password" minlength="12" maxlength="256" placeholder="Repeat your practice password" autocomplete="new-password"></label>
+              <p id="passwordStrength" class="practice-safety" role="status" aria-live="polite">Use a long password that you do not reuse anywhere else. Never enter real account credentials in this demo.</p>
+            </div>
             <div class="gate-onboarding-hint"><span class="gate-hint-icon">✦</span><span><b>Just the basics for now.</b> You'll choose your skills, interests and available time only when you want to build a project or find teammates.</span></div>
-            <div class="gate-notice">ⓘ <span><b>Safe demo only.</b> This is not a real account. Nothing is posted online and any teammates are fictional. The email and country you enter are saved only in this browser tab, not sent to our server. For testing, use an example email instead of your personal one. Real accounts for under-18s require appropriate guardian consent and safety protections.</span></div>
-            <label class="gate-confirm"><input id="signupAcknowledge" type="checkbox" required><span>I understand this is a browser-only demo. Email and country stay in this tab and no verification message will be sent.</span></label>
+            <div class="gate-notice">ⓘ <span><b>Safe demo only.</b> This is not a real account. Nothing is posted online and any teammates are fictional. Adult practice data is encrypted in this device's browser, not cloud-saved. Under-18 visitors can explore only a temporary guest demo. Use fictional names and example emails. Real youth accounts require appropriate guardian consent and protections.</span></div>
+            <label class="gate-confirm"><input id="signupAcknowledge" type="checkbox" required><span>I understand this is a practice demo, not a real online account. Adult demo data is encrypted on this device; guest data lasts only in this tab. No verification email is sent.</span></label>
             <p id="signupStatus" class="gate-error" role="alert" aria-live="polite"></p>
             <button class="gate-submit" type="submit">Enter ASD Industry <span>↗</span></button>
           </form>
-          <p class="gate-footnote">Browser-only demo · Password is not active · No real team messaging</p>
+          <p class="gate-footnote">Adult practice login saves encrypted data on this device · No real messaging</p>
           </div>
           <div id="loginPanel" class="auth-login-panel" role="tabpanel" aria-labelledby="loginTab" hidden>
             <h2>Welcome <em>back.</em></h2>
-            <p class="gate-subheading">Log in is prepared for our next update. No accounts exist in this preview, so signing in is not available yet.</p>
-            <div class="gate-form auth-login-form">
-              <label>Email address <input type="email" id="loginEmailPreview" placeholder="Email login coming soon" autocomplete="off" disabled></label>
-              <label>Password <input type="password" id="loginPasswordPreview" placeholder="Password login coming soon" autocomplete="off" disabled></label>
-              <button type="button" class="gate-submit auth-disabled-button" disabled>Log in · Coming soon <span>🔒</span></button>
-            </div>
-            <div class="gate-notice auth-login-notice">ⓘ <span><b>Not available yet.</b> Real login and password authentication need a secure account database and appropriate user protections. You can still explore using the Sign up demo.</span></div>
-            <button type="button" id="loginToSignup" class="auth-signup-link">← Continue with the demo</button>
+            <p class="gate-subheading">Log in to an adult practice account created in this browser. Saved projects and messages reopen on this device, never through the cloud.</p>
+            <form id="loginForm" class="gate-form auth-login-form">
+              <label>Practice email <input type="email" id="loginEmailPreview" maxlength="254" placeholder="Your example email" autocomplete="username" required></label>
+              <label>Practice password <input type="password" id="loginPasswordPreview" placeholder="Your unique practice password" autocomplete="current-password" required></label>
+              <p id="loginStatus" class="gate-error" role="alert" aria-live="polite"></p>
+              <button type="submit" class="gate-submit" id="practiceLoginSubmit">Log in to practice → <span>↗</span></button>
+            </form>
+            <div class="gate-notice auth-login-notice">ⓘ <span><b>Device-only demo login.</b> Real online accounts, password recovery and server-side sessions are not enabled. Use an invented password you never reuse elsewhere.</span></div>
+            <button type="button" id="loginToSignup" class="auth-signup-link">← Create a practice account</button>
           </div>
         </div>
       </div>
