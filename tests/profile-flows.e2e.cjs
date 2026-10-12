@@ -20,14 +20,16 @@ async function testProfile(width,browser){
     assert.ok(await page.locator("#signupPanel").isVisible());
     await page.locator("#loginTab").click();
     assert.ok(await page.locator("#loginPanel").isVisible());
-    assert.equal(await page.locator("#loginPasswordPreview").isDisabled(),true);
-    assert.equal(await page.locator("#loginPanel .gate-submit").isDisabled(),true);
+    assert.equal(await page.locator("#loginPasswordPreview").isDisabled(),false);
+    assert.equal(await page.locator("#loginPanel .gate-submit").isDisabled(),false);
     await page.locator("#loginToSignup").click();
     assert.ok(await page.locator("#signupPanel").isVisible());
-    assert.equal(await page.locator("#signupPasswordPreview").isDisabled(),true);
+    assert.equal(await page.locator("#signupPasswordPreview").isDisabled(),false);
 
     await page.locator("#signupNickname").fill("Sample");
     await page.locator("#signupAge").selectOption("18+");
+    await page.locator("#signupPasswordPreview").fill("Cedar River Orbit! 2026");
+    await page.locator("#signupPasswordConfirm").fill("Cedar River Orbit! 2026");
     await page.locator("#signupEmail").fill("sample@example.com");
     await page.locator("#signupCountry").fill("Nigeria");
     await page.locator("#signupAcknowledge").check();
@@ -87,6 +89,15 @@ async function testProfile(width,browser){
     assert.ok(await page.locator("#loginPanel").isVisible(),"Logout should lead to login preview");
     assert.equal(await page.locator("#siteShell").isVisible(),false);
     assert.equal(await page.evaluate(()=>sessionStorage.getItem("asd-industry-v03-demo-session")),null);
+    const record=await page.evaluate(()=>localStorage.getItem("asd-industry-local-practice-vault-v1"));
+    assert.ok(record,"adult practice data remains encrypted after logout");
+    assert.doesNotMatch(record,/Sample|better project ideas|Cedar River Orbit/i,"vault must not expose profile data or password");
+    await page.locator("#loginEmailPreview").fill("sample@example.com");
+    await page.locator("#loginPasswordPreview").fill("Cedar River Orbit! 2026");
+    await page.locator("#practiceLoginSubmit").click();
+    assert.ok(await page.locator("#view-home").isVisible(),"practice login restores workspace");
+    await page.locator('[data-nav="profile"]').first().click();
+    assert.equal(await page.locator("#profileDisplayHandle").textContent(),"@sample.dev");
     assert.deepEqual(errors,[]);
     console.log("PASS profile flow "+width+"px");
   }finally{await page.close();}
