@@ -287,9 +287,32 @@
     return {entryCompleted:false,profile:null,idea:null,project:null,sampleProjectInterests:[],sampleProjectJoins:{},sampleSquadChatMessages:{},squadChatActiveId:null};
   }
   let state = loadState();
-  const save = () => {
-    try { sessionStorage.setItem(STORE_KEY, JSON.stringify(state)); }
-    catch (_) { /* do not transmit browser data anywhere */ }
+  // Adult practice vault encrypts workspace data before saving to this browser.
+  // Existing guest and legacy demo sessions remain tab-only; never store their contact details persistently.
+  const vault=window.ASDPracticeVault;
+  const projectArchive=()=>{
+    if(!state||!state.project||!state.profile||!state.entryCompleted)return;
+    if(!Array.isArray(state.projectHistory))state.projectHistory=[];
+    if(!state.project.demoProjectId)state.project.demoProjectId=globalThis.crypto?.randomUUID?.()||"practice-"+Date.now();
+    const snapshot={id:state.project.demoProjectId,title:state.project.title,completed:!!state.project.completed,
+      updatedAt:new Date().toISOString(),project:JSON.parse(JSON.stringify(state.project)),
+      idea:state.idea?JSON.parse(JSON.stringify(state.idea)):null};
+    const prior=state.projectHistory.findIndex(x=>x.id===snapshot.id);
+    if(prior>=0)state.projectHistory.splice(prior,1);
+    state.projectHistory.unshift(snapshot);
+    state.projectHistory=state.projectHistory.slice(0,25);
+  };
+  const save=()=>{
+    projectArchive();
+    if(vault?.isUnlocked()){
+      vault.persist(state).catch(()=>{
+        const line=byId("managerSavedStatus");
+        if(line)line.textContent="⚠️ Your encrypted practice changes could not be saved. Check browser storage.";
+      });
+      return;
+    }
+    try{sessionStorage.setItem(STORE_KEY,JSON.stringify(state));}
+    catch(_){/* temporary guest data; do not transmit anywhere */ }
   };
   const gate = byId("accessGate");
   const siteShell = byId("siteShell");
@@ -301,7 +324,7 @@
     byId("loginTab").setAttribute("aria-selected",String(login));
     byId("signupTab").classList.toggle("is-active",!login);
     byId("loginTab").classList.toggle("is-active",login);
-    document.title=(login ? "Log in · Coming Soon" : "Join ASD Industry") + " · Builder Demo";
+    document.title=(login ? "Log in to Practice" : "Join ASD Industry") + " · Builder Demo";
     if (location.hash !== (login?"#login":"#signup")) history.replaceState(null, "", login?"#login":"#signup");
   }
   function showGate(mode) {
@@ -313,6 +336,48 @@
   byId("signupTab").addEventListener("click",()=>setAccessMode("signup"));
   byId("loginTab").addEventListener("click",()=>setAccessMode("login"));
   byId("loginToSignup").addEventListener("click",()=>setAccessMode("signup"));
+
+  function openManagerCreator(){
+    go("manager");
+    const details=byId("managerCreateDetails");
+    details.open=true;
+    details.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  function renderSavedProjects(){
+    const shelf=byId("managerSavedProjects");
+    if(!shelf)return;
+    shelf.replaceChildren();
+    const items=Array.isArray(state.projectHistory)?state.projectHistory:[];
+    if(!items.length){shelf.append(node("p","muted","No projects saved yet. Use Create a project to start."));return;}
+    for(const item of items){
+      const row=node("article","manager-saved-card");
+      const name=node("strong","",item.title||"Untitled demo project");
+      const status=node("span","tag",item.completed?"✓ Completed (self-marked)":"In progress");
+      const detail=node("p","",item.updatedAt?"Last edited "+new Date(item.updatedAt).toLocaleDateString():"Saved on device");
+      const open=node("button","btn btn-accent btn-small","Open project →");
+      open.type="button";
+      open.addEventListener("click",()=>{
+        state.project=JSON.parse(JSON.stringify(item.project));
+        if(item.idea)state.idea=JSON.parse(JSON.stringify(item.idea));
+        save();go("manager");
+        byId("managerSavedStatus").textContent="Opened locally saved project: "+item.title+".";
+      });
+      row.append(name,status,detail,open);shelf.append(row);
+    }
+  }
+  function beginNewProject(){
+    if(state.project)save();
+    state.project=null;state.idea=null;
+    byId("ideaForm").reset();
+    byId("managerCreateDetails").open=true;
+    save();
+    go("manager");
+    byId("managerCreateDetails").open=true;
+    byId("managerCreateDetails").scrollIntoView({behavior:"smooth",block:"start"});
+    byId("managerSavedStatus").textContent="Start a new project. Your previous one remains in Saved projects.";
+  }
+  byId("managerCreateNewProject").addEventListener("click",beginNewProject);
+  byId("managerEmptyCreate").addEventListener("click",openManagerCreator);
   function showSite() {
     gate.hidden = true;
     siteShell.hidden = false;
@@ -331,12 +396,12 @@
     if (location.hash !== "#"+to) history.replaceState(null,"","#"+to);
     window.scrollTo({top:0,behavior:"auto"});
     if (to==="workspace") renderWorkspace();
-    if (to==="manager") window.ASDManagerDashboard.render(state,save,renderWorkspace);
+    if (to==="manager") { window.ASDManagerDashboard.render(state,save,renderWorkspace); renderSavedProjects(); }
     if (to==="chat") renderChat();
     if (to==="squad-chat") renderSquadChat();
     if (to==="review") renderRisks();
     if (to==="ideas") { renderMatches(); renderOpenProjects(); }
-    if (to==="profile") renderBuilderProfile();
+    if (to==="profile") { renderBuilderProfile(); byId("practiceSecurityPanel").hidden=!vault?.isUnlocked(); }
     if (to==="profile-edit") syncProfileEditor();
   }
   document.querySelectorAll("[data-nav]").forEach(button =>
@@ -980,9 +1045,7 @@
     renderOpenProjects();
     browseProjectsList.scrollLeft=0;
   });
-  byId("postProjectJump").addEventListener("click",()=>{
-    byId("ideaForm").scrollIntoView({behavior:"smooth",block:"start"});
-  });
+  byId("postProjectJump").addEventListener("click",()=>{ openManagerCreator(); });
   byId("projectsScrollBack").addEventListener("click",()=>{
     browseProjectsList.scrollBy({left:-Math.max(240,browseProjectsList.clientWidth*.82),behavior:"smooth"});
   });
