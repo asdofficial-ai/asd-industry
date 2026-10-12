@@ -11,11 +11,11 @@
  if(typeof module==="object"&&module.exports)module.exports=api;
  else root.ASDSupportKnowledge=api;
 })(typeof globalThis!=="undefined"?globalThis:this,function(){
- const reviewedAt="2026-10-12",version="2026.10.12.2";
+ const reviewedAt="2026-10-12",version="2026.10.12.3";
  const topics=[
   {id:"platform-tour",title:"Complete ASD Industry platform guide",
   tags:["tell me everything about asd industry","everything about asd industry","all asd industry features","full platform overview","full guide to asd industry","show me all services","what are all the features","tell me about the whole platform","what can asd industry do","explain the entire asd industry"],
-  status:"demo",answer:"ASD Industry is a developing project-building and team-matching platform, not an online school. The interactive demo shows a builder profile, project idea proposals, simulated human review, fictional teammate discovery and matching, private demo groups, workspace tasks, group chat and community activity. Project AI assistance, verified human customer support, secure customer accounts, shared uploads and real team messaging are not publicly active. Any 30%/70% ownership split is only an early proposal, not a contract. You can ask me about any feature by name.",
+  status:"demo",answer:"ASD Industry is a developing project-building and team-matching platform, not an online school. The interactive demo shows a builder profile, project idea proposals, simulated human review, fictional teammate discovery and matching, private demo groups, workspace tasks, group chat and community activity. Project AI assistance, verified human customer support, secure customer accounts, shared uploads and real team messaging are not publicly active. You can ask me about any feature by name.",
   source:"README.md"},
   {id:"about",title:"What ASD Industry is",tags:["what is asd industry","about asd industry","what is the platform","what does asd do"],status:"demo",answer:"ASD Industry is being developed as a platform for people to propose projects, find complementary skills, and organize teams. The current public site is an interactive demonstration, not a launched community.",source:"README.md"},
   {id:"get-started",title:"Getting started",tags:["get started","start using","how to join","join asd industry","how to sign up","create account","register account"],status:"demo",answer:"The current public demonstration asks for a nickname, age group and interests. It creates a browser-local demo profile, not a real registered account. Real account registration and verification are not publicly enabled.",source:"README.md"},
@@ -39,7 +39,7 @@
   {id:"delete-data",title:"Removing demo data",tags:["delete account","remove account","erase my data","reset demo","clear my session","delete profile"],status:"demo",answer:"Use the demo's Exit or Reset Demo control to clear the local browser demonstration. This does not delete a real online account because live public accounts are not enabled.",source:"README.md",needsHumanForAction:false},
   {id:"browser",title:"How the demo stores information",tags:["browser storage","sessionstorage","saved data","data stored","cloud data","sync devices","my data lost"],status:"demo",answer:"The existing public demonstration uses browser-tab session storage. Closing the tab or resetting the demo can remove that information. It is not cloud-backed account memory and does not sync across devices.",source:"README.md"},
   {id:"payments",title:"Payments, investment and funding",tags:["pay","payment","transfer money","wallet","refund","withdraw","deposit","investment","earnings","funding","billing"],status:"disabled",answer:"ASD Industry has no active live payments, transfers, wallets, payouts or investments in this version. Do not send money, wallet credentials or payment evidence to supposed ASD Industry agents. ASD Pay is a separate project.",source:"README.md",needsHumanForAction:true},
-  {id:"equity",title:"Equity and ownership",tags:["equity","ownership","share profit","company shares","70%","30%","revenue split"],status:"planned",answer:"A 30% ASD Industry / 70% team split is only a proposal mentioned in early demonstration materials. It is not an active contract or legal ownership arrangement. Formal terms need legal review before any real use.",source:"README.md",needsHumanForAction:true},
+  {id:"equity",title:"Private project ownership matters",tags:["equity","ownership","share profit","company shares","revenue split","ownership split","profit split","shareholding"],status:"disabled",answer:"Project ownership, private financial arrangements, and internal share allocations are confidential. ASD Industry AI Support cannot disclose them, confirm terms, or guess figures. Only the authorized project manager may access those details through a separate restricted management system.",source:"README.md",needsHumanForAction:false},
   {id:"age",title:"Age and guardian safeguards",tags:["age limit","age range","12-14","15-17","under 18","minor","guardian","parent","child safety"],status:"disabled",answer:"The demonstration asks for an age group, but real youth accounts, guardian verification and under-18 interactions are not enabled. An age selection alone is not proof of identity or guardian consent.",source:"README.md",needsHumanForAction:true},
   {id:"reports",title:"Reporting safety problems",tags:["report abuse","report user","bullying","harassment","scam","fraud","sexual harassment","threat","unsafe"],status:"disabled",answer:"An operational in-app abuse reporting and safeguarding service is not yet active. Do not send private evidence or identity documents through the demo. If there is immediate danger, seek help from appropriate local emergency services or a trusted person.",source:"docs/V06-AI-STAFF.md",needsHumanForAction:true},
   {id:"verification-badge",title:"Official employee badges",tags:["employee badge","staff badge","verified badge","human employee","official support","support agent verification"],status:"planned",answer:"Official ASD Industry employee badges are reserved for administrator-verified human employees who opt into publication. AI assistants cannot receive human badges, and selecting a title does not grant employment or privileges.",source:"docs/V08_IDENTITY_ACCESS_AND_RECOVERY.md"},
@@ -77,7 +77,14 @@
   if(ranked[1]&&ranked[0].score===ranked[1].score&&ranked[0].score<9)return null;
   return ranked[0].item;
  }
+ const SHARE_REQUEST=/\b(?:equity|ownership|shareholding|shareholders?|stake(?:s)?|capitalization|cap\s*table|profit\s*(?:share|split|sharing)|revenue\s*(?:share|split|sharing)|ownership\s*(?:percentage|split)|company\s*split|(?:share|split|percentage|percent)\s*(?:of|for|between)\s*(?:the\s*)?(?:team|founder|asd)|how\s*much\s*(?:does|will)\s*(?:asd|the\s*team|the\s*founder))/i;
+ function restricted(question){
+  if(typeof question!=="string")return false;
+  return SHARE_REQUEST.test(question)||/\b\d{1,3}\s*(?:%|percent)\s*\/?\s*\d{1,3}\s*(?:%|percent)?\b/i.test(question);
+ }
+ const PRIVATE_REPLY="Project ownership, internal shares, and financial allocations are confidential. AI Support cannot disclose or verify them. Only an authorized project manager can access this information in the restricted management area.";
  function respond(question){
+  if(restricted(question))return Object.freeze({status:"answered",reason:null,topicId:"equity",text:PRIVATE_REPLY,availability:"disabled",version});
   const item=lookup(question);
   if(!item)return Object.freeze({status:"needs_human",reason:"cannot_answer",topicId:null,text:"I do not have a sufficiently reliable approved answer for that question. I can offer a human support handoff in the fictional preview."});
   // Knowledge of a policy is NOT permission to execute a restricted customer action.
@@ -92,9 +99,9 @@
   for(const topic of t){
    if(!/^[a-z0-9-]+$/.test(topic.id)||seen.has(topic.id))throw Error("Invalid or duplicate knowledge ID.");
    seen.add(topic.id);
-   if(!["demo","planned","disabled"].includes(topic.status)||topic.tags.length<2||topic.answer.length<45||topic.answer.length>630||!topic.source||FORBIDDEN.test(topic.answer))throw Error("Unsafe or incomplete support knowledge: "+topic.id);
+   if(!["demo","planned","disabled"].includes(topic.status)||topic.tags.length<2||topic.answer.length<45||topic.answer.length>630||!topic.source||FORBIDDEN.test(topic.answer)||/\b\d{1,3}\s*%/.test(topic.answer))throw Error("Unsafe or incomplete support knowledge: "+topic.id);
   }
   return t.length;
  }
- return Object.freeze({version,reviewedAt,topics:t,lookup,respond,validate});
+ return Object.freeze({version,reviewedAt,topics:t,lookup,respond,validate,restricted,PRIVATE_REPLY});
 });
