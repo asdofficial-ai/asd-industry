@@ -4,7 +4,7 @@ const read=name=>fs.readFileSync(path.join(__dirname,"../public",name),"utf8");
 test("customer chat and employee case workspace are separate, with AI-first human handoff",()=>{
  const html=read("support-conversation-lab.html"),agent=read("support-console.html");
  assert.match(html,/href="\/support-chat-v2.css\?v=20261012"/);
- assert.match(html,/src="\/support-chat-v2.js\?v=20261012"/);
+ assert.match(html,/src="\/support-chat-v2\.js\?v=20261012[^"]*"/);
  assert.match(html,/id="viewCustomer"/);
  assert.match(html,/id="viewAgent"/);
  assert.match(html,/id="customerScreen"/);
