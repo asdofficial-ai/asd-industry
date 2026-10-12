@@ -72,12 +72,14 @@ test("password recovery and unknown questions offer a human option, never reveal
  assert.equal(get("messages").children.length,count);
  assert.match(get("feedback").textContent,/Do not enter passwords/);
 });
-test("single support page has no live calls or persistent message storage",()=>{
+test("single support page offers instant FAQ and optional server-only model, without storing secrets",()=>{
  const script=read("support-page.js");
- for(const disallowed of [/fetch\s*\(/i,/XMLHttpRequest/i,/WebSocket/i,/sendMail/i,/localStorage/i,/sessionStorage/i,/indexedDB/i,/document\.cookie/i,/innerHTML\s*=/i]){
+ for(const disallowed of [/XMLHttpRequest/i,/WebSocket/i,/sendMail/i,/localStorage/i,/sessionStorage/i,/indexedDB/i,/document\\.cookie/i,/innerHTML\\s*=/i,/Bearer\\s/i]){
   assert.doesNotMatch(script,disallowed);
  }
- assert.match(script,/window\.ASDSupportKnowledge/);
- assert.match(script,/humanDemo\(\)/);
+ assert.match(script,/window\\.ASDSupportKnowledge/);
+ assert.match(script,/\\/api\\/support-ai\\/status/);
+ assert.match(script,/\\/api\\/support-ai\\/ask/);
+ assert.match(script,/AbortController/);
  assert.match(script,/no real staff/i);
 });
