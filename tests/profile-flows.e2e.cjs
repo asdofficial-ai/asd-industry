@@ -34,7 +34,9 @@ async function testProfile(width,browser){
     await page.locator("#signupCountry").fill("Nigeria");
     await page.locator("#signupAcknowledge").check();
     await page.locator("#signupForm button[type=submit]").click();
-    assert.ok(await page.locator("#view-home").isVisible(),"signup should still enter demo");
+    await page.locator("#view-home").waitFor({state:"visible",timeout:15000}).catch(async error=>{
+      throw Error("Adult signup failed: "+(await page.locator("#signupStatus").textContent())+" / "+error.message);
+    });
     await page.evaluate(()=>document.querySelector('button[data-nav="profile"]').click());
     assert.ok(await page.locator("#view-profile").isVisible());
     assert.equal(await page.locator("#profileForm").isVisible(),false,"editor must not share the profile view");
