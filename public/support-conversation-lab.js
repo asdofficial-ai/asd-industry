@@ -137,6 +137,7 @@
   $("chatLayout").classList.toggle("customer-layout",customer);
   $("chatLayout").classList.toggle("agent-layout",isAgent);
   $("agentInbox").hidden=customer;
+  $("customerDemoChoices").hidden=isAgent;
   $("agentContext").hidden=customer;
   $("agentCaseActions").hidden=customer;
   $("customerQuickReplies").hidden=isAgent;
@@ -206,6 +207,10 @@
   if(b)choosePerspective(b.dataset.perspective);
  });
  document.querySelectorAll("[data-case]").forEach(b=>b.addEventListener("click",()=>chooseCase(b.dataset.case)));
+ document.querySelectorAll("[data-customer-case]").forEach(b=>b.addEventListener("click",()=>{
+  if(perspective!=="customer"||!Object.prototype.hasOwnProperty.call(cases,b.dataset.customerCase))return;
+  selected=b.dataset.customerCase;$("chatHint").textContent="This is a separate fictional customer example, not a live account.";repaint();
+ }));
  document.querySelectorAll("[data-quick]").forEach(b=>b.addEventListener("click",()=>send(b.dataset.quick)));
  document.querySelectorAll("[data-agent-quick]").forEach(b=>b.addEventListener("click",()=>send(b.dataset.agentQuick)));
  $("chatForm").addEventListener("submit",event=>{
