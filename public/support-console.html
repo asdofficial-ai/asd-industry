@@ -19,7 +19,7 @@
 </section>
 <div id="supportWorkspace" hidden>
  <div class="workspace-top"><div><span class="eyebrow">SERVICE COMMAND CENTER</span><h2>Your support desk<span class="accent-dot">.</span></h2><p>Test cases only. No real messages or account recovery actions.</p></div><div class="workspace-actions"><span class="staff-identity" id="agentIdentity">Human Support Agent</span><button class="secondary" id="agentLogout" type="button">Sign out</button></div></div>
- <nav class="support-tabs" aria-label="Agent workspace"><button data-page="dashboard" class="selected" aria-pressed="true">◫ Overview</button><button data-page="cases" aria-pressed="false">☷ Cases</button><button data-page="create" aria-pressed="false">＋ New test case</button><button data-page="profile" aria-pressed="false">◎ My Profile</button><button data-page="team" id="managerTab" aria-pressed="false" hidden>♜ Team & Escalations</button><button data-page="guidelines" aria-pressed="false">◇ Guidelines</button></nav>
+ <nav class="support-tabs" aria-label="Agent workspace"><button data-page="dashboard" class="selected" aria-pressed="true">◫ Overview</button><button data-page="cases" aria-pressed="false">☷ Cases</button><button data-page="create" aria-pressed="false">＋ New test case</button><button data-page="profile" aria-pressed="false">◎ My Profile</button><button data-page="ai-inbox" aria-pressed="false">✦ AI Handoff Inbox</button><button data-page="team" id="managerTab" aria-pressed="false" hidden>♜ Team & Escalations</button><button data-page="guidelines" aria-pressed="false">◇ Guidelines</button></nav>
  <div id="workspaceError" class="banner error" role="alert" hidden></div>
  <section id="page-dashboard" class="workspace-page">
   <h3>Today at a glance</h3><p class="fine">Counts reflect only cases the current human role is allowed to access.</p>
@@ -52,6 +52,24 @@
    <p>An official ASD Industry employee badge is granted after identity and employment verification, and public listing needs your consent.</p>
    <p class="fine">Staff cannot edit their job role, employee verification, or badge status. This page never asks for identity documents or recovery secrets.</p>
    <span class="secure-pill">ROLE ENFORCED BY SERVER</span></article></div>
+ </section>
+ <section id="page-ai-inbox" class="workspace-page" hidden>
+  <span class="eyebrow">AI FIRST → HUMAN ONLY WHEN NEEDED</span><h3>AI-to-Human Support Inbox</h3>
+  <p class="fine">Private staff training. The server's reviewed AI-help rules generate a simulated handoff only when an answer is unavailable or an action is restricted. No real customers or live AI agents can send messages to this inbox yet.</p>
+  <div class="content-grid">
+   <article class="support-card"><h3>Pending AI escalations</h3><p class="fine">Claim a test case to read the fictional customer's question and the AI's message. Manager accounts can inspect authorized training cases.</p><div id="aiHandoffList" class="case-list"><p class="fine">Open this tab to load fictional handoffs.</p></div>
+    <button id="refreshHandoffs" type="button" class="secondary" style="margin-top:14px">Refresh inbox ↻</button>
+   </article>
+   <form class="support-card create-form" id="aiHandoffSimulator" hidden>
+    <span class="eyebrow">MANAGER · TEST ROUTING</span><h3>Simulate an AI escalation</h3>
+    <p class="fine">Only a Manager can submit a fictional question. The server checks the approved knowledge library: if the AI can answer, no ticket is created. Otherwise, a training case and AI-labeled message appear in the agent inbox.</p>
+    <label for="aiHandoffQuestion">Fictional support question</label>
+    <textarea id="aiHandoffQuestion" rows="4" required minlength="15" maxlength="500" placeholder="Could you override the decision on my fictional project application?"></textarea>
+    <label class="check"><input type="checkbox" id="aiHandoffFictional" required><span>Only a fictional adult-test request; no contact details, passwords or private information.</span></label>
+    <button id="simulateHandoffBtn" type="submit" class="primary">Send AI test handoff →</button>
+    <p class="fine" role="status" id="aiHandoffFeedback"></p>
+   </form>
+  </div>
  </section>
  <section id="page-team" class="workspace-page" hidden><span class="eyebrow">MANAGER OPERATIONS</span><h3>Team & escalation oversight</h3>
   <p class="fine">Only human Managers may assign departments, oversee authorized cases, and review escalations raised by another employee.</p>
