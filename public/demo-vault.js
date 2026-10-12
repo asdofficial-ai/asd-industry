@@ -68,10 +68,11 @@
  function persist(state){
   if(!encryptionKey)return Promise.resolve();
   const snapshot=JSON.parse(JSON.stringify(state));
+  const activeKey=encryptionKey;
   queue=queue.catch(()=>{}).then(async()=>{
    const old=record();
    if(!old)throw Error("Encrypted practice account was removed.");
-   const data=await seal(encryptionKey,snapshot,decode(old.salt),old.id);
+   const data=await seal(activeKey,snapshot,decode(old.salt),old.id);
    localStorage.setItem(KEY,JSON.stringify(data));
    failed=null;
   }).catch(error=>{failed=error;throw error;});
@@ -94,5 +95,5 @@
   encryptionKey=nextKey;failed=null;
  }
  function erase(){lock();try{localStorage.removeItem(KEY);}catch(_){}}
- window.ASDPracticeVault={enabled,exists,strong,create,unlock,persist,changePassword,erase,lock,isUnlocked:()=>!!encryptionKey,lastError:()=>failed?.message||""};
+ window.ASDPracticeVault={enabled,exists,strong,create,unlock,persist,changePassword,erase,lock,flush:()=>queue,isUnlocked:()=>!!encryptionKey,lastError:()=>failed?.message||""};
 })();
