@@ -151,5 +151,5 @@ test("all visible action selectors exist and simulator cannot send real messages
  assert.match(html,/id="caseFilter"/); assert.match(html,/id="caseSearch"/);
  for(const method of [/fetch\s*\(/i,/XMLHttpRequest/i,/WebSocket/i,/localStorage/i,/sessionStorage/i,/indexedDB/i,/innerHTML\s*=/i,/document\.cookie/i])
   assert.doesNotMatch(script,method,"Demo must remain in-memory only");
- assert.match(html,/No real customer messages, live agents, authentication/);
+ assert.match(html,/TRAINING PREVIEW — NO LIVE SERVICE/);
 });
