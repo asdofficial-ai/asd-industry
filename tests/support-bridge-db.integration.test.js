@@ -52,7 +52,7 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.equal((await db.query("SELECT COUNT(*)::int AS n FROM industry_support_ai_handoffs")).rows[0].n,before.rows[0].n);
    assert.equal(KB.respond(f.question).status,"needs_human");
    const started=await send(endpoint,"POST",f,manager);
-   assert.equal(started.status,201,await started.text?.call?.(started.clone()).catch(()=>"<no response>"));
+   assert.equal(started.status,201);
    const created=await started.json(),id=created.caseId;
    assert.equal(created.offered,true);
    assert.equal(created.customerMessagesSent,false);
