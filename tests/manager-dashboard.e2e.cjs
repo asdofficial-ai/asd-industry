@@ -36,6 +36,8 @@ async function widthTest(browser,width){
     await page.locator('input[name="ideaInterests"][value="Education"]').check();
     await page.locator("#ideaAvailability").selectOption("flexible");
     await page.locator('#ideaForm button[type="submit"]').click();
+    assert.ok(await page.locator("#managerContent").isVisible(),"project created inside Manager");
+    await goto("workspace");
     assert.ok(await page.locator("#workspaceContent").isVisible());
     assert.equal(await page.locator("#workspaceMembers .member").count(),1,"only project creator initially");
     await goto("manager");
