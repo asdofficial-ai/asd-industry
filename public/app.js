@@ -852,12 +852,8 @@
       const vacancy=node("span","project-role-vacancy",
         chosen?"Your role · demo":(available===0?"Filled":available+" available"));
       label.append(input,text,vacancy);
-      const share=proposedRoleShare(project,position);
-      const profitTag=node("span","project-role-profit",
-        share===null?"Profit share: not proposed":"If profitable: "+displayShare(share)+" net profit / person");
-      if(share!==null && Number(project.projectedMonthlyProfit)>0)
-        profitTag.textContent+=" · hypothetical "+money(project.projectedMonthlyProfit*share/100)+"/month";
-      label.append(profitTag);
+      // Project equity / financial figures belong to authorized management, not public join cards.
+      label.append(node("span","project-role-profit","Internal financial terms are private to authorized project management."));
       roleList.append(label);
     });
     const action=byId("confirmProjectJoin");
@@ -930,9 +926,7 @@
       card.append(footer);
       card.append(node("p","open-project-estimate","Expected start: ~"+project.estimateDays+" days · when squad fills"));
       card.append(node("p","open-project-card-note",
-        project.positions.some(p=>proposedRoleShare(project,p)!==null)
-          ?"Proposed net-profit split · see roles before joining"
-          :"No paid/profit terms proposed · see full details"));
+        "Project ownership and financial arrangements are private."));
       const membership=projectMembership(project);
       const button=node("button","open-project-interest",membership?"✓ View my position →":"View roles & join →");
       button.type="button";
