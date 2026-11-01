@@ -83,6 +83,17 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.equal((await replied.json()).outboundSent,false);
    caseMessages=await send("/support/cases/"+id+"/conversation","GET",undefined,agent);
    assert.ok((await caseMessages.json()).data.some(x=>x.sender_kind==="human_agent"&&x.body===text));
+   // A manager's reassignment must immediately cut off the previous agent's
+   // conversation history, while allowing the new assigned employee to read it.
+   const secondProfile=await send("/support/profile","PATCH",{
+    displayName:"Alternate Demo Agent",avatarPreset:"shield",availability:"available"
+   },second);
+   assert.equal(secondProfile.status,200);
+   const reassigned=await send("/support/cases/"+id+"/assign","POST",{agentId:other},manager);
+   assert.equal(reassigned.status,200);
+   assert.equal((await send("/support/cases/"+id+"/conversation","GET",undefined,agent)).status,404);
+   assert.equal((await send("/support/cases/"+id+"/conversation","GET",undefined,second)).status,200);
+   assert.equal((await send("/support/cases/"+id+"/conversation","GET",undefined,unauthorized)).status,403);
    const dbrecord=await db.query("SELECT count(*)::int AS n FROM industry_support_ai_handoffs WHERE request_id=$1",[f.requestId]);
    assert.equal(dbrecord.rows[0].n,1);
    const audit=await db.query("SELECT count(*)::int AS n FROM industry_support_case_events WHERE case_id=$1 AND event_type='ai_handoff_created'",[id]);
