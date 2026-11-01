@@ -63,4 +63,4 @@ jobs:
           node-version: '22'
       - run: npm install --no-audit --no-fund
       - run: node scripts/staff-migrate.js
-      - run: node --test tests/staff-db.integration.test.js tests/identity-db.integration.test.js tests/support-db.integration.test.js tests/support-bridge-db.integration.test.js
+      - run: node --test tests/staff-db.integration.test.js tests/identity-db.integration.test.js tests/support-db.integration.test.js tests/support-bridge-db.integration.test.js tests/support-handoff-db.integration.test.js
