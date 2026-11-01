@@ -17,13 +17,27 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    const staffId=crypto.randomUUID(),caseId=crypto.randomUUID();
    await client.query("INSERT INTO industry_staff_accounts(id,email,password_hash,role) VALUES($1,$2,$3,'support')",
     [staffId,"handoff-"+staffId+"@ci.invalid","synthetic-hash-not-a-login"]);
-   await client.query("INSERT INTO industry_support_cases(id,subject,requester_alias,description,category,priority,status,created_by_staff_id) VALUES($1,$2,$3,$4,'technical','normal','open',$5)",
+   await client.query("INSERT INTO industry_support_cases(id,subject,requester_alias,description,category,priority,status,created_by) VALUES($1,$2,$3,$4,'technical','normal','open',$5)",
     [caseId,"Fictional AI escalation","SampleAdult","Entirely fictional adult support scenario for security testing.",staffId]);
    const assessment1=assessment();
    const grant=await Store.issue(client,{session:customer,assessment:assessment1,caseId});
    assert.equal(grant.case_id,caseId);
-   await assert.rejects(Store.issue(client,{session:customer,assessment:assessment1,caseId}));
-   // Unique violation aborts a PostgreSQL transaction: use a savepoint in real flows.
+   await client.query("SAVEPOINT before_duplicate");
+   await assert.rejects(Store.issue(client,{session:customer,assessment:assessment1,caseId}),/duplicate key/);
+   await client.query("ROLLBACK TO SAVEPOINT before_duplicate");
+   const wrong={...customer,subjectHash:crypto.randomBytes(32).toString("hex")};
+   assert.deepEqual(await Store.redeem(client,{session:wrong,grantId:grant.id,caseId}),{accepted:false});
+   const ok=await Store.redeem(client,{session:customer,grantId:grant.id,caseId});
+   assert.deepEqual(ok,{accepted:true,caseId});
+   assert.deepEqual(await Store.redeem(client,{session:customer,grantId:grant.id,caseId}),{accepted:false});
+   const second=await Store.issue(client,{session:customer,assessment:assessment(),caseId});
+   await client.query("UPDATE industry_support_handoff_grants SET expires_at=now()-interval '1 minute' WHERE id=$1",[second.id]);
+   assert.deepEqual(await Store.redeem(client,{session:customer,grantId:second.id,caseId}),{accepted:false});
+   const third=await Store.issue(client,{session:customer,assessment:assessment(),caseId});
+   assert.deepEqual(await Store.revoke(client,{session:customer,grantId:third.id,caseId}),{revoked:true});
+   assert.deepEqual(await Store.redeem(client,{session:customer,grantId:third.id,caseId}),{accepted:false});
+   const events=await client.query("SELECT event_type FROM industry_support_handoff_events WHERE grant_id=$1 ORDER BY created_at",[grant.id]);
+   assert.deepEqual(events.rows.map(x=>x.event_type),["issued","redeemed"]);
   }finally{
    if(client){await client.query("ROLLBACK").catch(()=>{});client.release();}
    await pool.end();
