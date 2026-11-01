@@ -31,7 +31,7 @@ if(!process.env.STAFF_TEST_DATABASE_URL){
    assert.deepEqual(ok,{accepted:true,caseId});
    assert.deepEqual(await Store.redeem(client,{session:customer,grantId:grant.id,caseId}),{accepted:false});
    const second=await Store.issue(client,{session:customer,assessment:assessment(),caseId});
-   await client.query("UPDATE industry_support_handoff_grants SET expires_at=now()-interval '1 minute' WHERE id=$1",[second.id]);
+   await client.query("UPDATE industry_support_handoff_grants SET issued_at=now()-interval '12 minutes',expires_at=now()-interval '2 minutes' WHERE id=$1",[second.id]);
    assert.deepEqual(await Store.redeem(client,{session:customer,grantId:second.id,caseId}),{accepted:false});
    const third=await Store.issue(client,{session:customer,assessment:assessment(),caseId});
    assert.deepEqual(await Store.revoke(client,{session:customer,grantId:third.id,caseId}),{revoked:true});
